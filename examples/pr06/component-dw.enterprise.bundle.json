@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "bundle_id": "bundle.dw.providers.enterprise",
+  "bundle_name": "DW Providers Enterprise Example",
+  "requested_mode": "setup",
+  "locale": "en",
+  "artifact_extension": ".yaml",
+  "generated_resolved_files": [
+    "resolved/redis.yaml"
+  ],
+  "generated_setup_files": [
+    "state/setup/redis.yaml"
+  ],
+  "app_packs": [
+    "packs/memory-short-term-redis.gtpack",
+    "packs/task-store-redis.gtpack",
+    "packs/observer-basic-audit.gtpack"
+  ],
+  "extension_providers": [
+    "providers/memory-short-term-redis.gtpack",
+    "providers/task-store-redis.gtpack",
+    "providers/observer-basic-audit.gtpack"
+  ],
+  "capabilities": [
+    "cap://dw.memory.short-term",
+    "cap://dw.state.task-store",
+    "cap://dw.observer.audit"
+  ],
+  "notes": [
+    "Enterprise uses Redis-backed providers and OCI-style provider refs.",
+    "Use gtc wizard --answers for generated gtpack or gtbundle artifacts."
+  ]
+}

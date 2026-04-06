@@ -1,0 +1,16 @@
+{
+  "pack_id": "vendor.tool.example",
+  "category": "tool",
+  "variants": [
+    {
+      "provider_type": "dw.tool.wasm-adapter",
+      "capability_uri": "cap://dw.tool.wasm",
+      "pack_capability_id": "greentic.cap.tool.wasm"
+    },
+    {
+      "provider_type": "dw.tool.mcp-adapter",
+      "capability_uri": "cap://dw.tool.mcp",
+      "pack_capability_id": "greentic.cap.tool.mcp"
+    }
+  ]
+}

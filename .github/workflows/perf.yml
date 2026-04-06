@@ -1,0 +1,33 @@
+name: Perf (lightweight)
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: read
+
+concurrency:
+  group: perf-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  perf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Run tests (including perf guards)
+        run: cargo test --workspace --all-features
+
+      - name: Run benchmarks (smoke)
+        run: cargo bench --bench perf -- --sample-size 10

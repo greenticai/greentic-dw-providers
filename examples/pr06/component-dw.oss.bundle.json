@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "bundle_id": "bundle.dw.providers.oss",
+  "bundle_name": "DW Providers OSS Example",
+  "requested_mode": "setup",
+  "locale": "en",
+  "artifact_extension": ".yaml",
+  "generated_resolved_files": [
+    "resolved/in-memory.yaml"
+  ],
+  "generated_setup_files": [
+    "state/setup/in-memory.yaml"
+  ],
+  "app_packs": [
+    "packs/memory-short-term-in-memory.gtpack",
+    "packs/task-store-in-memory.gtpack",
+    "packs/observer-basic-audit.gtpack"
+  ],
+  "extension_providers": [
+    "providers/memory-short-term-in-memory.gtpack",
+    "providers/task-store-in-memory.gtpack",
+    "providers/observer-basic-audit.gtpack"
+  ],
+  "capabilities": [
+    "cap://dw.memory.short-term",
+    "cap://dw.state.task-store",
+    "cap://dw.observer.audit"
+  ],
+  "notes": [
+    "OSS uses in-memory providers and direct component refs.",
+    "Use gtc wizard --answers for generated gtpack or gtbundle artifacts."
+  ]
+}

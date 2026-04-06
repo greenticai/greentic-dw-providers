@@ -1,0 +1,30 @@
+name: Reusable Coverage Check
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install cargo-binstall
+        uses: cargo-bins/cargo-binstall@main
+
+      - name: Install coverage tools
+        run: cargo binstall --no-confirm --force greentic-dev cargo-nextest cargo-llvm-cov
+
+      - name: Run coverage policy check
+        run: greentic-dev coverage

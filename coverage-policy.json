@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "global": {
+    "line_coverage_min": 60.0
+  },
+  "defaults": {
+    "per_file_line_coverage_min": 60.0
+  },
+  "exclusions": {
+    "files": [
+      "src/main.rs"
+    ]
+  },
+  "per_file": {
+    "crates/greentic-dw-providers-common/src/capability.rs": {
+      "line_coverage_min": 75.0
+    },
+    "crates/greentic-dw-providers-common/src/control.rs": {
+      "line_coverage_min": 75.0
+    },
+    "crates/greentic-dw-providers-common/src/engine.rs": {
+      "line_coverage_min": 75.0
+    },
+    "crates/greentic-dw-providers-common/src/integration.rs": {
+      "line_coverage_min": 75.0
+    },
+    "crates/greentic-dw-providers-common/src/memory.rs": {
+      "line_coverage_min": 75.0
+    },
+    "crates/greentic-dw-providers-common/src/observer.rs": {
+      "line_coverage_min": 75.0
+    },
+    "crates/greentic-dw-providers-common/src/provider.rs": {
+      "line_coverage_min": 75.0
+    },
+    "crates/greentic-dw-providers-common/src/state.rs": {
+      "line_coverage_min": 75.0
+    },
+    "crates/greentic-dw-providers-common/src/tool.rs": {
+      "line_coverage_min": 75.0
+    },
+    "crates/greentic-dw-providers-common/src/fixtures.rs": {
+      "line_coverage_min": 70.0
+    }
+  }
+}

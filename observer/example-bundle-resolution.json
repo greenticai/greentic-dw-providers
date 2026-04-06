@@ -1,0 +1,16 @@
+{
+  "pack_id": "vendor.observer.example",
+  "category": "observer",
+  "variants": [
+    {
+      "provider_type": "dw.observer.basic-audit",
+      "capability_uri": "cap://dw.observer.audit",
+      "pack_capability_id": "greentic.cap.observer.audit"
+    },
+    {
+      "provider_type": "dw.observer.basic-metrics",
+      "capability_uri": "cap://dw.observer.metrics",
+      "pack_capability_id": "greentic.cap.observer.metrics"
+    }
+  ]
+}

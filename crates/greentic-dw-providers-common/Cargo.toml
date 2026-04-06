@@ -1,0 +1,18 @@
+[package]
+name = "greentic-dw-providers-common"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme.workspace = true
+description = "Shared support crate for Greentic DW provider scaffolding."
+
+[dependencies]
+greentic-cap-types = { workspace = true }
+greentic-types = { workspace = true }
+greentic-interfaces = { workspace = true }
+greentic-pack = { workspace = true }
+greentic-state = { workspace = true }
+semver = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }

@@ -1,0 +1,16 @@
+{
+  "pack_id": "vendor.control.example",
+  "category": "control",
+  "variants": [
+    {
+      "provider_type": "dw.control.basic-policy",
+      "capability_uri": "cap://dw.control.basic",
+      "pack_capability_id": "greentic.cap.control.basic"
+    },
+    {
+      "provider_type": "dw.control.delegation-guard",
+      "capability_uri": "cap://dw.control.delegation-guard",
+      "pack_capability_id": "greentic.cap.control.delegation-guard"
+    }
+  ]
+}

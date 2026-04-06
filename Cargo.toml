@@ -1,0 +1,49 @@
+[workspace]
+members = [
+    "crates/greentic-dw-providers-common",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.5.0"
+edition = "2024"
+license = "MIT"
+repository = "https://github.com/greenticai/greentic-dw-providers"
+readme = "README.md"
+description = "Greentic digital worker provider workspace scaffold."
+
+[workspace.dependencies]
+criterion = "0.5"
+greentic-dw-providers-common = { path = "crates/greentic-dw-providers-common", version = "0.5" }
+greentic-dw = { version = "0.5" }
+greentic-cap = { version = "0.5" }
+greentic-cap-types = { version = "0.5" }
+greentic-dw-manifest = { version = "0.5" }
+greentic-dw-types = { version = "0.5" }
+greentic-types = { version = "0.4", default-features = false, features = ["std", "serde", "time"] }
+greentic-interfaces = { version = "0.4", default-features = false, features = ["bindings-rust", "provider-common", "state-store-v1"] }
+greentic-pack = { package = "greentic-pack-lib", version = "0.4" }
+greentic-state = { version = "0.4", default-features = false }
+semver = { version = "1" }
+serde = { version = "1", features = ["derive"] }
+thiserror = { version = "2" }
+
+[package]
+name = "greentic-dw-providers"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme.workspace = true
+description.workspace = true
+publish = false
+
+[dependencies]
+greentic-dw-providers-common = { workspace = true }
+
+[dev-dependencies]
+criterion = { workspace = true }
+
+[[bench]]
+name = "perf"
+harness = false
