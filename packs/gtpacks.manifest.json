@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "packs": [
+    {
+      "category": "memory",
+      "name": "short-term-in-memory",
+      "pack_id": "greentic.dw.providers.memory.short-term.in-memory"
+    },
+    {
+      "category": "memory",
+      "name": "short-term-redis",
+      "pack_id": "greentic.dw.providers.memory.short-term.redis"
+    },
+    {
+      "category": "state",
+      "name": "task-store-in-memory",
+      "pack_id": "greentic.dw.providers.state.task-store.in-memory"
+    },
+    {
+      "category": "state",
+      "name": "task-store-redis",
+      "pack_id": "greentic.dw.providers.state.task-store.redis"
+    },
+    {
+      "category": "engine",
+      "name": "default",
+      "pack_id": "greentic.dw.providers.engine.default"
+    },
+    {
+      "category": "engine",
+      "name": "router-lite",
+      "pack_id": "greentic.dw.providers.engine.router-lite"
+    },
+    {
+      "category": "control",
+      "name": "basic-policy",
+      "pack_id": "greentic.dw.providers.control.basic-policy"
+    },
+    {
+      "category": "control",
+      "name": "delegation-guard",
+      "pack_id": "greentic.dw.providers.control.delegation-guard"
+    },
+    {
+      "category": "observer",
+      "name": "basic-audit",
+      "pack_id": "greentic.dw.providers.observer.basic-audit"
+    },
+    {
+      "category": "observer",
+      "name": "basic-metrics",
+      "pack_id": "greentic.dw.providers.observer.basic-metrics"
+    },
+    {
+      "category": "tool",
+      "name": "mcp-adapter",
+      "pack_id": "greentic.dw.providers.tool.mcp-adapter"
+    },
+    {
+      "category": "tool",
+      "name": "wasm-adapter",
+      "pack_id": "greentic.dw.providers.tool.wasm-adapter"
+    }
+  ]
+}

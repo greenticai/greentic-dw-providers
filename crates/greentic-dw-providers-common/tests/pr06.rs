@@ -14,7 +14,7 @@ fn oss_example_uses_in_memory_providers() {
             .bundle
             .app_packs
             .iter()
-            .any(|value| value.contains("memory-short-term-in-memory"))
+            .any(|value| value.contains("packs/dw/memory/short-term-in-memory-pack"))
     );
     assert!(
         example
@@ -34,7 +34,7 @@ fn enterprise_example_uses_redis_providers() {
     assert!(example.resolution.binding_overrides.iter().any(|value| {
         value
             .provider_ref
-            .starts_with("oci://ghcr.io/greenticai/packs")
+            .starts_with("oci://ghcr.io/greenticai/packs/dw/")
     }));
     assert!(
         example

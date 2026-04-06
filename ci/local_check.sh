@@ -20,4 +20,7 @@ cargo build --workspace --all-features
 step "cargo doc --workspace --no-deps --all-features"
 cargo doc --workspace --no-deps --all-features
 
+step "validate gtpack wizard manifests"
+bash ci/gtpacks.sh validate
+
 step "done"

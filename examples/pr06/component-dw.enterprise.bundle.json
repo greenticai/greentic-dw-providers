@@ -12,14 +12,14 @@
     "state/setup/redis.yaml"
   ],
   "app_packs": [
-    "packs/memory-short-term-redis.gtpack",
-    "packs/task-store-redis.gtpack",
-    "packs/observer-basic-audit.gtpack"
+    "packs/dw/memory/short-term-redis-pack.gtpack",
+    "packs/dw/state/task-store-redis-pack.gtpack",
+    "packs/dw/observer/basic-audit-pack.gtpack"
   ],
   "extension_providers": [
-    "providers/memory-short-term-redis.gtpack",
-    "providers/task-store-redis.gtpack",
-    "providers/observer-basic-audit.gtpack"
+    "providers/dw/memory/short-term-redis-pack.gtpack",
+    "providers/dw/state/task-store-redis-pack.gtpack",
+    "providers/dw/observer/basic-audit-pack.gtpack"
   ],
   "capabilities": [
     "cap://dw.memory.short-term",
