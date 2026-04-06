@@ -37,9 +37,10 @@
   - **Key functionality:** Defines the global and per-file line coverage minimums, excludes the thin root entrypoint, and raises thresholds for the shared helper modules.
   - **Key dependencies / integration points:** Intended for the repository coverage tooling and future CI coverage enforcement.
 
-- **Path:** `.github/workflows/ci.yml`
-  - **Role:** GitHub Actions CI workflow.
-  - **Key functionality:** Runs the local check script on pull requests and pushes to the main branch.
+- **Path:** `.github/workflows/publish.yml`
+  - **Role:** GitHub Actions publish and validation workflow.
+  - **Key functionality:** Runs the local check script on pull requests and pushes to the main branch, validates release tags against the root version, publishes the shared crate to crates.io on release-capable runs, and documents the intended GHCR pack namespace for future `gtpack` artifacts.
+  - **Key dependencies / integration points:** Uses `ci/local_check.sh` for CI gating and reserves `oci://ghcr.io/greenticai/packs/dw/<dw-type>/<dw-name>-pack:<version>` for pack publishing.
 
 - **Path:** `.github/workflows/perf.yml`
   - **Role:** Lightweight performance and concurrency workflow.

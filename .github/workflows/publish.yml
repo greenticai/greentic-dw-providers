@@ -1,0 +1,181 @@
+name: Publish
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag in the format vX.Y.Z"
+        required: false
+        type: string
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Run local checks
+        run: bash ci/local_check.sh
+
+  verify-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read root version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(sed -n 's/^version = "\([^"]*\)"/\1/p' Cargo.toml | head -n1)"
+          if [ -z "$version" ]; then
+            echo "Unable to determine root package version from Cargo.toml"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve tag to validate
+        id: tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ inputs.tag }}" ]; then
+            tag="${{ inputs.tag }}"
+          elif [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            tag="${GITHUB_REF_NAME}"
+          else
+            tag="v${{ steps.version.outputs.version }}"
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Validate tag matches Cargo.toml version
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected_tag="v${{ steps.version.outputs.version }}"
+          actual_tag="${{ steps.tag.outputs.tag }}"
+          if [ "$expected_tag" != "$actual_tag" ]; then
+            echo "Tag/version mismatch"
+            echo "Expected: $expected_tag"
+            echo "Actual:   $actual_tag"
+            exit 1
+          fi
+
+  publish-crates:
+    needs:
+      - ci
+      - verify-version
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment:
+      name: crates-io
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Publish common crate to crates.io
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -z "${CARGO_REGISTRY_TOKEN:-}" ]; then
+            echo "Missing CARGO_REGISTRY_TOKEN secret"
+            exit 1
+          fi
+
+          attempt=1
+          while true; do
+            set +e
+            output="$(cargo publish --allow-dirty -p greentic-dw-providers-common 2>&1)"
+            status=$?
+            set -e
+
+            if [ "$status" -eq 0 ]; then
+              printf '%s\n' "$output"
+              break
+            fi
+
+            if printf '%s\n' "$output" | grep -Eiq 'already (exists|uploaded)|version .*already|crate .*already'; then
+              printf '%s\n' "$output"
+              printf '%s already exists on crates.io; treating as success\n' "greentic-dw-providers-common"
+              break
+            fi
+
+            if [ "$attempt" -ge 3 ]; then
+              printf '%s\n' "$output"
+              echo "Failed to publish greentic-dw-providers-common after $attempt attempts"
+              exit 1
+            fi
+
+            printf '%s\n' "$output"
+            sleep_for=$((attempt * 15))
+            echo "Retrying greentic-dw-providers-common in ${sleep_for}s (attempt $((attempt + 1))/3)..."
+            sleep "$sleep_for"
+            attempt=$((attempt + 1))
+          done
+
+  validate-gtpack-layout:
+    needs:
+      - ci
+      - verify-version
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate pack namespace
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          shopt -s nullglob
+          pack_dirs=(packs/dw/*/*-pack)
+          if [ "${#pack_dirs[@]}" -eq 0 ]; then
+            echo "No gtpack artifacts found under packs/dw/**; GHCR publish is currently a no-op."
+            echo "Expected future namespace: oci://ghcr.io/greenticai/packs/dw/<dw-type>/<dw-name>-pack:<version>"
+            exit 0
+          fi
+
+          version="${{ needs.verify-version.outputs.version }}"
+          for pack_dir in "${pack_dirs[@]}"; do
+            rel="${pack_dir#packs/dw/}"
+            dw_type="${rel%%/*}"
+            pack_name="${rel##*/}"
+            echo "Would publish ${pack_dir} as ghcr.io/greenticai/packs/dw/${dw_type}/${pack_name}:${version}"
+          done

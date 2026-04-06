@@ -112,7 +112,7 @@ Coverage policy enforcement runs through [`greentic-dev coverage`](https://githu
 
 Lightweight performance and concurrency checks run through [`benches/perf.rs`](benches/perf.rs), [`tests/perf_scaling.rs`](tests/perf_scaling.rs), and [`tests/perf_timeout.rs`](tests/perf_timeout.rs). The Criterion harness now splits provider-extension validation from pack-manifest assembly and CBOR encoding so the hot path is easier to pinpoint. The `perf` GitHub workflow runs the workspace tests and a Criterion smoke benchmark on pull requests and pushes to the main branch.
 
-Release automation has not been added yet; the repo currently only has bootstrap-level CI plus nightly coverage and lightweight perf enforcement.
+Release automation now lives in [`.github/workflows/publish.yml`](.github/workflows/publish.yml). It runs the local CI checks on pull requests and pushes to `main`/`master`, validates release tags against the root Cargo version, publishes the shared crate to crates.io on release-capable pushes, and reserves the GHCR pack namespace `oci://ghcr.io/greenticai/packs/dw/<dw-type>/<dw-name>-pack:<version>` for future `gtpack` artifacts.
 
 ## Examples
 
