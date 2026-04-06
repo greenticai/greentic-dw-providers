@@ -19,6 +19,10 @@ concurrency:
   group: publish-${{ github.ref }}
   cancel-in-progress: false
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -33,6 +37,17 @@ jobs:
 
       - name: Cache Cargo
         uses: Swatinem/rust-cache@v2
+
+      - name: Install cargo-binstall
+        uses: cargo-bins/cargo-binstall@main
+
+      - name: Install gtc
+        shell: bash
+        run: cargo binstall gtc --no-confirm
+
+      - name: Install Greentic tools
+        shell: bash
+        run: gtc install
 
       - name: Run local checks
         run: bash ci/local_check.sh
@@ -147,7 +162,7 @@ jobs:
             attempt=$((attempt + 1))
           done
 
-  validate-gtpack-layout:
+  build-gtpacks:
     needs:
       - ci
       - verify-version
@@ -159,23 +174,60 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate pack namespace
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install cargo-binstall
+        uses: cargo-bins/cargo-binstall@main
+
+      - name: Install gtc
         shell: bash
-        run: |
-          set -euo pipefail
+        run: cargo binstall gtc --no-confirm
 
-          shopt -s nullglob
-          pack_dirs=(packs/dw/*/*-pack)
-          if [ "${#pack_dirs[@]}" -eq 0 ]; then
-            echo "No gtpack artifacts found under packs/dw/**; GHCR publish is currently a no-op."
-            echo "Expected future namespace: oci://ghcr.io/greenticai/packs/dw/<dw-type>/<dw-name>-pack:<version>"
-            exit 0
-          fi
+      - name: Install Greentic tools
+        shell: bash
+        run: gtc install
 
-          version="${{ needs.verify-version.outputs.version }}"
-          for pack_dir in "${pack_dirs[@]}"; do
-            rel="${pack_dir#packs/dw/}"
-            dw_type="${rel%%/*}"
-            pack_name="${rel##*/}"
-            echo "Would publish ${pack_dir} as ghcr.io/greenticai/packs/dw/${dw_type}/${pack_name}:${version}"
-          done
+      - name: Build gtpack artifacts with gtc wizard answers
+        shell: bash
+        run: bash ci/gtpacks.sh build
+
+      - name: Upload gtpack artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: gtpack-artifacts
+          path: dist/packs/dw/**/*.gtpack
+          if-no-files-found: error
+
+  publish-gtpacks:
+    needs:
+      - ci
+      - verify-version
+      - build-gtpacks
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download gtpack artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: gtpack-artifacts
+          path: dist
+
+      - name: Install oras
+        uses: oras-project/setup-oras@v1
+
+      - name: Publish gtpack artifacts to GHCR
+        env:
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: bash ci/gtpacks.sh publish

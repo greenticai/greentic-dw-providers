@@ -5,6 +5,7 @@
 - The repo now has a functional shared helper crate that reuses Greentic core models and builds the provider/capability naming patterns used by future provider packages. The root binary remains a lightweight workspace banner rather than a runtime entrypoint.
 - The engine family, the control family, the observer family, the tool family, the short-term memory family, and the task-store family are the first concrete provider contracts in the tree: the repo now documents `default` and `router-lite` engine variants, `basic-policy` / `delegation-guard` control variants, `basic-audit` / `basic-metrics` observer variants, `wasm-adapter` / `mcp-adapter` tool variants, plus `in-memory` and `redis` variants for the memory and state families.
 - The repo now also carries PR-06 end-to-end fixtures that combine short-term memory, task-state, and audit observer contracts into OSS and enterprise example bundle/setup flows.
+- The release path now generates scaffold gtpack artifacts from `packs/gtpacks.manifest.json` with `gtc wizard --answers` and publishes them to GHCR under the `packs/dw/<dw-type>/<dw-name>-pack` namespace.
 - The workspace now consumes the sibling `greentic-dw` and `greentic-cap` APIs through the `0.5` crate line instead of local path references.
 
 ## 2. Main Components and Functionality
@@ -29,8 +30,18 @@
 
 - **Path:** `ci/local_check.sh`
   - **Role:** Local validation wrapper.
-  - **Key functionality:** Runs formatting, clippy, tests, build, and docs for the workspace.
+  - **Key functionality:** Runs formatting, clippy, tests, build, docs, and lightweight gtpack manifest validation for the workspace.
   - **Key dependencies / integration points:** Mirrors the repository CI checks.
+
+- **Path:** `ci/gtpacks.sh`
+  - **Role:** Manifest-driven gtpack generation and publishing helper.
+  - **Key functionality:** Validates `packs/gtpacks.manifest.json`, checks the launcher AnswerDocuments against `gtc wizard --schema`, generates scaffold packs with `gtc wizard --answers`, and publishes the resulting `.gtpack` archives to GHCR with `oras`.
+  - **Key dependencies / integration points:** Used by the release workflow and the local validation wrapper.
+
+- **Path:** `packs/gtpacks.manifest.json`
+  - **Role:** Source manifest for release-time gtpack generation.
+  - **Key functionality:** Lists the current pack categories, pack names, and pack ids that the release workflow turns into `.gtpack` artifacts.
+  - **Key dependencies / integration points:** Consumed by `ci/gtpacks.sh`.
 
 - **Path:** `coverage-policy.json`
   - **Role:** Coverage policy gate.
@@ -39,8 +50,8 @@
 
 - **Path:** `.github/workflows/publish.yml`
   - **Role:** GitHub Actions publish and validation workflow.
-  - **Key functionality:** Runs the local check script on pull requests and pushes to the main branch, validates release tags against the root version, publishes the shared crate to crates.io on release-capable runs, and documents the intended GHCR pack namespace for future `gtpack` artifacts.
-  - **Key dependencies / integration points:** Uses `ci/local_check.sh` for CI gating and reserves `oci://ghcr.io/greenticai/packs/dw/<dw-type>/<dw-name>-pack:<version>` for pack publishing.
+  - **Key functionality:** Runs the local check script on pull requests and pushes to the main branch, validates release tags against the root version, publishes the shared crate to crates.io on release-capable runs, generates gtpack artifacts from `packs/gtpacks.manifest.json` with `gtc wizard --answers`, and publishes those archives to GHCR.
+  - **Key dependencies / integration points:** Uses `ci/local_check.sh` for CI gating, `ci/gtpacks.sh` for pack generation/publishing, and reserves `oci://ghcr.io/greenticai/packs/dw/<dw-type>/<dw-name>-pack:<version>` for pack publishing.
 
 - **Path:** `.github/workflows/perf.yml`
   - **Role:** Lightweight performance and concurrency workflow.

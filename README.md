@@ -114,6 +114,8 @@ Lightweight performance and concurrency checks run through [`benches/perf.rs`](b
 
 Release automation now lives in [`.github/workflows/publish.yml`](.github/workflows/publish.yml). It runs the local CI checks on pull requests and pushes to `main`/`master`, validates release tags against the root Cargo version, publishes the shared crate to crates.io on release-capable pushes, and reserves the GHCR pack namespace `oci://ghcr.io/greenticai/packs/dw/<dw-type>/<dw-name>-pack:<version>` for future `gtpack` artifacts.
 
+The release job now generates those `.gtpack` artifacts from `packs/gtpacks.manifest.json` using `cargo binstall gtc`, `gtc install`, `gtc wizard --schema`, and `gtc wizard --answers`, then publishes the resulting archives to GHCR with `oras` under the same `packs/dw/<dw-type>/<dw-name>-pack` namespace.
+
 ## Examples
 
 The `examples/pr06` directory contains the current end-to-end fixture set. It shows two documented paths:

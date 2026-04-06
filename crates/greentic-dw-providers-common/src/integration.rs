@@ -243,14 +243,14 @@ pub fn end_to_end_bundle_metadata(variant: EndToEndVariant) -> ExampleBundleMeta
         generated_resolved_files: vec![format!("resolved/{}.yaml", provider_suffix)],
         generated_setup_files: vec![format!("state/setup/{}.yaml", provider_suffix)],
         app_packs: vec![
-            format!("packs/memory-short-term-{}.gtpack", pack_suffix),
-            format!("packs/task-store-{}.gtpack", pack_suffix),
-            "packs/observer-basic-audit.gtpack".to_string(),
+            format!("packs/dw/memory/short-term-{}-pack.gtpack", pack_suffix),
+            format!("packs/dw/state/task-store-{}-pack.gtpack", pack_suffix),
+            "packs/dw/observer/basic-audit-pack.gtpack".to_string(),
         ],
         extension_providers: vec![
-            format!("providers/memory-short-term-{}.gtpack", pack_suffix),
-            format!("providers/task-store-{}.gtpack", pack_suffix),
-            "providers/observer-basic-audit.gtpack".to_string(),
+            format!("providers/dw/memory/short-term-{}-pack.gtpack", pack_suffix),
+            format!("providers/dw/state/task-store-{}-pack.gtpack", pack_suffix),
+            "providers/dw/observer/basic-audit-pack.gtpack".to_string(),
         ],
         capabilities: end_to_end_required_capabilities(),
         notes: vec![
@@ -272,13 +272,13 @@ pub fn end_to_end_binding_overrides(variant: EndToEndVariant) -> Vec<BindingOver
     let memory_provider_ref = match variant {
         EndToEndVariant::InMemory => "component:memory.short-term.in-memory".to_string(),
         EndToEndVariant::Redis => {
-            "oci://ghcr.io/greenticai/packs/dw-providers/memory/short-term-redis:latest".to_string()
+            "oci://ghcr.io/greenticai/packs/dw/memory/short-term-redis-pack:latest".to_string()
         }
     };
     let state_provider_ref = match variant {
         EndToEndVariant::InMemory => "component:state.task-store.in-memory".to_string(),
         EndToEndVariant::Redis => {
-            "oci://ghcr.io/greenticai/packs/dw-providers/state/task-store-redis:latest".to_string()
+            "oci://ghcr.io/greenticai/packs/dw/state/task-store-redis-pack:latest".to_string()
         }
     };
     let observer_provider_ref = "component:observer.basic-audit".to_string();
