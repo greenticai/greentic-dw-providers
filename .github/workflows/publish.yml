@@ -41,15 +41,24 @@ jobs:
       - name: Install cargo-binstall
         uses: cargo-bins/cargo-binstall@main
 
-      - name: Install gtc
+      - name: Install Greentic CLIs
         shell: bash
         run: |
-          cargo binstall gtc --no-confirm
-          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          set -euo pipefail
+          cargo binstall gtc --no-confirm --force
+          cargo binstall greentic-dev --no-confirm --force
+          test -x "${CARGO_HOME:-$HOME/.cargo}/bin/gtc"
+          test -x "${CARGO_HOME:-$HOME/.cargo}/bin/greentic-dev"
 
       - name: Install Greentic tools
         shell: bash
-        run: gtc install
+        run: |
+          set -euo pipefail
+          bin_dir="${CARGO_HOME:-$HOME/.cargo}/bin"
+          "${bin_dir}/greentic-dev" install tools --latest
+          "${bin_dir}/gtc" install
+          test -x "${bin_dir}/greentic-pack"
+          echo "${bin_dir}" >> "$GITHUB_PATH"
 
       - name: Run local checks
         run: bash ci/local_check.sh
@@ -90,7 +99,7 @@ jobs:
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
       - name: Validate tag matches Cargo.toml version
-        if: github.event_name != 'pull_request'
+        if: github.ref_type == 'tag' || (github.event_name == 'workflow_dispatch' && inputs.tag != '')
         shell: bash
         run: |
           set -euo pipefail
@@ -185,15 +194,24 @@ jobs:
       - name: Install cargo-binstall
         uses: cargo-bins/cargo-binstall@main
 
-      - name: Install gtc
+      - name: Install Greentic CLIs
         shell: bash
         run: |
-          cargo binstall gtc --no-confirm
-          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          set -euo pipefail
+          cargo binstall gtc --no-confirm --force
+          cargo binstall greentic-dev --no-confirm --force
+          test -x "${CARGO_HOME:-$HOME/.cargo}/bin/gtc"
+          test -x "${CARGO_HOME:-$HOME/.cargo}/bin/greentic-dev"
 
       - name: Install Greentic tools
         shell: bash
-        run: gtc install
+        run: |
+          set -euo pipefail
+          bin_dir="${CARGO_HOME:-$HOME/.cargo}/bin"
+          "${bin_dir}/greentic-dev" install tools --latest
+          "${bin_dir}/gtc" install
+          test -x "${bin_dir}/greentic-pack"
+          echo "${bin_dir}" >> "$GITHUB_PATH"
 
       - name: Build gtpack artifacts with gtc wizard answers
         shell: bash
