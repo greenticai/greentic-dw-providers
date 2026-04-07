@@ -228,14 +228,24 @@ publish_gtpacks() {
   printf '%s' "$token" | oras login ghcr.io -u "${GITHUB_ACTOR:-github-actions[bot]}" --password-stdin
 
   shopt -s nullglob
-  gtpacks=("$dist_root"/packs/dw/*/*-pack.gtpack)
+  gtpacks=(
+    "$dist_root"/packs/dw/*/*-pack.gtpack
+    "$dist_root"/*/*-pack.gtpack
+  )
   if [ "${#gtpacks[@]}" -eq 0 ]; then
-    echo "No gtpack artifacts found under ${dist_root}/packs/dw/**"
+    echo "No gtpack artifacts found under ${dist_root}/packs/dw/** or ${dist_root}/*/**"
     exit 1
   fi
 
   for gtpack in "${gtpacks[@]}"; do
-    rel="${gtpack#${dist_root}/}"
+    if [[ "$gtpack" == "$dist_root"/packs/dw/* ]]; then
+      rel="${gtpack#${dist_root}/}"
+    elif [[ "$gtpack" == "$dist_root"/* ]]; then
+      rel="packs/dw/${gtpack#${dist_root}/}"
+    else
+      echo "Unexpected gtpack artifact path: ${gtpack}" >&2
+      exit 1
+    fi
     ref="ghcr.io/greenticai/${rel%.gtpack}:${version}"
     echo "Publishing ${gtpack} -> ${ref}"
     oras push \
