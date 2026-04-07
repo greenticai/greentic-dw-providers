@@ -43,7 +43,9 @@ jobs:
 
       - name: Install gtc
         shell: bash
-        run: cargo binstall gtc --no-confirm
+        run: |
+          cargo binstall gtc --no-confirm
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
 
       - name: Install Greentic tools
         shell: bash
@@ -88,7 +90,7 @@ jobs:
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
       - name: Validate tag matches Cargo.toml version
-        if: github.event_name != 'pull_request'
+        if: github.ref_type == 'tag' || (github.event_name == 'workflow_dispatch' && inputs.tag != '')
         shell: bash
         run: |
           set -euo pipefail
@@ -185,7 +187,9 @@ jobs:
 
       - name: Install gtc
         shell: bash
-        run: cargo binstall gtc --no-confirm
+        run: |
+          cargo binstall gtc --no-confirm
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
 
       - name: Install Greentic tools
         shell: bash
