@@ -44,12 +44,13 @@ jobs:
       - name: Install gtc
         shell: bash
         run: |
+          set -euo pipefail
           cargo binstall gtc --no-confirm
-          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          test -x "$HOME/.cargo/bin/gtc"
 
       - name: Install Greentic tools
         shell: bash
-        run: gtc install
+        run: '"$HOME/.cargo/bin/gtc" install'
 
       - name: Run local checks
         run: bash ci/local_check.sh
@@ -188,12 +189,13 @@ jobs:
       - name: Install gtc
         shell: bash
         run: |
+          set -euo pipefail
           cargo binstall gtc --no-confirm
-          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          test -x "$HOME/.cargo/bin/gtc"
 
       - name: Install Greentic tools
         shell: bash
-        run: gtc install
+        run: '"$HOME/.cargo/bin/gtc" install'
 
       - name: Build gtpack artifacts with gtc wizard answers
         shell: bash
