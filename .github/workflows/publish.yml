@@ -43,7 +43,9 @@ jobs:
 
       - name: Install gtc
         shell: bash
-        run: cargo binstall gtc --no-confirm
+        run: |
+          cargo binstall gtc --no-confirm
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
 
       - name: Install Greentic tools
         shell: bash
@@ -185,7 +187,9 @@ jobs:
 
       - name: Install gtc
         shell: bash
-        run: cargo binstall gtc --no-confirm
+        run: |
+          cargo binstall gtc --no-confirm
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
 
       - name: Install Greentic tools
         shell: bash
