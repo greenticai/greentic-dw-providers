@@ -50,7 +50,11 @@ jobs:
 
       - name: Install Greentic tools
         shell: bash
-        run: '"${CARGO_HOME:-$HOME/.cargo}/bin/gtc" install'
+        run: |
+          set -euo pipefail
+          bin_dir="${CARGO_HOME:-$HOME/.cargo}/bin"
+          "${bin_dir}/gtc" install
+          echo "${bin_dir}" >> "$GITHUB_PATH"
 
       - name: Run local checks
         run: bash ci/local_check.sh
@@ -195,7 +199,11 @@ jobs:
 
       - name: Install Greentic tools
         shell: bash
-        run: '"${CARGO_HOME:-$HOME/.cargo}/bin/gtc" install'
+        run: |
+          set -euo pipefail
+          bin_dir="${CARGO_HOME:-$HOME/.cargo}/bin"
+          "${bin_dir}/gtc" install
+          echo "${bin_dir}" >> "$GITHUB_PATH"
 
       - name: Build gtpack artifacts with gtc wizard answers
         shell: bash
