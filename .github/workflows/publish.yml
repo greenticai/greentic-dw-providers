@@ -45,12 +45,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cargo binstall gtc --no-confirm
-          test -x "$HOME/.cargo/bin/gtc"
+          cargo binstall gtc --no-confirm --force
+          test -x "${CARGO_HOME:-$HOME/.cargo}/bin/gtc"
 
       - name: Install Greentic tools
         shell: bash
-        run: '"$HOME/.cargo/bin/gtc" install'
+        run: '"${CARGO_HOME:-$HOME/.cargo}/bin/gtc" install'
 
       - name: Run local checks
         run: bash ci/local_check.sh
@@ -190,12 +190,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cargo binstall gtc --no-confirm
-          test -x "$HOME/.cargo/bin/gtc"
+          cargo binstall gtc --no-confirm --force
+          test -x "${CARGO_HOME:-$HOME/.cargo}/bin/gtc"
 
       - name: Install Greentic tools
         shell: bash
-        run: '"$HOME/.cargo/bin/gtc" install'
+        run: '"${CARGO_HOME:-$HOME/.cargo}/bin/gtc" install'
 
       - name: Build gtpack artifacts with gtc wizard answers
         shell: bash
