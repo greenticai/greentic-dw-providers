@@ -1,0 +1,14 @@
+[package]
+name = "greentic-dw-control-basic-policy"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Basic policy control provider for Greentic DW."
+
+[dependencies]
+greentic-dw-control = { workspace = true }
+greentic-dw-providers-common = { workspace = true }
+greentic-types = { workspace = true }
+serde_json = { workspace = true }

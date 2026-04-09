@@ -1,11 +1,14 @@
 # memory/short-term/redis
 
-Placeholder for the Redis-backed short-term memory provider.
+Redis-backed short-term memory provider crate.
 
-This provider is expected to implement the same shared short-term memory contract as the in-memory variant:
+This backend now contains real Rust code:
 
+- crate: `greentic-dw-memory-redis`
+- shared contract crate: `greentic-dw-memory`
 - capability URI: `cap://dw.memory.short-term`
 - pack capability id: `greentic.cap.memory.short-term`
 - operations: `memory.get`, `memory.put`, `memory.delete`, `memory.clear`
 
-The helper crate includes sample manifest and pack fixtures for this variant.
+The provider reuses `greentic-state`'s `RedisStateStore` and exposes the canonical provider
+declaration and pack manifest for the Redis variant.

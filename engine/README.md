@@ -1,6 +1,6 @@
 # Engine Providers
 
-This directory anchors the engine provider family planned by the workspace.
+This directory contains the engine provider family.
 
 The shared helper crate currently defines the first engine contract:
 
@@ -9,6 +9,7 @@ The shared helper crate currently defines the first engine contract:
 
 The current contract split is:
 
+- `engine/core/` for the shared engine contract crate
 - `engine/default/` for the default/simple engine
 - `engine/router-lite/` for the router/planner-lite engine
 
@@ -23,3 +24,9 @@ The provider helper crate now exposes:
 - `engine_capability_declaration`
 - `engine_pack_manifest`
 - `engine_pack_manifest_cbor`
+
+The implemented engine crates are:
+
+- `greentic-dw-engine`
+- `greentic-dw-engine-default`
+- `greentic-dw-engine-router-lite`

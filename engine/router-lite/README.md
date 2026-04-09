@@ -1,6 +1,6 @@
 # Engine Router Lite
 
-Router/planner-lite engine provider anchor.
+Router/planner-lite engine provider crate.
 
 The current shared contract uses:
 
@@ -8,4 +8,5 @@ The current shared contract uses:
 - capability URI `cap://dw.engine.router`
 - pack capability id `greentic.cap.engine.router`
 
-This directory is currently documentation only.
+This backend now contains real Rust code and performs lightweight rule-based route selection
+with a simple execution plan outline.

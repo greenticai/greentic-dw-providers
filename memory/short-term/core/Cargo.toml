@@ -1,0 +1,16 @@
+[package]
+name = "greentic-dw-memory"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "../README.md"
+description = "Shared short-term memory contract and store-backed implementation helpers."
+
+[dependencies]
+greentic-dw-providers-common = { workspace = true }
+greentic-state = { workspace = true }
+greentic-types = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+

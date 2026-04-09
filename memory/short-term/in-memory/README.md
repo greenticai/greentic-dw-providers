@@ -1,11 +1,14 @@
 # memory/short-term/in-memory
 
-Placeholder for the in-memory short-term memory provider.
+In-memory short-term memory provider crate.
 
-This provider is expected to implement the shared short-term memory contract:
+This backend now contains real Rust code:
 
+- crate: `greentic-dw-memory-in-memory`
+- shared contract crate: `greentic-dw-memory`
 - capability URI: `cap://dw.memory.short-term`
 - pack capability id: `greentic.cap.memory.short-term`
 - operations: `memory.get`, `memory.put`, `memory.delete`, `memory.clear`
 
-The helper crate includes sample manifest and pack fixtures for this variant.
+The provider delegates storage to `greentic-state`'s `InMemoryStateStore` and exposes the
+canonical provider declaration and pack manifest for the in-memory variant.

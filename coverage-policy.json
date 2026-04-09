@@ -12,6 +12,15 @@
     ]
   },
   "per_file": {
+    "control/core/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "control/basic-policy/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "control/delegation-guard/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
     "crates/greentic-dw-providers-common/src/capability.rs": {
       "line_coverage_min": 75.0
     },
@@ -41,6 +50,51 @@
     },
     "crates/greentic-dw-providers-common/src/fixtures.rs": {
       "line_coverage_min": 70.0
+    },
+    "engine/core/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "engine/default/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "engine/router-lite/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "memory/short-term/core/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "memory/short-term/in-memory/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "memory/short-term/redis/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "observer/core/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "observer/basic-audit/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "observer/basic-metrics/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "state/task-store/core/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "state/task-store/in-memory/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "state/task-store/redis/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "tool/core/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "tool/component-adapter/src/lib.rs": {
+      "line_coverage_min": 45.0
+    },
+    "tool/mcp-adapter/src/lib.rs": {
+      "line_coverage_min": 45.0
     }
   }
 }

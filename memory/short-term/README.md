@@ -2,9 +2,12 @@
 
 Shared short-term memory provider contract.
 
-This family contains two backend variants:
+This family now contains one shared contract crate plus two backend variants:
 
+- core
 - in-memory
 - redis
 
-Both variants implement the same short-term memory capability contract and are expected to expose the same pack-level metadata.
+The shared crate owns the short-term memory trait, config surface, and `StateStore`-backed
+implementation logic. Both backend crates implement the same short-term memory capability
+contract and expose the same pack-level metadata.
