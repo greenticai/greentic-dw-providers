@@ -58,8 +58,8 @@
     },
     {
       "category": "tool",
-      "name": "wasm-adapter",
-      "pack_id": "greentic.dw.providers.tool.wasm-adapter"
+      "name": "component-adapter",
+      "pack_id": "greentic.dw.providers.tool.component-adapter"
     }
   ]
 }

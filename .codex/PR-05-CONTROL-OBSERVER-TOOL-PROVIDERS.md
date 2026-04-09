@@ -13,7 +13,7 @@ Add enough reference providers to make end-to-end examples realistic.
 - basic-metrics
 
 ### tool
-- wasm-adapter
+- component-adapter
 - mcp-adapter
 
 ## Example capabilities
@@ -21,7 +21,7 @@ Add enough reference providers to make end-to-end examples realistic.
 - `cap://dw.control.delegation-guard`
 - `cap://dw.observer.audit`
 - `cap://dw.observer.metrics`
-- `cap://dw.tool.wasm`
+- `cap://dw.tool.component`
 - `cap://dw.tool.mcp`
 
 ## Deliverables
@@ -33,7 +33,7 @@ Add enough reference providers to make end-to-end examples realistic.
 - The shared helper crate now exposes:
   - `ControlVariant` for `basic-policy` and `delegation-guard`
   - `ObserverVariant` for `basic-audit` and `basic-metrics`
-  - `ToolVariant` for `wasm-adapter` and `mcp-adapter`
+  - `ToolVariant` for `component-adapter` and `mcp-adapter`
   - the shared capability URIs, pack capability ids, provider declarations, capability declarations, pack manifests, and CBOR encoding helpers for all three families
   - pack-capability selection helpers for each family
 - The repository also includes the `control/`, `observer/`, and `tool/` documentation trees plus example bundle-resolution JSON files for each family.

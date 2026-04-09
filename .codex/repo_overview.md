@@ -1,9 +1,13 @@
 # Repository Overview
 
 ## 1. High-Level Purpose
-- This repository is a Rust workspace scaffold for Greentic digital worker providers. It is intended to grow into category-specific provider crates for engine, memory, state, control, observer, and tool integrations.
+- This repository is a Rust workspace for Greentic digital worker providers. It still contains placeholder categories for some provider families, but the control, engine, short-term memory, observer, and task-store families now include real backend crates alongside the shared helper crate.
 - The repo now has a functional shared helper crate that reuses Greentic core models and builds the provider/capability naming patterns used by future provider packages. The root binary remains a lightweight workspace banner rather than a runtime entrypoint.
-- The engine family, the control family, the observer family, the tool family, the short-term memory family, and the task-store family are the first concrete provider contracts in the tree: the repo now documents `default` and `router-lite` engine variants, `basic-policy` / `delegation-guard` control variants, `basic-audit` / `basic-metrics` observer variants, `wasm-adapter` / `mcp-adapter` tool variants, plus `in-memory` and `redis` variants for the memory and state families.
+- The engine family, the control family, the observer family, the tool family, the short-term memory family, and the task-store family are the first concrete provider contracts in the tree: the repo now documents `default` and `router-lite` engine variants, `basic-policy` / `delegation-guard` control variants, `basic-audit` / `basic-metrics` observer variants, `component-adapter` / `mcp-adapter` tool variants, plus `in-memory` and `redis` variants for the memory and state families.
+- The memory family now has real backend code in this repo: `memory/short-term/core` provides the shared short-term memory contract, while `memory/short-term/in-memory` and `memory/short-term/redis` implement store-backed providers on top of `greentic-state`.
+- The observer family now also has real backend code: `observer/core` provides the shared observer contract, while `observer/basic-audit` and `observer/basic-metrics` implement tenant-scoped audit logging and metrics aggregation.
+- The engine family now also has real backend code: `engine/core` provides the shared engine contract, while `engine/default` and `engine/router-lite` implement a direct-action engine and a lightweight heuristic router.
+- The control family now also has real backend code: `control/core` provides the shared control contract, while `control/basic-policy` and `control/delegation-guard` implement allow/deny policy checks and explicit delegation gating.
 - The repo now also carries PR-06 end-to-end fixtures that combine short-term memory, task-state, and audit observer contracts into OSS and enterprise example bundle/setup flows.
 - The release path now generates scaffold gtpack artifacts from `packs/gtpacks.manifest.json` with `gtc wizard --answers` and publishes them to GHCR under the `packs/dw/<dw-type>/<dw-name>-pack` namespace.
 - The workspace now consumes the sibling `greentic-dw` and `greentic-cap` APIs through the `0.5` crate line instead of local path references.
@@ -94,10 +98,70 @@
     - `observer.rs` builds observer helpers for the basic-audit and basic-metrics variants.
     - `memory.rs` builds short-term memory helpers for the in-memory and Redis variants.
     - `state.rs` builds task-store helpers for the in-memory and Redis variants.
-    - `tool.rs` builds tool helpers for the wasm-adapter and mcp-adapter variants.
+    - `tool.rs` builds tool helpers for the component-adapter and mcp-adapter variants.
     - `fixtures.rs` builds sample provider packs and CBOR-ready pack manifests for tests and examples.
     - `integration.rs` builds end-to-end OSS and enterprise bundle/setup fixtures.
   - **Key dependencies / integration points:** Uses the versioned `greentic-cap-types` and `greentic-dw-*` crate lines for capability declarations and DW manifest/type helpers, plus shared Greentic crates for packs, provider manifests, and state primitives.
+
+- **Path:** `engine/core`
+  - **Role:** Shared engine contract crate.
+  - **Key functionality:** Defines the engine trait, request model, and decision model used by concrete engine backends.
+  - **Key dependencies / integration points:** Reuses `greentic-types` for tenant scoping and standard Greentic error handling.
+
+- **Path:** `engine/default`
+  - **Role:** Default engine backend crate.
+  - **Key functionality:** Produces direct decisions by selecting the first available candidate or deriving an action directly from the request goal.
+  - **Key dependencies / integration points:** Builds on `engine/core` and uses `crates/greentic-dw-providers-common` for the canonical provider declaration and pack manifest.
+
+- **Path:** `engine/router-lite`
+  - **Role:** Router-lite engine backend crate.
+  - **Key functionality:** Performs lightweight rule-based route selection and emits a minimal execution plan for the chosen candidate.
+  - **Key dependencies / integration points:** Builds on `engine/core` and uses `crates/greentic-dw-providers-common` for the canonical provider declaration and pack manifest.
+
+- **Path:** `control/core`
+  - **Role:** Shared control contract crate.
+  - **Key functionality:** Defines the control trait, request model, and decision model used by concrete control backends.
+  - **Key dependencies / integration points:** Reuses `greentic-types` for tenant scoping and standard Greentic error handling.
+
+- **Path:** `control/basic-policy`
+  - **Role:** Basic policy control backend crate.
+  - **Key functionality:** Applies simple allow/deny rules based on action and policy attributes.
+  - **Key dependencies / integration points:** Builds on `control/core` and uses `crates/greentic-dw-providers-common` for the canonical provider declaration and pack manifest.
+
+- **Path:** `control/delegation-guard`
+  - **Role:** Delegation guard control backend crate.
+  - **Key functionality:** Blocks delegation unless it is explicitly allowed by request attributes.
+  - **Key dependencies / integration points:** Builds on `control/core` and uses `crates/greentic-dw-providers-common` for the canonical provider declaration and pack manifest.
+
+- **Path:** `memory/short-term/core`
+  - **Role:** Shared short-term memory contract crate.
+  - **Key functionality:** Defines the short-term memory trait, config model, write request shape, default prefixing, and a generic `StateStore`-backed implementation that handles tenant scoping and CRUD operations.
+  - **Key dependencies / integration points:** Reuses `greentic-state::StateStore` as the backend abstraction and `greentic-types` for tenant and state-key modeling.
+
+- **Path:** `memory/short-term/in-memory`
+  - **Role:** In-memory short-term memory backend crate.
+  - **Key functionality:** Wraps `greentic-state::inmemory::InMemoryStateStore` behind the shared short-term memory contract and exposes the canonical provider declaration and pack manifest for the in-memory backend.
+  - **Key dependencies / integration points:** Builds on `memory/short-term/core` and `crates/greentic-dw-providers-common`.
+
+- **Path:** `memory/short-term/redis`
+  - **Role:** Redis-backed short-term memory backend crate.
+  - **Key functionality:** Wraps `greentic-state::redis_store::RedisStateStore` behind the shared short-term memory contract and exposes the canonical provider declaration and pack manifest for the Redis backend.
+  - **Key dependencies / integration points:** Builds on `memory/short-term/core`, reuses the published `greentic-state` Redis support, and shares pack metadata with `crates/greentic-dw-providers-common`.
+
+- **Path:** `observer/core`
+  - **Role:** Shared observer contract crate.
+  - **Key functionality:** Defines the observer trait, event model, report model, and shared event-validation helpers used by concrete observer backends.
+  - **Key dependencies / integration points:** Reuses `greentic-types` for tenant scoping and standard Greentic error handling.
+
+- **Path:** `observer/basic-audit`
+  - **Role:** Basic audit observer backend crate.
+  - **Key functionality:** Stores an append-only per-tenant audit trail and emits audit reports with counts and raw entries.
+  - **Key dependencies / integration points:** Builds on `observer/core` and uses `crates/greentic-dw-providers-common` for the canonical provider declaration and pack manifest.
+
+- **Path:** `observer/basic-metrics`
+  - **Role:** Basic metrics observer backend crate.
+  - **Key functionality:** Aggregates per-tenant event counts, numeric totals, and observed attribute frequencies into a metrics report.
+  - **Key dependencies / integration points:** Builds on `observer/core` and uses `crates/greentic-dw-providers-common` for the canonical provider declaration and pack manifest.
 
 - **Path:** `crates/greentic-dw-providers-common/tests/pr01.rs`
   - **Role:** Integration tests for the shared helper crate.
@@ -128,35 +192,35 @@
   - **Key functionality:** Reserve the directory skeleton for future provider crates while documenting the current family contracts and example bundle flows.
   - **Key dependencies / integration points:** `engine/`, `control/`, `observer/`, `tool/`, `memory/`, and `state/` now contain contract documentation and backend subdirectories.
 
-- **Path:** `engine/default/`, `engine/router-lite/`
-  - **Role:** Engine provider documentation anchors.
-  - **Key functionality:** Document the intended default and router-lite engine variants.
-  - **Key dependencies / integration points:** Both point at the shared `cap://dw.engine.default` / `cap://dw.engine.router` contracts and pack capability ids `greentic.cap.engine.default` / `greentic.cap.engine.router`.
+- **Path:** `engine/`
+  - **Role:** Engine provider family.
+  - **Key functionality:** Contains the shared engine contract crate plus the default and router-lite backend crates.
+  - **Key dependencies / integration points:** All three crates point at the shared `cap://dw.engine.default` / `cap://dw.engine.router` contracts and their matching pack capability ids.
 
-- **Path:** `control/basic-policy/`, `control/delegation-guard/`
-  - **Role:** Control provider documentation anchors.
-  - **Key functionality:** Document the intended basic-policy and delegation-guard control variants.
-  - **Key dependencies / integration points:** Both point at the shared `cap://dw.control.basic` / `cap://dw.control.delegation-guard` contracts and pack capability ids `greentic.cap.control.basic` / `greentic.cap.control.delegation-guard`.
+- **Path:** `control/`
+  - **Role:** Control provider family.
+  - **Key functionality:** Contains the shared control contract crate plus the basic-policy and delegation-guard backend crates.
+  - **Key dependencies / integration points:** All three crates point at the shared `cap://dw.control.basic` / `cap://dw.control.delegation-guard` contracts and their matching pack capability ids.
 
-- **Path:** `observer/basic-audit/`, `observer/basic-metrics/`
-  - **Role:** Observer provider documentation anchors.
-  - **Key functionality:** Document the intended basic-audit and basic-metrics observer variants.
-  - **Key dependencies / integration points:** Both point at the shared `cap://dw.observer.audit` / `cap://dw.observer.metrics` contracts and pack capability ids `greentic.cap.observer.audit` / `greentic.cap.observer.metrics`.
+- **Path:** `observer/`
+  - **Role:** Observer provider family.
+  - **Key functionality:** Contains the shared observer contract crate plus the basic-audit and basic-metrics backend crates.
+  - **Key dependencies / integration points:** All three crates point at the shared `cap://dw.observer.audit` / `cap://dw.observer.metrics` contracts and their matching pack capability ids.
 
-- **Path:** `tool/wasm-adapter/`, `tool/mcp-adapter/`
-  - **Role:** Tool provider documentation anchors.
-  - **Key functionality:** Document the intended wasm-adapter and mcp-adapter tool variants.
-  - **Key dependencies / integration points:** Both point at the shared `cap://dw.tool.wasm` / `cap://dw.tool.mcp` contracts and pack capability ids `greentic.cap.tool.wasm` / `greentic.cap.tool.mcp`.
+- **Path:** `tool/core`, `tool/component-adapter/`, `tool/mcp-adapter/`
+  - **Role:** Shared tool contract crate plus concrete tool backends.
+  - **Key functionality:** Defines the generic tool adapter interface, invokes Greentic components directly through the component test harness, and talks to normal MCP servers through `rmcp`.
+  - **Key dependencies / integration points:** The backends point at the shared `cap://dw.tool.component` / `cap://dw.tool.mcp` contracts and pack capability ids `greentic.cap.tool.component` / `greentic.cap.tool.mcp`.
 
 - **Path:** `examples/pr06/`
   - **Role:** End-to-end bundle/setup example fixtures.
   - **Key functionality:** Provides OSS and enterprise bundle metadata, setup binding overrides, and bundle-resolution examples for the memory, task-state, and audit observer scenario.
   - **Key dependencies / integration points:** Mirrors the Greentic DW setup/bundle flow and the shared `greentic-cap` bundle-resolution vocabulary.
 
-- **Path:** `memory/short-term/in-memory/`, `memory/short-term/redis/`
-  - **Role:** Short-term memory provider documentation anchors.
-  - **Key functionality:** Document the intended in-memory and Redis variants for the first provider family.
-  - **Key dependencies / integration points:** Both point at the shared `cap://dw.memory.short-term` contract and `greentic.cap.memory.short-term` pack capability id.
+- **Path:** `memory/short-term/`
+  - **Role:** Short-term memory provider family.
+  - **Key functionality:** Contains the shared contract crate plus the in-memory and Redis backend crates for the first real provider implementation in the repository.
+  - **Key dependencies / integration points:** All three crates point at the shared `cap://dw.memory.short-term` contract and `greentic.cap.memory.short-term` pack capability id.
 
 - **Path:** `state/task-store/in-memory/`, `state/task-store/redis/`
   - **Role:** Task-store provider documentation anchors.
@@ -173,20 +237,20 @@
 
 ## 3. Work In Progress, TODOs, and Stubs
 - **Location:** `memory/`
-  - **Status:** partial
-  - **Short description:** The short-term memory contract is documented and backed by helpers, but no actual provider crates exist yet.
+  - **Status:** active
+  - **Short description:** The short-term memory family now has a shared contract crate plus in-memory and Redis backend crates, but pack source trees and runtime component exports are still pending.
 
 - **Location:** `engine/`
-  - **Status:** partial
-  - **Short description:** The engine contract is documented and backed by helpers, but no actual provider crates exist yet.
+  - **Status:** active
+  - **Short description:** The engine family now has a shared contract crate plus default and router-lite backend crates, but pack source trees and runtime component exports are still pending.
 
 - **Location:** `control/`
-  - **Status:** partial
-  - **Short description:** The control contract is documented and backed by helpers, but no actual provider crates exist yet.
+  - **Status:** active
+  - **Short description:** The control family now has a shared contract crate plus basic-policy and delegation-guard backend crates, but pack source trees and runtime component exports are still pending.
 
 - **Location:** `observer/`
-  - **Status:** partial
-  - **Short description:** The observer contract is documented and backed by helpers, but no actual provider crates exist yet.
+  - **Status:** active
+  - **Short description:** The observer family now has a shared contract crate plus basic-audit and basic-metrics backend crates, but pack source trees and runtime component exports are still pending.
 
 - **Location:** `tool/`
   - **Status:** partial
@@ -225,13 +289,13 @@
   - **Short description:** Describes the end-to-end examples and integration fixtures and now matches the implemented helper surface.
 
 ## 4. Broken, Failing, or Conflicting Areas
-- No failing tests or build errors are currently observed in this repository.
-- `bash ci/local_check.sh` passes.
+- The new control, engine, short-term memory, observer, and task-store crates are mid-integration; targeted package tests and the full workspace check need to be rerun after the workspace dependency graph finishes rebuilding.
+- `bash ci/local_check.sh` has not yet been rerun against the new control, engine, memory, observer, and task-store crates in the current worktree.
 - The lightweight perf harness now has a Criterion benchmark, a concurrency scaling guard, and a timeout guard, all focused on provider-extension validation and pack-manifest generation.
 - The Criterion harness now separates pack-manifest assembly from CBOR encoding; assembly is materially cheaper than encoding, and provider-extension validation is no longer the hottest path.
-- `cargo test --workspace` passes, including the PR-01 helper integration tests, the PR-02 memory contract tests, the PR-03 task-store contract tests, the PR-04 engine contract tests, the PR-05 control/observer/tool contract tests, and the PR-06 end-to-end fixture tests.
+- The last known pre-change workspace test run passed, including the PR-01 helper integration tests, the PR-02 memory contract tests, the PR-03 task-store contract tests, the PR-04 engine contract tests, the PR-05 control/observer/tool contract tests, and the PR-06 end-to-end fixture tests, but that status needs to be re-established for the new workspace members.
 - No explicit `BROKEN`, `FIXME`, or `HACK` markers were found in the source tree.
-- The repository now includes `coverage-policy.json` with a 60% global and default per-file line coverage floor, plus stricter targets for the shared helper modules.
+- The repository now includes `coverage-policy.json` with a 60% global and default per-file line coverage floor, stricter targets for the shared helper modules, and explicit coverage entries for the concrete provider crates added under `control/`, `engine/`, `memory/`, `observer/`, `state/`, and `tool/`.
 - The nightly coverage workflow now installs `greentic-dev`, `cargo-nextest`, and `cargo-llvm-cov` through `cargo-binstall` and fails when the coverage policy is violated.
 - The new provider-extension validation path avoids repeating checks that are already covered by `ProviderExtensionInline::validate_basic`, which should help the perf harness stay focused on real hot work instead of duplicate validation.
 - The remaining bottleneck is pack-manifest CBOR encoding; the current safe win is to keep the manifest assembly path free of redundant string generation and reuse the split benchmark to catch regressions.

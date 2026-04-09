@@ -15,8 +15,8 @@ use greentic_types::{
 /// Tool provider variants planned by this repository.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ToolVariant {
-    /// WASM adapter.
-    WasmAdapter,
+    /// Component adapter.
+    ComponentAdapter,
     /// MCP adapter.
     McpAdapter,
 }
@@ -26,7 +26,7 @@ impl ToolVariant {
     #[must_use]
     pub const fn as_str(self) -> &'static str {
         match self {
-            Self::WasmAdapter => "wasm-adapter",
+            Self::ComponentAdapter => "component-adapter",
             Self::McpAdapter => "mcp-adapter",
         }
     }
@@ -35,7 +35,7 @@ impl ToolVariant {
     #[must_use]
     pub const fn capability_name(self) -> &'static str {
         match self {
-            Self::WasmAdapter => "wasm",
+            Self::ComponentAdapter => "component",
             Self::McpAdapter => "mcp",
         }
     }
@@ -90,7 +90,7 @@ pub fn tool_pack_capability_id(capability: impl AsRef<str>) -> String {
 #[must_use]
 pub fn tool_variant_from_pack_capability_id(capability_id: impl AsRef<str>) -> Option<ToolVariant> {
     match capability_id.as_ref() {
-        "greentic.cap.tool.wasm" => Some(ToolVariant::WasmAdapter),
+        "greentic.cap.tool.component" => Some(ToolVariant::ComponentAdapter),
         "greentic.cap.tool.mcp" => Some(ToolVariant::McpAdapter),
         _ => None,
     }
@@ -104,7 +104,7 @@ pub const fn tool_operations() -> [&'static str; 2] {
 
 fn tool_operation_for_variant(variant: ToolVariant) -> &'static str {
     match variant {
-        ToolVariant::WasmAdapter => "tool.invoke",
+        ToolVariant::ComponentAdapter => "tool.invoke",
         ToolVariant::McpAdapter => "tool.describe",
     }
 }

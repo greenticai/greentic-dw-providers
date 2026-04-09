@@ -1,6 +1,6 @@
 # Control Basic Policy
 
-Basic policy control provider anchor.
+Basic policy control provider crate.
 
 The shared contract uses:
 
@@ -8,4 +8,5 @@ The shared contract uses:
 - capability URI `cap://dw.control.basic`
 - pack capability id `greentic.cap.control.basic`
 
-This directory is currently documentation only.
+This backend now contains real Rust code and evaluates simple allow/deny policy rules
+based on the requested action and policy attributes.

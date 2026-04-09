@@ -1,0 +1,13 @@
+[package]
+name = "greentic-dw-control"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "../README.md"
+description = "Shared control contract and policy request models for Greentic DW."
+
+[dependencies]
+greentic-types = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
