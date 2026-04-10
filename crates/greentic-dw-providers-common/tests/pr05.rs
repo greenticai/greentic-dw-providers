@@ -282,12 +282,12 @@ fn observer_selection_helper_resolves_pack_capability_ids() {
 
 #[test]
 fn tool_contract_is_shared_across_variants() {
-    assert_eq!(tool_capability_uri("wasm"), "cap://dw.tool.wasm");
+    assert_eq!(tool_capability_uri("component"), "cap://dw.tool.component");
     assert_eq!(tool_capability_uri("mcp"), "cap://dw.tool.mcp");
     assert_eq!(tool_operations(), ["tool.invoke", "tool.describe"]);
     assert_eq!(
-        tool_provider_decl(ToolVariant::WasmAdapter).provider_type,
-        "dw.tool.wasm-adapter"
+        tool_provider_decl(ToolVariant::ComponentAdapter).provider_type,
+        "dw.tool.component-adapter"
     );
     assert_eq!(
         tool_provider_decl(ToolVariant::McpAdapter).provider_type,
@@ -297,34 +297,42 @@ fn tool_contract_is_shared_across_variants() {
 
 #[test]
 fn tool_capability_declaration_is_valid_for_each_backend() {
-    let wasm = match tool_capability_declaration(ToolVariant::WasmAdapter) {
+    let component = match tool_capability_declaration(ToolVariant::ComponentAdapter) {
         Ok(value) => value,
-        Err(err) => panic!("wasm declaration should build: {err}"),
+        Err(err) => panic!("component declaration should build: {err}"),
     };
     let mcp = match tool_capability_declaration(ToolVariant::McpAdapter) {
         Ok(value) => value,
         Err(err) => panic!("mcp declaration should build: {err}"),
     };
 
-    assert_eq!(wasm.offers[0].capability.as_str(), "cap://dw.tool.wasm");
+    assert_eq!(
+        component.offers[0].capability.as_str(),
+        "cap://dw.tool.component"
+    );
     assert_eq!(mcp.offers[0].capability.as_str(), "cap://dw.tool.mcp");
-    assert!(greentic_dw_providers_common::validate_capability_declaration(&wasm).is_ok());
+    assert!(greentic_dw_providers_common::validate_capability_declaration(&component).is_ok());
     assert!(greentic_dw_providers_common::validate_capability_declaration(&mcp).is_ok());
 }
 
 #[test]
 fn tool_provider_extension_contains_both_variants() {
-    let extension =
-        tool_provider_extension_inline(vec![ToolVariant::WasmAdapter, ToolVariant::McpAdapter]);
+    let extension = tool_provider_extension_inline(vec![
+        ToolVariant::ComponentAdapter,
+        ToolVariant::McpAdapter,
+    ]);
 
     assert_eq!(extension.providers.len(), 2);
-    assert_eq!(extension.providers[0].provider_type, "dw.tool.wasm-adapter");
+    assert_eq!(
+        extension.providers[0].provider_type,
+        "dw.tool.component-adapter"
+    );
     assert_eq!(extension.providers[1].provider_type, "dw.tool.mcp-adapter");
 }
 
 #[test]
 fn tool_pack_manifests_roundtrip_to_cbor() {
-    let manifest = match tool_pack_manifest(tool_pack_id(), ToolVariant::WasmAdapter) {
+    let manifest = match tool_pack_manifest(tool_pack_id(), ToolVariant::ComponentAdapter) {
         Ok(value) => value,
         Err(err) => panic!("pack manifest should build: {err}"),
     };
@@ -363,18 +371,18 @@ fn tool_pack_manifest_cbor_roundtrip() {
 
 #[test]
 fn tool_capability_id_is_canonical() {
-    let capability_id = match tool_capability_id("wasm") {
+    let capability_id = match tool_capability_id("component") {
         Ok(value) => value,
         Err(err) => panic!("capability id should build: {err}"),
     };
-    assert_eq!(capability_id.as_str(), "cap://dw.tool.wasm");
+    assert_eq!(capability_id.as_str(), "cap://dw.tool.component");
 }
 
 #[test]
 fn tool_selection_helper_resolves_pack_capability_ids() {
     assert_eq!(
-        tool_variant_from_pack_capability_id("greentic.cap.tool.wasm"),
-        Some(ToolVariant::WasmAdapter)
+        tool_variant_from_pack_capability_id("greentic.cap.tool.component"),
+        Some(ToolVariant::ComponentAdapter)
     );
     assert_eq!(
         tool_variant_from_pack_capability_id("greentic.cap.tool.mcp"),

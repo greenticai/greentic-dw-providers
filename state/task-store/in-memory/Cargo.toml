@@ -1,0 +1,15 @@
+[package]
+name = "greentic-dw-task-store-in-memory"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "In-memory task-store provider for Greentic DW."
+
+[dependencies]
+greentic-dw-providers-common = { workspace = true }
+greentic-dw-task-store = { workspace = true }
+greentic-state = { workspace = true }
+greentic-types = { workspace = true }
+serde_json = { workspace = true }

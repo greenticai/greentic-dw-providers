@@ -1,6 +1,6 @@
 # Tool MCP Adapter
 
-MCP tool adapter anchor.
+MCP tool adapter.
 
 The shared contract uses:
 
@@ -8,4 +8,4 @@ The shared contract uses:
 - capability URI `cap://dw.tool.mcp`
 - pack capability id `greentic.cap.tool.mcp`
 
-This directory is currently documentation only.
+This adapter is intended to talk to a normal MCP server over the standard protocol using `rmcp`.

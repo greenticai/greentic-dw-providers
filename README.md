@@ -69,7 +69,7 @@ The repository is organized by provider family:
   - `basic-audit/`
   - `basic-metrics/`
 - `tool/`
-  - `wasm-adapter/`
+  - `component-adapter/`
   - `mcp-adapter/`
 - `memory/`
   - `short-term/in-memory/`
@@ -78,7 +78,7 @@ The repository is organized by provider family:
   - `task-store/in-memory/`
   - `task-store/redis/`
 
-The category roots are still placeholders, but `engine/default/...`, `engine/router-lite/...`, `control/basic-policy/...`, `control/delegation-guard/...`, `observer/basic-audit/...`, `observer/basic-metrics/...`, `tool/wasm-adapter/...`, `tool/mcp-adapter/...`, `memory/short-term/...`, and `state/task-store/...` now carry concrete contract documentation for the first engine, control, observer, tool, memory, and task-state provider families.
+The category roots are still placeholders, but `engine/default/...`, `engine/router-lite/...`, `control/basic-policy/...`, `control/delegation-guard/...`, `observer/basic-audit/...`, `observer/basic-metrics/...`, `tool/component-adapter/...`, `tool/mcp-adapter/...`, `memory/short-term/...`, and `state/task-store/...` now carry concrete contract documentation for the first engine, control, observer, tool, memory, and task-state provider families.
 
 ## Versioning
 
@@ -93,10 +93,10 @@ The repo is still a scaffold, but the shared helper layer is now functional:
 - the engine family has shared contract helpers plus `default` and `router-lite` example directories,
 - the control family has shared contract helpers plus `basic-policy` and `delegation-guard` example directories,
 - the observer family has shared contract helpers plus `basic-audit` and `basic-metrics` example directories,
-- the tool family has shared contract helpers plus `wasm-adapter` and `mcp-adapter` example directories,
+- the tool family has shared contract helpers plus `component-adapter` and `mcp-adapter` example directories,
 - the short-term memory family has shared contract helpers plus `in-memory` and `redis` example directories,
 - the task-store family has shared contract helpers plus `in-memory` and `redis` example directories,
-- the planned category crates have not been created yet.
+- the provider families now include real backend crates for engine, control, observer, tool, memory, and task-state work.
 
 ## CI and Releases
 

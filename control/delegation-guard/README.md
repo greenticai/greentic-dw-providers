@@ -1,6 +1,6 @@
 # Control Delegation Guard
 
-Delegation guard control provider anchor.
+Delegation guard control provider crate.
 
 The shared contract uses:
 
@@ -8,4 +8,5 @@ The shared contract uses:
 - capability URI `cap://dw.control.delegation-guard`
 - pack capability id `greentic.cap.control.delegation-guard`
 
-This directory is currently documentation only.
+This backend now contains real Rust code and blocks delegation requests unless the
+request explicitly carries `allow_delegation=true`.

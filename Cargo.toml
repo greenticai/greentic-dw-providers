@@ -1,11 +1,29 @@
 [workspace]
 members = [
     "crates/greentic-dw-providers-common",
+    "control/core",
+    "control/basic-policy",
+    "control/delegation-guard",
+    "engine/core",
+    "engine/default",
+    "engine/router-lite",
+    "memory/short-term/core",
+    "memory/short-term/in-memory",
+    "memory/short-term/redis",
+    "state/task-store/core",
+    "state/task-store/in-memory",
+    "state/task-store/redis",
+    "observer/core",
+    "observer/basic-audit",
+    "observer/basic-metrics",
+    "tool/core",
+    "tool/component-adapter",
+    "tool/mcp-adapter",
 ]
 resolver = "2"
 
 [workspace.package]
-version = "0.5.1"
+version = "0.5.2"
 edition = "2024"
 license = "MIT"
 repository = "https://github.com/greenticai/greentic-dw-providers"
@@ -14,18 +32,28 @@ description = "Greentic digital worker provider workspace scaffold."
 
 [workspace.dependencies]
 criterion = "0.8"
-greentic-dw-providers-common = { path = "crates/greentic-dw-providers-common", version = "0.5" }
+greentic-dw-control = { path = "control/core" }
+greentic-dw-providers-common = { path = "crates/greentic-dw-providers-common" }
+greentic-dw-engine = { path = "engine/core" }
+greentic-dw-memory = { path = "memory/short-term/core" }
+greentic-dw-task-store = { path = "state/task-store/core" }
+greentic-dw-observer = { path = "observer/core" }
+greentic-dw-tool = { path = "tool/core" }
 greentic-dw = { version = "0.5" }
 greentic-cap = { version = "0.5" }
 greentic-cap-types = { version = "0.5" }
 greentic-dw-manifest = { version = "0.5" }
 greentic-dw-types = { version = "0.5" }
+greentic-component = { version = "0.4", default-features = false, features = ["cli"] }
 greentic-types = { version = "0.4", default-features = false, features = ["std", "serde", "time"] }
 greentic-interfaces = { version = "0.4", default-features = false, features = ["bindings-rust", "provider-common", "state-store-v1"] }
 greentic-pack = { package = "greentic-pack-lib", version = "0.4" }
 greentic-state = { version = "0.4", default-features = false }
+rmcp = { version = "1.3", default-features = false, features = ["client", "transport-async-rw"] }
 semver = { version = "1" }
 serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["io-util", "rt-multi-thread", "sync", "time"] }
 thiserror = { version = "2" }
 
 [package]

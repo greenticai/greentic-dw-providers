@@ -3,9 +3,9 @@
   "category": "tool",
   "variants": [
     {
-      "provider_type": "dw.tool.wasm-adapter",
-      "capability_uri": "cap://dw.tool.wasm",
-      "pack_capability_id": "greentic.cap.tool.wasm"
+      "provider_type": "dw.tool.component-adapter",
+      "capability_uri": "cap://dw.tool.component",
+      "pack_capability_id": "greentic.cap.tool.component"
     },
     {
       "provider_type": "dw.tool.mcp-adapter",
