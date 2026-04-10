@@ -246,14 +246,19 @@ publish_gtpacks() {
       echo "Unexpected gtpack artifact path: ${gtpack}" >&2
       exit 1
     fi
-    ref="ghcr.io/greenticai/${rel%.gtpack}:${version}"
-    echo "Publishing ${gtpack} -> ${ref}"
-    oras push \
-      --artifact-type application/vnd.greentic.gtpack \
-      --annotation "org.opencontainers.image.title=$(basename "$gtpack")" \
-      --annotation "org.opencontainers.image.version=${version}" \
-      "$ref" \
-      "${gtpack}:application/octet-stream"
+    repo="ghcr.io/greenticai/${rel%.gtpack}"
+    tags=("${version}" "latest")
+
+    for tag in "${tags[@]}"; do
+      ref="${repo}:${tag}"
+      echo "Publishing ${gtpack} -> ${ref}"
+      oras push \
+        --artifact-type application/vnd.greentic.gtpack \
+        --annotation "org.opencontainers.image.title=$(basename "$gtpack")" \
+        --annotation "org.opencontainers.image.version=${version}" \
+        "$ref" \
+        "${gtpack}:application/octet-stream"
+    done
   done
 }
 
