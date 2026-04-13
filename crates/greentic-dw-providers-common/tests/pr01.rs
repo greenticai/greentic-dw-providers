@@ -1,9 +1,30 @@
 use core::str::FromStr;
 use greentic_dw_providers_common::{
-    ProviderCategory, ProviderDeclSpec, capability_consume, capability_declaration, capability_id,
-    capability_offer, capability_profile, capability_provider_ref, capability_requirement,
-    capability_uri, pack_capabilities_extension, pack_capability_id, planned_categories,
-    provider_decl, provider_manifest, provider_runtime_ref, sample_capability_declaration,
+    LlmWizardProviderQa, LlmWizardQuestion, LlmWizardQuestionKind, LlmWizardQuestionOption,
+    LlmWizardVisibility, ProviderCategory, ProviderDeclSpec, anthropic_llm_feature_profile,
+    anthropic_llm_pack_manifest, anthropic_llm_provider_declaration, anthropic_llm_provider_id,
+    anthropic_llm_provider_manifest, anthropic_llm_wizard_qa, azure_openai_llm_feature_profile,
+    azure_openai_llm_pack_manifest, azure_openai_llm_provider_declaration,
+    azure_openai_llm_provider_id, azure_openai_llm_provider_manifest, azure_openai_llm_wizard_qa,
+    bedrock_llm_feature_profile, bedrock_llm_pack_manifest, bedrock_llm_provider_declaration,
+    bedrock_llm_provider_id, bedrock_llm_provider_manifest, bedrock_llm_wizard_qa,
+    capability_consume, capability_declaration, capability_id, capability_offer,
+    capability_profile, capability_provider_ref, capability_requirement, capability_uri,
+    gemini_llm_feature_profile, gemini_llm_pack_manifest, gemini_llm_provider_declaration,
+    gemini_llm_provider_id, gemini_llm_provider_manifest, gemini_llm_wizard_qa,
+    implemented_llm_wizard_qas, llm_capability_declaration, llm_capability_id,
+    llm_capability_profile, llm_capability_uri, llm_feature_profile, llm_pack_capabilities,
+    llm_pack_capability_id, llm_pack_manifest, llm_provider_declaration, llm_provider_id,
+    llm_provider_manifest, llm_provider_pack_capability_id, nvidia_nim_llm_feature_profile,
+    nvidia_nim_llm_pack_manifest, nvidia_nim_llm_provider_declaration, nvidia_nim_llm_provider_id,
+    nvidia_nim_llm_provider_manifest, nvidia_nim_llm_wizard_qa,
+    openai_compatible_llm_feature_profile, openai_compatible_llm_pack_manifest,
+    openai_compatible_llm_provider_declaration, openai_compatible_llm_provider_id,
+    openai_compatible_llm_provider_manifest, openai_compatible_llm_wizard_qa,
+    openai_llm_feature_profile, openai_llm_pack_manifest, openai_llm_provider_declaration,
+    openai_llm_provider_id, openai_llm_provider_manifest, openai_llm_wizard_qa,
+    pack_capabilities_extension, pack_capability_id, planned_categories, provider_decl,
+    provider_manifest, provider_runtime_ref, sample_capability_declaration,
     sample_capability_offer_v1, sample_pack_manifest, sample_pack_manifest_cbor, workspace_banner,
     workspace_version,
 };
@@ -31,7 +52,7 @@ fn category_helpers_expose_expected_names() {
         pack_capability_id(ProviderCategory::Tool, "invoke"),
         "greentic.cap.tool.invoke"
     );
-    assert_eq!(planned_categories().len(), 6);
+    assert_eq!(planned_categories().len(), 7);
 }
 
 #[test]
@@ -139,6 +160,7 @@ fn category_and_capability_helpers_cover_remaining_variants() {
         planned_categories(),
         [
             ProviderCategory::Engine,
+            ProviderCategory::Llm,
             ProviderCategory::Memory,
             ProviderCategory::State,
             ProviderCategory::Control,
@@ -150,7 +172,7 @@ fn category_and_capability_helpers_cover_remaining_variants() {
     assert_eq!(
         workspace_banner(),
         format!(
-            "greentic-dw-providers {} scaffold (engine, memory, state, control, observer, tool)",
+            "greentic-dw-providers {} scaffold (engine, llm, memory, state, control, observer, tool)",
             env!("CARGO_PKG_VERSION")
         )
     );
@@ -238,6 +260,343 @@ fn category_and_capability_helpers_cover_remaining_variants() {
     );
     assert_eq!(extension.offers.len(), 1);
     assert_eq!(extension.offers[0].cap_id, "greentic.cap.tool.invoke");
+}
+
+#[test]
+fn llm_helpers_build_consistent_family_metadata() {
+    let features = llm_feature_profile(true, true, true, true, false, true, false, true);
+    assert_eq!(llm_provider_id("openai"), "dw.llm.openai");
+    assert_eq!(llm_capability_uri(), "cap://dw.llm");
+    assert_eq!(
+        llm_capability_id()
+            .expect("llm capability id should be valid")
+            .as_str(),
+        "cap://dw.llm"
+    );
+    assert_eq!(llm_pack_capability_id(), "greentic.cap.llm");
+    assert_eq!(
+        llm_provider_pack_capability_id("openai"),
+        "greentic.cap.llm.openai"
+    );
+
+    let manifest = llm_provider_manifest("openai", &features);
+    assert_eq!(manifest.provider_type, "dw.llm.openai");
+    assert_eq!(manifest.capabilities, vec!["greentic.cap.llm".to_string()]);
+    assert!(manifest.ops.iter().any(|op| op == "llm.chat"));
+    assert!(manifest.ops.iter().any(|op| op == "llm.stateful"));
+
+    let decl = llm_provider_declaration("openai", &features);
+    assert_eq!(decl.provider_type, "dw.llm.openai");
+    assert_eq!(decl.runtime.component_ref, "component:llm.openai");
+
+    let profile = llm_capability_profile("openai", &features);
+    assert_eq!(profile.id, "llm.openai.features");
+    assert!(
+        profile
+            .description
+            .as_deref()
+            .expect("llm profile should include a description")
+            .contains("structured_outputs")
+    );
+
+    let declaration =
+        llm_capability_declaration("openai", &features).expect("llm declaration should build");
+    assert_eq!(declaration.offers.len(), 1);
+    assert_eq!(declaration.profiles.len(), 1);
+    assert_eq!(declaration.offers[0].capability.as_str(), "cap://dw.llm");
+}
+
+#[test]
+fn llm_wizard_metadata_supports_defaults_and_visibility() {
+    let qa = LlmWizardProviderQa::new(
+        "demo",
+        "wizard.llm.provider.demo.label",
+        false,
+        vec!["compatible".to_string()],
+        vec![
+            LlmWizardQuestion::select(
+                "mode",
+                "wizard.llm.demo.mode",
+                true,
+                vec![
+                    LlmWizardQuestionOption::new("auto", "wizard.llm.demo.mode.auto"),
+                    LlmWizardQuestionOption::new("manual", "wizard.llm.demo.mode.manual"),
+                ],
+            )
+            .with_default("auto"),
+            LlmWizardQuestion::text("token", "wizard.llm.demo.token", false)
+                .visible_when_equals("mode", "manual"),
+        ],
+    );
+
+    assert_eq!(qa.provider_name, "demo");
+    assert_eq!(qa.provider_label_key, "wizard.llm.provider.demo.label");
+    assert_eq!(qa.compatibility_tags, vec!["compatible".to_string()]);
+    assert_eq!(qa.questions[0].default_value.as_deref(), Some("auto"));
+    assert!(matches!(
+        qa.questions[0].kind,
+        LlmWizardQuestionKind::Select { .. }
+    ));
+    assert!(matches!(
+        qa.questions[1].visibility,
+        LlmWizardVisibility::Equals { .. }
+    ));
+}
+
+#[test]
+fn openai_llm_helpers_build_native_provider_metadata() {
+    let provider_id = openai_llm_provider_id();
+    assert_eq!(provider_id, "dw.llm.openai");
+
+    let features = openai_llm_feature_profile();
+    assert!(features.chat);
+    assert!(features.structured_outputs);
+    assert!(features.tool_calling);
+    assert!(features.streaming);
+    assert!(features.stateful_conversation);
+    assert!(!features.multimodal_input);
+
+    let manifest = openai_llm_provider_manifest();
+    assert_eq!(manifest.provider_type, "dw.llm.openai");
+    assert_eq!(
+        manifest.capabilities,
+        vec![llm_pack_capability_id().to_string()]
+    );
+
+    let declaration = openai_llm_provider_declaration();
+    assert_eq!(declaration.provider_type, "dw.llm.openai");
+    assert_eq!(declaration.runtime.component_ref, "component:llm.openai");
+    assert!(greentic_dw_providers_common::validate_provider_decl(&declaration).is_ok());
+
+    let pack_manifest =
+        openai_llm_pack_manifest(PackId::new("greentic.dw.providers.llm.openai").expect("pack id"))
+            .expect("pack manifest");
+    assert_eq!(
+        pack_manifest.pack_id.to_string(),
+        "greentic.dw.providers.llm.openai"
+    );
+}
+
+#[test]
+fn implemented_llm_wizard_registry_covers_current_backends() {
+    let providers = implemented_llm_wizard_qas();
+    let provider_names = providers
+        .iter()
+        .map(|provider| provider.provider_name.as_str())
+        .collect::<Vec<_>>();
+
+    assert_eq!(
+        provider_names,
+        vec![
+            "openai",
+            "azure-openai",
+            "openai-compatible",
+            "anthropic",
+            "gemini",
+            "bedrock",
+            "nvidia-nim",
+        ]
+    );
+    assert_eq!(providers[0], openai_llm_wizard_qa());
+    assert_eq!(providers[1], azure_openai_llm_wizard_qa());
+    assert_eq!(providers[2], openai_compatible_llm_wizard_qa());
+    assert_eq!(providers[3], anthropic_llm_wizard_qa());
+    assert_eq!(providers[4], gemini_llm_wizard_qa());
+    assert_eq!(providers[5], bedrock_llm_wizard_qa());
+    assert_eq!(providers[6], nvidia_nim_llm_wizard_qa());
+}
+
+#[test]
+fn azure_openai_llm_helpers_build_provider_metadata() {
+    let provider_id = azure_openai_llm_provider_id();
+    assert_eq!(provider_id, "dw.llm.azure-openai");
+
+    let features = azure_openai_llm_feature_profile();
+    assert!(features.chat);
+    assert!(features.structured_outputs);
+    assert!(features.tool_calling);
+    assert!(features.streaming);
+    assert!(features.stateful_conversation);
+    assert!(features.enterprise_auth);
+    assert!(!features.local_self_hosted);
+
+    let manifest = azure_openai_llm_provider_manifest();
+    assert_eq!(manifest.provider_type, provider_id);
+
+    let declaration = azure_openai_llm_provider_declaration();
+    assert_eq!(declaration.provider_type, provider_id);
+    assert_eq!(
+        declaration.runtime.component_ref,
+        "component:llm.azure-openai"
+    );
+
+    let pack_manifest = azure_openai_llm_pack_manifest(
+        PackId::new("greentic.dw.providers.llm.azure-openai").expect("pack id"),
+    )
+    .expect("pack manifest");
+    assert_eq!(
+        pack_manifest.pack_id.to_string(),
+        "greentic.dw.providers.llm.azure-openai"
+    );
+}
+
+#[test]
+fn anthropic_llm_helpers_build_provider_metadata() {
+    let features = anthropic_llm_feature_profile();
+    assert!(features.chat);
+    assert!(features.tool_calling);
+    assert!(features.structured_outputs);
+    assert!(features.enterprise_auth);
+    assert_eq!(anthropic_llm_provider_id(), "dw.llm.anthropic");
+
+    let manifest = anthropic_llm_provider_manifest();
+    assert_eq!(manifest.provider_type, "dw.llm.anthropic");
+
+    let decl = anthropic_llm_provider_declaration();
+    assert_eq!(decl.provider_type, "dw.llm.anthropic");
+
+    let manifest = anthropic_llm_pack_manifest(pack_id()).expect("anthropic pack manifest");
+    assert_eq!(manifest.pack_id, pack_id());
+}
+
+#[test]
+fn openai_compatible_llm_helpers_build_provider_metadata() {
+    let provider_id = openai_compatible_llm_provider_id();
+    assert_eq!(provider_id, "dw.llm.openai-compatible");
+
+    let features = openai_compatible_llm_feature_profile();
+    assert!(features.chat);
+    assert!(features.tool_calling);
+    assert!(features.streaming);
+    assert!(features.local_self_hosted);
+    assert!(!features.stateful_conversation);
+
+    let manifest = openai_compatible_llm_provider_manifest();
+    assert_eq!(manifest.provider_type, "dw.llm.openai-compatible");
+
+    let declaration = openai_compatible_llm_provider_declaration();
+    assert_eq!(declaration.provider_type, "dw.llm.openai-compatible");
+    assert_eq!(
+        declaration.runtime.component_ref,
+        "component:llm.openai-compatible"
+    );
+
+    let pack_manifest = openai_compatible_llm_pack_manifest(
+        PackId::new("greentic.dw.providers.llm.openai-compatible").expect("pack id"),
+    )
+    .expect("pack manifest");
+    assert_eq!(
+        pack_manifest.pack_id.to_string(),
+        "greentic.dw.providers.llm.openai-compatible"
+    );
+}
+
+#[test]
+fn gemini_llm_helpers_build_provider_metadata() {
+    let provider_id = gemini_llm_provider_id();
+    assert_eq!(provider_id, "dw.llm.gemini");
+
+    let features = gemini_llm_feature_profile();
+    assert!(features.chat);
+    assert!(features.structured_outputs);
+    assert!(features.tool_calling);
+    assert!(!features.stateful_conversation);
+    assert!(!features.local_self_hosted);
+
+    let manifest = gemini_llm_provider_manifest();
+    assert_eq!(manifest.provider_type, provider_id);
+
+    let declaration = gemini_llm_provider_declaration();
+    assert_eq!(declaration.provider_type, provider_id);
+    assert_eq!(declaration.ops[0], "llm.generate");
+
+    let pack_manifest = gemini_llm_pack_manifest(
+        PackId::new("greentic.dw.providers.llm.gemini").expect("valid gemini pack id"),
+    )
+    .expect("gemini pack manifest");
+    assert_eq!(
+        pack_manifest.capabilities[0].name,
+        greentic_dw_providers_common::llm_pack_capability_id()
+    );
+}
+
+#[test]
+fn bedrock_llm_helpers_build_provider_metadata() {
+    let provider_id = bedrock_llm_provider_id();
+    assert_eq!(provider_id, "dw.llm.bedrock");
+
+    let features = bedrock_llm_feature_profile();
+    assert!(features.chat);
+    assert!(features.tool_calling);
+    assert!(features.streaming);
+    assert!(features.enterprise_auth);
+    assert!(!features.local_self_hosted);
+
+    let manifest = bedrock_llm_provider_manifest();
+    assert_eq!(manifest.provider_type, provider_id);
+
+    let declaration = bedrock_llm_provider_declaration();
+    assert_eq!(declaration.provider_type, provider_id);
+    assert_eq!(declaration.ops[0], "llm.generate");
+
+    let pack_manifest = bedrock_llm_pack_manifest(
+        PackId::new("greentic.dw.providers.llm.bedrock").expect("valid bedrock pack id"),
+    )
+    .expect("bedrock pack manifest");
+    assert_eq!(
+        pack_manifest.capabilities[0].name,
+        greentic_dw_providers_common::llm_pack_capability_id()
+    );
+}
+
+#[test]
+fn nvidia_nim_llm_helpers_build_provider_metadata() {
+    let provider_id = nvidia_nim_llm_provider_id();
+    assert_eq!(provider_id, "dw.llm.nvidia-nim");
+
+    let features = nvidia_nim_llm_feature_profile();
+    assert!(features.chat);
+    assert!(features.tool_calling);
+    assert!(features.streaming);
+    assert!(features.local_self_hosted);
+    assert!(!features.stateful_conversation);
+
+    let manifest = nvidia_nim_llm_provider_manifest();
+    assert_eq!(manifest.provider_type, "dw.llm.nvidia-nim");
+
+    let declaration = nvidia_nim_llm_provider_declaration();
+    assert_eq!(declaration.provider_type, "dw.llm.nvidia-nim");
+    assert_eq!(
+        declaration.runtime.component_ref,
+        "component:llm.nvidia-nim"
+    );
+
+    let pack_manifest = nvidia_nim_llm_pack_manifest(
+        PackId::new("greentic.dw.providers.llm.nvidia-nim").expect("pack id"),
+    )
+    .expect("pack manifest");
+    assert_eq!(
+        pack_manifest.pack_id.to_string(),
+        "greentic.dw.providers.llm.nvidia-nim"
+    );
+}
+
+#[test]
+fn llm_pack_helpers_emit_provider_pack_metadata() {
+    let features = llm_feature_profile(true, false, false, true, false, false, true, false);
+    let extension = llm_pack_capabilities("ollama");
+    assert_eq!(extension.offers.len(), 1);
+    assert_eq!(extension.offers[0].cap_id, "greentic.cap.llm");
+    assert_eq!(
+        extension.offers[0].provider.component_ref,
+        "component:llm.ollama"
+    );
+
+    let manifest =
+        llm_pack_manifest(pack_id(), "ollama", &features).expect("llm pack manifest should build");
+    assert_eq!(manifest.pack_id, pack_id());
+    assert_eq!(manifest.capabilities[0].name, "greentic.cap.llm");
+    assert!(manifest.provider_extension_inline().is_some());
 }
 
 #[test]

@@ -14,6 +14,7 @@ mod control;
 mod engine;
 mod fixtures;
 mod integration;
+mod llm;
 mod memory;
 mod observer;
 mod provider;
@@ -51,6 +52,33 @@ pub use integration::{
     EndToEndExample, EndToEndVariant, ExampleBundleMetadata, OperationBinding,
     end_to_end_binding_overrides, end_to_end_bundle_resolution, end_to_end_required_capabilities,
     enterprise_end_to_end_example, oss_end_to_end_example,
+};
+pub use llm::{
+    ANTHROPIC_LLM_PROVIDER_NAME, AZURE_OPENAI_LLM_PROVIDER_NAME, BEDROCK_LLM_PROVIDER_NAME,
+    GEMINI_LLM_PROVIDER_NAME, LLM_CAPABILITY_URI, LLM_PACK_CAPABILITY_ID, LlmFeatureProfile,
+    LlmFixtureError, LlmWizardProviderQa, LlmWizardQuestion, LlmWizardQuestionKind,
+    LlmWizardQuestionOption, LlmWizardVisibility, NVIDIA_NIM_LLM_PROVIDER_NAME,
+    OPENAI_COMPATIBLE_LLM_PROVIDER_NAME, OPENAI_LLM_PROVIDER_NAME, anthropic_llm_feature_profile,
+    anthropic_llm_pack_manifest, anthropic_llm_provider_declaration, anthropic_llm_provider_id,
+    anthropic_llm_provider_manifest, anthropic_llm_wizard_qa, azure_openai_llm_feature_profile,
+    azure_openai_llm_pack_manifest, azure_openai_llm_provider_declaration,
+    azure_openai_llm_provider_id, azure_openai_llm_provider_manifest, azure_openai_llm_wizard_qa,
+    bedrock_llm_feature_profile, bedrock_llm_pack_manifest, bedrock_llm_provider_declaration,
+    bedrock_llm_provider_id, bedrock_llm_provider_manifest, bedrock_llm_wizard_qa,
+    gemini_llm_feature_profile, gemini_llm_pack_manifest, gemini_llm_provider_declaration,
+    gemini_llm_provider_id, gemini_llm_provider_manifest, gemini_llm_wizard_qa,
+    implemented_llm_wizard_qas, llm_capability_declaration, llm_capability_id,
+    llm_capability_profile, llm_capability_uri, llm_feature_profile, llm_operations,
+    llm_pack_capabilities, llm_pack_capability_id, llm_pack_manifest, llm_pack_manifest_cbor,
+    llm_provider_declaration, llm_provider_extension_inline, llm_provider_id,
+    llm_provider_manifest, llm_provider_pack_capability_id, nvidia_nim_llm_feature_profile,
+    nvidia_nim_llm_pack_manifest, nvidia_nim_llm_provider_declaration, nvidia_nim_llm_provider_id,
+    nvidia_nim_llm_provider_manifest, nvidia_nim_llm_wizard_qa,
+    openai_compatible_llm_feature_profile, openai_compatible_llm_pack_manifest,
+    openai_compatible_llm_provider_declaration, openai_compatible_llm_provider_id,
+    openai_compatible_llm_provider_manifest, openai_compatible_llm_wizard_qa,
+    openai_llm_feature_profile, openai_llm_pack_manifest, openai_llm_provider_declaration,
+    openai_llm_provider_id, openai_llm_provider_manifest, openai_llm_wizard_qa,
 };
 pub use memory::{
     MemoryFixtureError, ShortTermMemoryVariant, short_term_memory_capability_declaration,

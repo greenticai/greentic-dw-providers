@@ -1,0 +1,18 @@
+[package]
+name = "greentic-dw-llm-azure-openai"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Azure OpenAI LLM provider for Greentic DW."
+
+[dependencies]
+greentic-dw-llm = { workspace = true }
+greentic-dw-providers-common = { workspace = true }
+greentic-types = { workspace = true }
+reqwest = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+

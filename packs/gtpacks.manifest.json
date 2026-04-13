@@ -60,6 +60,41 @@
       "category": "tool",
       "name": "component-adapter",
       "pack_id": "greentic.dw.providers.tool.component-adapter"
+    },
+    {
+      "category": "llm",
+      "name": "anthropic",
+      "pack_id": "greentic.dw.providers.llm.anthropic"
+    },
+    {
+      "category": "llm",
+      "name": "azure-openai",
+      "pack_id": "greentic.dw.providers.llm.azure-openai"
+    },
+    {
+      "category": "llm",
+      "name": "bedrock",
+      "pack_id": "greentic.dw.providers.llm.bedrock"
+    },
+    {
+      "category": "llm",
+      "name": "gemini",
+      "pack_id": "greentic.dw.providers.llm.gemini"
+    },
+    {
+      "category": "llm",
+      "name": "openai",
+      "pack_id": "greentic.dw.providers.llm.openai"
+    },
+    {
+      "category": "llm",
+      "name": "openai-compatible",
+      "pack_id": "greentic.dw.providers.llm.openai-compatible"
+    },
+    {
+      "category": "llm",
+      "name": "nvidia-nim",
+      "pack_id": "greentic.dw.providers.llm.nvidia-nim"
     }
   ]
 }
