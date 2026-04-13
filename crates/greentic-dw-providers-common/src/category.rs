@@ -9,6 +9,8 @@ use serde::{Deserialize, Serialize};
 pub enum ProviderCategory {
     /// Engine providers.
     Engine,
+    /// LLM providers.
+    Llm,
     /// Memory providers.
     Memory,
     /// State providers.
@@ -27,6 +29,7 @@ impl ProviderCategory {
     pub const fn as_str(self) -> &'static str {
         match self {
             Self::Engine => "engine",
+            Self::Llm => "llm",
             Self::Memory => "memory",
             Self::State => "state",
             Self::Control => "control",
@@ -60,6 +63,7 @@ impl FromStr for ProviderCategory {
     fn from_str(value: &str) -> Result<Self, Self::Err> {
         match value {
             "engine" => Ok(Self::Engine),
+            "llm" => Ok(Self::Llm),
             "memory" => Ok(Self::Memory),
             "state" => Ok(Self::State),
             "control" => Ok(Self::Control),
@@ -84,9 +88,10 @@ pub fn capability_uri(category: ProviderCategory, capability: impl AsRef<str>) -
 
 /// Returns the planned provider categories in workspace order.
 #[must_use]
-pub const fn planned_categories() -> [ProviderCategory; 6] {
+pub const fn planned_categories() -> [ProviderCategory; 7] {
     [
         ProviderCategory::Engine,
+        ProviderCategory::Llm,
         ProviderCategory::Memory,
         ProviderCategory::State,
         ProviderCategory::Control,
