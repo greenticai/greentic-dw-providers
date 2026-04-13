@@ -1,9 +1,9 @@
 # Repository Overview
 
 ## 1. High-Level Purpose
-- This repository is a Rust workspace for Greentic digital worker providers. It still contains placeholder categories for some provider families, but the control, engine, short-term memory, observer, and task-store families now include real backend crates alongside the shared helper crate.
+- This repository is a Rust workspace for Greentic digital worker providers. It still contains placeholder categories for some provider families, but the control, engine, LLM, short-term memory, observer, and task-store families now include real backend crates or normalized core-contract crates alongside the shared helper crate.
 - The repo now has a functional shared helper crate that reuses Greentic core models and builds the provider/capability naming patterns used by future provider packages. The root binary remains a lightweight workspace banner rather than a runtime entrypoint.
-- The engine family, the control family, the observer family, the tool family, the short-term memory family, and the task-store family are the first concrete provider contracts in the tree: the repo now documents `default` and `router-lite` engine variants, `basic-policy` / `delegation-guard` control variants, `basic-audit` / `basic-metrics` observer variants, `component-adapter` / `mcp-adapter` tool variants, plus `in-memory` and `redis` variants for the memory and state families.
+- The engine family, the LLM family, the control family, the observer family, the tool family, the short-term memory family, and the task-store family are the first concrete provider contracts in the tree: the repo now includes the normalized `llm/core` contract plus `anthropic`, Azure-specific `azure-openai`, `bedrock`, `gemini`, native `openai`, generic `openai-compatible`, and NVIDIA `nvidia-nim` backends, `default` and `router-lite` engine variants, `basic-policy` / `delegation-guard` control variants, `basic-audit` / `basic-metrics` observer variants, `component-adapter` / `mcp-adapter` tool variants, plus `in-memory` and `redis` variants for the memory and state families.
 - The memory family now has real backend code in this repo: `memory/short-term/core` provides the shared short-term memory contract, while `memory/short-term/in-memory` and `memory/short-term/redis` implement store-backed providers on top of `greentic-state`.
 - The observer family now also has real backend code: `observer/core` provides the shared observer contract, while `observer/basic-audit` and `observer/basic-metrics` implement tenant-scoped audit logging and metrics aggregation.
 - The engine family now also has real backend code: `engine/core` provides the shared engine contract, while `engine/default` and `engine/router-lite` implement a direct-action engine and a lightweight heuristic router.
@@ -93,6 +93,7 @@
     - `category.rs` defines `ProviderCategory` plus provider/capability naming helpers.
     - `capability.rs` builds capability ids, offers, declarations, pack capability ids, and validation wrappers.
     - `provider.rs` builds provider manifests, provider declarations, runtime refs, and validation wrappers.
+    - `llm.rs` builds family-level LLM provider ids, the `cap://dw.llm` / `greentic.cap.llm` identifiers, provider manifests/declarations, feature profiles, shared wizard QA descriptor types, and fixture manifests for future LLM backends.
     - `engine.rs` builds engine helpers for the default and router-lite variants.
     - `control.rs` builds control helpers for the basic-policy and delegation-guard variants.
     - `observer.rs` builds observer helpers for the basic-audit and basic-metrics variants.
@@ -187,10 +188,54 @@
   - **Role:** Integration tests for the end-to-end bundle/setup fixtures.
   - **Key functionality:** Verifies the OSS and enterprise scenarios wire together short-term memory, task-state, and audit observer providers through bundle metadata and setup binding overrides.
 
-- **Path:** `engine/`, `memory/`, `state/`, `control/`, `observer/`, `tool/`
+- **Path:** `crates/greentic-dw-providers-common/tests/pr07.rs`
+  - **Role:** LLM-family conformance tests.
+  - **Key functionality:** Verifies that the implemented LLM backends stay aligned on helper naming, manifests, pack metadata, feature-profile behavior, wizard QA registry coverage, and exported config-schema basics.
+
+- **Path:** `engine/`, `llm/`, `memory/`, `state/`, `control/`, `observer/`, `tool/`
   - **Role:** Top-level provider category placeholders and documentation anchors.
   - **Key functionality:** Reserve the directory skeleton for future provider crates while documenting the current family contracts and example bundle flows.
-  - **Key dependencies / integration points:** `engine/`, `control/`, `observer/`, `tool/`, `memory/`, and `state/` now contain contract documentation and backend subdirectories.
+  - **Key dependencies / integration points:** `llm/`, `engine/`, `control/`, `observer/`, `tool/`, `memory/`, and `state/` now contain contract documentation and backend or scaffold subdirectories.
+
+- **Path:** `llm/`
+  - **Role:** LLM provider family.
+  - **Key functionality:** Contains the shared normalized LLM contract crate plus the Anthropic, Azure OpenAI, Bedrock, Gemini, native OpenAI, generic OpenAI-compatible, and NVIDIA NIM backend crates, and the family-level documentation for future backend crates such as other platform-aware providers.
+  - **Key dependencies / integration points:** Uses the shared family identifiers `cap://dw.llm` and `greentic.cap.llm` plus the typed feature-profile metadata exposed by the common helper crate.
+
+- **Path:** `llm/azure-openai`
+  - **Role:** Azure OpenAI provider crate.
+  - **Key functionality:** Provides Azure-specific config validation, Responses API and Chat Completions request mapping, provider-owned wizard QA metadata, a blocking HTTP transport, and provider metadata/pack manifest helpers for `dw.llm.azure-openai`.
+  - **Key dependencies / integration points:** Builds on `llm/core`, uses `crates/greentic-dw-providers-common` for canonical provider metadata, and uses `reqwest` for the blocking HTTP transport.
+
+- **Path:** `llm/anthropic`
+  - **Role:** Anthropic Claude backend crate.
+  - **Key functionality:** Maps the normalized `llm/core` request/response model onto the Anthropic Messages API, including tool use, synthetic structured-output forcing, optional thinking-mode payloads, and Anthropic-specific API error mapping.
+  - **Key dependencies / integration points:** Builds on `llm/core`, uses `crates/greentic-dw-providers-common` for canonical provider metadata, and uses `reqwest` for the blocking HTTP transport.
+
+- **Path:** `llm/bedrock`
+  - **Role:** Amazon Bedrock backend crate.
+  - **Key functionality:** Maps the normalized `llm/core` request/response model onto Bedrock Converse and ConverseStream, including AWS auth-mode config, tool-use mapping, SDK-backed transport execution, and streamed response aggregation.
+  - **Key dependencies / integration points:** Builds on `llm/core`, uses `crates/greentic-dw-providers-common` for canonical provider metadata, and uses the official AWS Bedrock Runtime SDK for transport.
+
+- **Path:** `llm/gemini`
+  - **Role:** Gemini backend crate.
+  - **Key functionality:** Maps the normalized `llm/core` request/response model onto Gemini `generateContent`, including function declarations, function-calling policy mapping, JSON-schema structured outputs, and Gemini-specific API error mapping.
+  - **Key dependencies / integration points:** Builds on `llm/core`, uses `crates/greentic-dw-providers-common` for canonical provider metadata, and uses `reqwest` for the blocking HTTP transport.
+
+- **Path:** `llm/openai`
+  - **Role:** Native OpenAI backend crate.
+  - **Key functionality:** Maps the normalized `llm/core` request/response model onto the OpenAI Responses API, including stateful `previous_response_id` chaining, JSON schema structured outputs, and function tool declarations.
+  - **Key dependencies / integration points:** Builds on `llm/core`, uses `crates/greentic-dw-providers-common` for canonical provider metadata, and uses `reqwest` for the blocking HTTP transport.
+
+- **Path:** `llm/openai-compatible`
+  - **Role:** Generic OpenAI-compatible backend crate.
+  - **Key functionality:** Maps the normalized `llm/core` request/response model onto configurable `responses` and `chat_completions` style endpoints for Ollama-, vLLM-, LM Studio-, and gateway-class targets, with explicit feature flags for stateful responses and structured outputs.
+  - **Key dependencies / integration points:** Builds on `llm/core`, uses `crates/greentic-dw-providers-common` for canonical provider metadata, and uses `reqwest` for the blocking HTTP transport.
+
+- **Path:** `llm/nvidia-nim`
+  - **Role:** NVIDIA NIM backend crate.
+  - **Key functionality:** Maps the normalized `llm/core` request/response model onto the NIM OpenAI-compatible inference surface and adds mode-gated provider-specific helpers for model discovery, ready/live health checks, startup probing, and NIM-specific error handling.
+  - **Key dependencies / integration points:** Builds on `llm/core`, uses `crates/greentic-dw-providers-common` for canonical provider metadata, and uses `reqwest` for the blocking HTTP transport.
 
 - **Path:** `engine/`
   - **Role:** Engine provider family.
@@ -227,9 +272,9 @@
   - **Key functionality:** Document the intended in-memory and Redis variants for the task-state family.
   - **Key dependencies / integration points:** Both point at the shared `cap://dw.state.task-store` contract and `greentic.cap.state.task-store` pack capability id.
 
-- **Path:** `.codex/PR-00-BOOTSTRAP.md` through `.codex/PR-06-INTEGRATION-TESTS-EXAMPLES.md`
+- **Path:** `.codex/PR-00-BOOTSTRAP.md` through `.codex/PR-17-AZURE-OPENAI.md`
   - **Role:** Planning notes for the intended provider roadmap.
-  - **Key functionality:** Describe the workspace bootstrap, category architecture, provider families, and integration-test goals.
+  - **Key functionality:** Describe the workspace bootstrap, category architecture, provider families, integration-test goals, and the planned LLM provider rollout.
 
 - **Path:** `../greentic-dw`, `../greentic-cap`
   - **Role:** Sibling reference workspaces.
@@ -255,6 +300,10 @@
 - **Location:** `tool/`
   - **Status:** partial
   - **Short description:** The tool contract is documented and backed by helpers, but no actual provider crates exist yet.
+
+- **Location:** `llm/`
+  - **Status:** active
+  - **Short description:** The LLM family now has a normalized shared `llm/core` contract crate plus `llm/anthropic`, `llm/azure-openai`, `llm/bedrock`, `llm/gemini`, `llm/openai`, `llm/openai-compatible`, and `llm/nvidia-nim`, while the rest of the provider matrix is still pending.
 
 - **Location:** `state/`
   - **Status:** partial
@@ -288,6 +337,50 @@
   - **Status:** WIP
   - **Short description:** Describes the end-to-end examples and integration fixtures and now matches the implemented helper surface.
 
+- **Location:** `.codex/PR-07-LLM-FAMILY-SCAFFOLD.md`
+  - **Status:** WIP
+  - **Short description:** Describes the top-level LLM family scaffold, shared helper additions, and capability/profile metadata builders, and now matches the implemented helper surface.
+
+- **Location:** `.codex/PR-08-LLM-CORE-CONTRACT.md`
+  - **Status:** WIP
+  - **Short description:** Describes the normalized LLM core contract, request/response model, provider feature flags, and conformance fixtures, and now matches the implemented shared contract crate.
+
+- **Location:** `.codex/PR-09-LLM-OPENAI.md`
+  - **Status:** WIP
+  - **Short description:** Describes the native OpenAI provider crate, Responses API mapping, config schema, and passthrough tests, and now matches the first backend implementation under `llm/openai`.
+
+- **Location:** `.codex/PR-10-LLM-OPENAI-COMPATIBLE.md`
+  - **Status:** WIP
+  - **Short description:** Describes the generic OpenAI-compatible provider crate for Ollama, vLLM, LM Studio, and internal gateways, and now matches the first compatibility backend implementation under `llm/openai-compatible`.
+
+- **Location:** `.codex/PR-11-LLM-NVIDIA-NIM.md`
+  - **Status:** complete
+  - **Short description:** Describes the NVIDIA NIM provider crate, OpenAI-compatible inference, NIM-aware discovery and health helpers, startup probing, and platform-specific metadata, and now matches the implemented backend under `llm/nvidia-nim`.
+
+- **Location:** `.codex/PR-12-LLM-ANTHROPIC.md`
+  - **Status:** complete
+  - **Short description:** Describes the Anthropic Claude provider crate, Messages API mapping, tool-use normalization, structured outputs, thinking-mode config, and provider metadata, and now matches the implemented backend under `llm/anthropic`.
+
+- **Location:** `.codex/PR-13-LLM-GEMINI.md`
+  - **Status:** complete
+  - **Short description:** Describes the Gemini provider crate, `generateContent` mapping, function calling, structured outputs, and provider metadata, and now matches the implemented backend under `llm/gemini`.
+
+- **Location:** `.codex/PR-14-LLM-BEDROCK.md`
+  - **Status:** complete
+  - **Short description:** Describes the Bedrock provider crate, Converse and ConverseStream mapping, AWS auth configuration, SDK-backed transport execution, and enterprise-oriented request normalization.
+
+- **Location:** `.codex/PR-15-LLM-WIZARD-QA.md`
+  - **Status:** WIP
+  - **Short description:** Describes provider-owned wizard QA blocks and dynamic follow-up question metadata for the LLM family, and now matches the shared helper structs plus the first provider-owned QA blocks across the implemented LLM backends.
+
+- **Location:** `.codex/PR-16-LLM-CONFORMANCE-TESTS.md`
+  - **Status:** complete
+  - **Short description:** Describes the shared LLM-family conformance tests across helper naming, manifests, capability ids, feature profiles, wizard metadata, and config schemas, and now matches the implemented `crates/greentic-dw-providers-common/tests/pr07.rs` suite.
+
+- **Location:** `.codex/PR-17-AZURE-OPENAI.md`
+  - **Status:** complete
+  - **Short description:** Describes the Azure OpenAI provider with Azure-specific endpoint, auth, deployment, Responses API behavior, wizard metadata, and conformance coverage, and now matches the implemented backend under `llm/azure-openai`.
+
 ## 4. Broken, Failing, or Conflicting Areas
 - The new control, engine, short-term memory, observer, and task-store crates are mid-integration; targeted package tests and the full workspace check need to be rerun after the workspace dependency graph finishes rebuilding.
 - `bash ci/local_check.sh` has not yet been rerun against the new control, engine, memory, observer, and task-store crates in the current worktree.
@@ -296,6 +389,7 @@
 - The last known pre-change workspace test run passed, including the PR-01 helper integration tests, the PR-02 memory contract tests, the PR-03 task-store contract tests, the PR-04 engine contract tests, the PR-05 control/observer/tool contract tests, and the PR-06 end-to-end fixture tests, but that status needs to be re-established for the new workspace members.
 - No explicit `BROKEN`, `FIXME`, or `HACK` markers were found in the source tree.
 - The repository now includes `coverage-policy.json` with a 60% global and default per-file line coverage floor, stricter targets for the shared helper modules, and explicit coverage entries for the concrete provider crates added under `control/`, `engine/`, `memory/`, `observer/`, `state/`, and `tool/`.
+- The repository now also includes explicit coverage entries for the new `crates/greentic-dw-providers-common/src/llm.rs` helper module, the `llm/core` contract crate, the `llm/anthropic` provider crate, the `llm/azure-openai` provider crate, the `llm/bedrock` provider crate, the `llm/gemini` provider crate, the native `llm/openai` provider crate, the generic `llm/openai-compatible` provider crate, and the `llm/nvidia-nim` provider crate.
 - The nightly coverage workflow now installs `greentic-dev`, `cargo-nextest`, and `cargo-llvm-cov` through `cargo-binstall` and fails when the coverage policy is violated.
 - The new provider-extension validation path avoids repeating checks that are already covered by `ProviderExtensionInline::validate_basic`, which should help the perf harness stay focused on real hot work instead of duplicate validation.
 - The remaining bottleneck is pack-manifest CBOR encoding; the current safe win is to keep the manifest assembly path free of redundant string generation and reuse the split benchmark to catch regressions.
@@ -303,9 +397,40 @@
 
 ## 5. Notes for Future Work
 - Add the first real provider crates under the category directories, starting with the engine, control, observer, tool, short-term memory, and task-store families.
+- Add the remaining planned LLM provider crates after the now-landed normalized core contract, Anthropic backend, Azure OpenAI backend, Gemini backend, native OpenAI backend, generic OpenAI-compatible backend, and NVIDIA NIM backend.
+- Build additional provider-specific transports on top of the normalized `llm/core` request/response model and the shared family-level helper metadata.
 - Revisit the PR-06 bundle/setup examples once real provider crates or published artifact generation are available, so the fixtures can point at concrete generated outputs.
 - Decide whether the shared helper crate should grow any additional pack-manifest or capability-profile convenience builders, or whether those should live in the future provider crates.
 - Replace the category placeholders with real crate manifests and source once provider implementation work starts.
 - Revisit the sibling `greentic-dw` and `greentic-cap` references when those APIs are published as crates and can be consumed without local checkout coupling.
 - Keep the shared helper API small and reuse-first so provider implementations do not drift from the existing Greentic types and pack contracts.
 - Use the `gtc wizard --answers` flow for any future `gtpack` or `gtbundle` generation, and review `greentic-pack`/bundle compatibility before adding new generation tooling.
+- **Path:** `llm/core`
+  - **Role:** Shared normalized LLM contract crate.
+  - **Key functionality:** Defines the provider-neutral `LlmRequest` / `LlmResponse` model, tool and structured-output types, provider feature flags, the `LlmProvider` trait, normalized error handling, and conformance fixtures for common request shapes.
+  - **Key dependencies / integration points:** Reuses `greentic-types::TenantCtx`, the shared capability-profile model from `greentic-cap-types`, and mirrors the family-level identifiers exposed by `crates/greentic-dw-providers-common::llm`.
+
+- **Path:** `llm/openai`
+  - **Role:** Native OpenAI provider crate.
+  - **Key functionality:** Provides OpenAI-specific config validation, request mapping for the Responses API, provider-owned wizard QA metadata, a blocking HTTP transport, and provider metadata/pack manifest helpers for `dw.llm.openai`.
+  - **Key dependencies / integration points:** Reuses `greentic-dw-llm` for the normalized contract, `greentic-dw-providers-common` for provider declarations and pack manifests, and `reqwest` for transport.
+
+- **Path:** `llm/bedrock`
+  - **Role:** Amazon Bedrock provider crate.
+  - **Key functionality:** Provides Bedrock-specific config validation, Converse and ConverseStream request mapping, provider-owned wizard QA metadata, an AWS SDK-backed transport, and provider metadata/pack manifest helpers for `dw.llm.bedrock`.
+  - **Key dependencies / integration points:** Reuses `greentic-dw-llm` for the normalized contract, `greentic-dw-providers-common` for provider declarations and pack manifests, and the AWS Bedrock Runtime SDK for transport.
+
+- **Path:** `llm/gemini`
+  - **Role:** Gemini provider crate.
+  - **Key functionality:** Provides Gemini-specific config validation, `generateContent` request mapping, provider-owned wizard QA metadata, a blocking HTTP transport, and provider metadata/pack manifest helpers for `dw.llm.gemini`.
+  - **Key dependencies / integration points:** Reuses `greentic-dw-llm` for the normalized contract, `greentic-dw-providers-common` for provider declarations and pack manifests, and `reqwest` for transport.
+
+- **Path:** `llm/openai-compatible`
+  - **Role:** Generic OpenAI-compatible provider crate.
+  - **Key functionality:** Provides compatibility-mode config validation, request mapping for both `responses` and `chat_completions` style APIs, provider-owned wizard QA metadata, a blocking HTTP transport, and provider metadata/pack manifest helpers for `dw.llm.openai-compatible`.
+  - **Key dependencies / integration points:** Reuses `greentic-dw-llm` for the normalized contract, `greentic-dw-providers-common` for provider declarations and pack manifests, and `reqwest` for transport.
+
+- **Path:** `llm/nvidia-nim`
+  - **Role:** NVIDIA NIM provider crate.
+  - **Key functionality:** Provides NIM-specific config validation, OpenAI-compatible inference mapping, provider-owned wizard QA metadata, discovery and health parsing helpers, a blocking HTTP transport, and provider metadata/pack manifest helpers for `dw.llm.nvidia-nim`.
+  - **Key dependencies / integration points:** Reuses `greentic-dw-llm` for the normalized contract, `greentic-dw-providers-common` for provider declarations and pack manifests, and `reqwest` for transport.

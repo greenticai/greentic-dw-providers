@@ -4,6 +4,7 @@ Greentic digital worker provider workspace scaffold.
 
 This repository is the starting point for provider implementations that will plug into the Greentic digital worker ecosystem. The intended provider families are:
 
+- llm
 - memory
 - state
 - engine
@@ -24,6 +25,7 @@ The shared crate currently provides reusable helpers for:
 - provider categories and naming
 - capability declarations and pack capability ids
 - provider manifests and runtime refs
+- llm family fixtures and feature-profile helpers
 - engine selection helpers
 - short-term memory fixtures
 - task-store fixtures
@@ -44,6 +46,11 @@ Provider families follow a compact naming scheme that the shared helper crate en
 - runtime capability URIs use `cap://dw.<category>.<capability>`
 - pack capability ids use `greentic.cap.<category>.<capability>`
 
+The new `llm` family is the current exception:
+
+- runtime capability URI uses `cap://dw.llm`
+- shared pack capability id uses `greentic.cap.llm`
+
 The common crate exposes a small builder surface for these patterns:
 
 - `ProviderCategory`
@@ -59,6 +66,15 @@ These helpers are meant to be copied or wrapped by future provider crates so tha
 
 The repository is organized by provider family:
 
+- `llm/`
+  - `core/`
+  - `anthropic/`
+  - `azure-openai/`
+  - `bedrock/`
+  - `gemini/`
+  - `openai/`
+  - `openai-compatible/`
+  - `nvidia-nim/`
 - `engine/`
   - `default/`
   - `router-lite/`
@@ -78,7 +94,7 @@ The repository is organized by provider family:
   - `task-store/in-memory/`
   - `task-store/redis/`
 
-The category roots are still placeholders, but `engine/default/...`, `engine/router-lite/...`, `control/basic-policy/...`, `control/delegation-guard/...`, `observer/basic-audit/...`, `observer/basic-metrics/...`, `tool/component-adapter/...`, `tool/mcp-adapter/...`, `memory/short-term/...`, and `state/task-store/...` now carry concrete contract documentation for the first engine, control, observer, tool, memory, and task-state provider families.
+The category roots are still placeholders, but `llm/core/...`, `llm/anthropic/...`, `llm/azure-openai/...`, `llm/bedrock/...`, `llm/gemini/...`, `llm/openai/...`, `llm/openai-compatible/...`, `engine/default/...`, `engine/router-lite/...`, `control/basic-policy/...`, `control/delegation-guard/...`, `observer/basic-audit/...`, `observer/basic-metrics/...`, `tool/component-adapter/...`, `tool/mcp-adapter/...`, `memory/short-term/...`, and `state/task-store/...` now carry concrete contract crates or documentation for the first LLM, engine, control, observer, tool, memory, and task-state provider families.
 
 ## Versioning
 
@@ -90,6 +106,16 @@ The repo is still a scaffold, but the shared helper layer is now functional:
 
 - the root binary is a placeholder entrypoint,
 - the common provider crate now contains reusable provider, capability, and pack-fixture helpers,
+- the llm family now has a normalized shared contract crate plus canonical provider, capability, and feature-profile helpers,
+- the llm family helper surface now also includes shared wizard QA descriptor types for provider-owned setup questions,
+- the shared helper crate now also carries cross-provider LLM conformance tests for naming, manifests, feature flags, wizard metadata, and config schemas,
+- the llm family now also has an `anthropic` backend crate for Messages API mapping, tool use, and structured outputs,
+- the llm family now also has an `azure-openai` backend crate for Azure-specific deployment, auth, and Responses API execution,
+- the llm family now also has a `bedrock` backend crate for AWS auth-aware Converse and ConverseStream transport over the official AWS SDK,
+- the llm family now also has a `gemini` backend crate for `generateContent`, function calling, and JSON structured outputs,
+- the llm family now also has a native `openai` backend crate for the OpenAI Responses API,
+- the llm family now also has an `openai-compatible` backend crate for self-hosted and gateway targets,
+- the llm family now also has a `nvidia-nim` backend crate for NIM-aware discovery, health-aware deployments, and mode-gated startup probing,
 - the engine family has shared contract helpers plus `default` and `router-lite` example directories,
 - the control family has shared contract helpers plus `basic-policy` and `delegation-guard` example directories,
 - the observer family has shared contract helpers plus `basic-audit` and `basic-metrics` example directories,
