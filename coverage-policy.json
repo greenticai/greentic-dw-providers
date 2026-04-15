@@ -21,6 +21,18 @@
     "control/delegation-guard/src/lib.rs": {
       "line_coverage_min": 60.0
     },
+    "context/compressor/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "context/core/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "context/retrieval/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "context/static/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
     "crates/greentic-dw-providers-common/src/capability.rs": {
       "line_coverage_min": 75.0
     },
@@ -53,6 +65,15 @@
     },
     "crates/greentic-dw-providers-common/src/fixtures.rs": {
       "line_coverage_min": 70.0
+    },
+    "delegation/capability-match/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "delegation/core/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "delegation/static-router/src/lib.rs": {
+      "line_coverage_min": 60.0
     },
     "engine/core/src/lib.rs": {
       "line_coverage_min": 60.0
@@ -213,6 +234,42 @@
     "observer/basic-metrics/src/lib.rs": {
       "line_coverage_min": 60.0
     },
+    "planning/core/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "planning/llm-outline/src/config.rs": {
+      "line_coverage_min": 60.0
+    },
+    "planning/llm-outline/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "planning/llm-outline/src/prompt.rs": {
+      "line_coverage_min": 60.0
+    },
+    "planning/llm-outline/src/provider.rs": {
+      "line_coverage_min": 60.0
+    },
+    "planning/static/src/config.rs": {
+      "line_coverage_min": 60.0
+    },
+    "planning/static/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "planning/static/src/provider.rs": {
+      "line_coverage_min": 60.0
+    },
+    "reflection/core/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "reflection/llm-critic/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "reflection/rules/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "reflection/schema-check/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
     "state/task-store/core/src/lib.rs": {
       "line_coverage_min": 60.0
     },
@@ -230,6 +287,15 @@
     },
     "tool/mcp-adapter/src/lib.rs": {
       "line_coverage_min": 45.0
+    },
+    "workspace/core/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "workspace/fs/src/lib.rs": {
+      "line_coverage_min": 60.0
+    },
+    "workspace/in-memory/src/lib.rs": {
+      "line_coverage_min": 60.0
     }
   }
 }

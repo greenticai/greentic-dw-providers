@@ -1,0 +1,37 @@
+[
+  {
+    "version_id": "v1",
+    "content": {
+      "plan_id": "plan-golden",
+      "status": "draft"
+    },
+    "provenance": {
+      "derived_from": null,
+      "source": "planning/static"
+    },
+    "metadata": {
+      "content_checksum": "acd3b9ecd8e7c5a9afbdaf297b352fedf2b534a72a7e62d996d19b854de539cd",
+      "attributes": {
+        "phase": "draft"
+      }
+    }
+  },
+  {
+    "version_id": "v2",
+    "content": {
+      "plan_id": "plan-golden",
+      "reviewed": true,
+      "status": "approved"
+    },
+    "provenance": {
+      "derived_from": "v1",
+      "source": "reflection/schema-check"
+    },
+    "metadata": {
+      "content_checksum": "9103aa6f8b479eb3cea2cbc8d6849123e1f44fc8117b7e76aa5e36bca5dce20e",
+      "attributes": {
+        "phase": "approved"
+      }
+    }
+  }
+]
