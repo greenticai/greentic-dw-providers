@@ -1,0 +1,13 @@
+[package]
+name = "greentic-dw-reflection-schema-check"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Deterministic schema validation reflection provider for Greentic DW."
+
+[dependencies]
+greentic-dw-reflection = { workspace = true }
+greentic-types = { workspace = true }
+serde_json = { workspace = true }

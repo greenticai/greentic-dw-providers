@@ -1,0 +1,13 @@
+[package]
+name = "greentic-dw-reflection"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "../README.md"
+description = "Shared reflection contract and review outcome models for Greentic DW."
+
+[dependencies]
+greentic-types = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

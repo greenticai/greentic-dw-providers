@@ -1,0 +1,18 @@
+[package]
+name = "greentic-dw-context-retrieval"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Retrieval-based context provider for Greentic DW."
+
+[dependencies]
+greentic-dw-context = { workspace = true }
+greentic-dw-planning = { workspace = true }
+greentic-dw-workspace = { workspace = true }
+greentic-types = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+greentic-dw-workspace-in-memory = { path = "../../workspace/in-memory" }
