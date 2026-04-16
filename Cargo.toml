@@ -48,8 +48,9 @@ members = [
 resolver = "2"
 
 [workspace.package]
-version = "0.5.4"
+version = "0.5.5"
 edition = "2024"
+rust-version = "1.94"
 license = "MIT"
 repository = "https://github.com/greenticai/greentic-dw-providers"
 readme = "README.md"
@@ -99,6 +100,7 @@ thiserror = { version = "2" }
 name = "greentic-dw-providers"
 version.workspace = true
 edition.workspace = true
+rust-version = "1.94"
 license.workspace = true
 repository.workspace = true
 readme.workspace = true

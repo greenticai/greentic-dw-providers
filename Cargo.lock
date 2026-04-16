@@ -521,7 +521,7 @@ dependencies = [
  "hyper 0.14.32",
  "hyper 1.9.0",
  "hyper-rustls 0.24.2",
- "hyper-rustls 0.27.9",
+ "hyper-rustls 0.27.8",
  "hyper-util",
  "pin-project-lite",
  "rustls 0.21.12",
@@ -698,9 +698,9 @@ checksum = "5e764a1d40d510daf35e07be9eb06e75770908c27d411ee6c92109c9840eaaf7"
 
 [[package]]
 name = "bitflags"
-version = "2.11.1"
+version = "2.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c4512299f36f043ab09a583e57bceb5a5aab7a73db1805848e8fef3c9e8c78b3"
+checksum = "843867be96c8daad0d758b57df9392b6d8d271134fce549de6ce169ff98a92af"
 
 [[package]]
 name = "bitmaps"
@@ -2190,7 +2190,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-context"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2199,7 +2199,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-context-compressor"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-context",
  "greentic-types",
@@ -2208,7 +2208,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-context-retrieval"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-context",
  "greentic-dw-planning",
@@ -2220,7 +2220,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-context-static"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-context",
  "greentic-types",
@@ -2229,7 +2229,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-control"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2238,7 +2238,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-control-basic-policy"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-control",
  "greentic-dw-providers-common",
@@ -2248,7 +2248,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-control-delegation-guard"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-control",
  "greentic-dw-providers-common",
@@ -2258,7 +2258,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-delegation"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2267,7 +2267,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-delegation-capability-match"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-delegation",
  "greentic-types",
@@ -2275,7 +2275,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-delegation-static-router"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-delegation",
  "greentic-types",
@@ -2285,7 +2285,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-engine"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2294,7 +2294,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-engine-default"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-engine",
  "greentic-dw-providers-common",
@@ -2304,7 +2304,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-engine-router-lite"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-engine",
  "greentic-dw-providers-common",
@@ -2314,7 +2314,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-cap-types",
  "greentic-types",
@@ -2325,7 +2325,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm-anthropic"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-llm",
  "greentic-dw-providers-common",
@@ -2338,7 +2338,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm-azure-openai"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-llm",
  "greentic-dw-providers-common",
@@ -2351,7 +2351,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm-bedrock"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "aws-config",
  "aws-credential-types",
@@ -2370,7 +2370,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm-gemini"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-llm",
  "greentic-dw-providers-common",
@@ -2383,7 +2383,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm-nvidia-nim"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-llm",
  "greentic-dw-providers-common",
@@ -2396,7 +2396,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm-openai"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-llm",
  "greentic-dw-providers-common",
@@ -2409,7 +2409,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm-openai-compatible"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-llm",
  "greentic-dw-providers-common",
@@ -2422,7 +2422,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-memory"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-providers-common",
  "greentic-state",
@@ -2433,7 +2433,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-memory-in-memory"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-memory",
  "greentic-dw-providers-common",
@@ -2444,7 +2444,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-memory-redis"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-memory",
  "greentic-dw-providers-common",
@@ -2455,7 +2455,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-observer"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2464,7 +2464,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-observer-basic-audit"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-observer",
  "greentic-dw-providers-common",
@@ -2474,7 +2474,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-observer-basic-metrics"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-observer",
  "greentic-dw-providers-common",
@@ -2484,7 +2484,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-planning"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2493,7 +2493,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-planning-llm-outline"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-planning",
  "greentic-types",
@@ -2503,7 +2503,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-planning-static"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-planning",
  "greentic-types",
@@ -2513,7 +2513,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-providers"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "criterion",
  "greentic-dw-context",
@@ -2536,7 +2536,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-providers-common"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-cap-types",
  "greentic-dw-llm",
@@ -2559,7 +2559,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-reflection"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2568,7 +2568,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-reflection-llm-critic"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-reflection",
  "greentic-types",
@@ -2577,7 +2577,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-reflection-rules"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-reflection",
  "greentic-types",
@@ -2586,7 +2586,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-reflection-schema-check"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-reflection",
  "greentic-types",
@@ -2595,7 +2595,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-task-store"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-providers-common",
  "greentic-state",
@@ -2606,7 +2606,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-task-store-in-memory"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-providers-common",
  "greentic-dw-task-store",
@@ -2617,7 +2617,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-task-store-redis"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-providers-common",
  "greentic-dw-task-store",
@@ -2628,7 +2628,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-tool"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2637,7 +2637,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-tool-component-adapter"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-component",
  "greentic-dw-providers-common",
@@ -2649,7 +2649,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-tool-mcp-adapter"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-providers-common",
  "greentic-dw-tool",
@@ -2662,7 +2662,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-workspace"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "blake3",
  "greentic-types",
@@ -2672,7 +2672,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-workspace-fs"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-workspace",
  "greentic-types",
@@ -2682,7 +2682,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-workspace-in-memory"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "greentic-dw-workspace",
  "greentic-types",
@@ -2734,9 +2734,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-i18n-translator"
-version = "0.4.12"
+version = "0.4.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "51dc3143da62a6965963e7fe94a3325e97bda1683be56bcfd28b0cbd7d01b854"
+checksum = "4928f431ae9dc810c1ea6bef41d6a2257c9dd775ceb1fe52fa6ebe8b02e67f01"
 dependencies = [
  "blake3",
  "clap",
@@ -2746,9 +2746,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-interfaces"
-version = "0.4.113"
+version = "0.4.112"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3337028cef893ae50da5027389850f18bb7d9a6945497858433bd3794931b880"
+checksum = "4b3e26c26c92d5cf8ad38b562bc64a41f1d01b15504ca259ff6e9ea14da9c2d1"
 dependencies = [
  "anyhow",
  "greentic-types",
@@ -2763,9 +2763,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-interfaces-guest"
-version = "0.4.113"
+version = "0.4.112"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "db0ad9c65e52fcc1c55a1d64a83edbaed4154a5ca8b8169fa133cb5fd4ac7627"
+checksum = "92b4cd55f864894d3296bbcec920a13e20bd875cff2347bf6197a0e8d93d0988"
 dependencies = [
  "greentic-interfaces",
  "greentic-types",
@@ -2776,9 +2776,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-interfaces-host"
-version = "0.4.113"
+version = "0.4.112"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e2754ba2499fbf692762f3a8d012af1e1fd4f4903ab5a3933ad0752c6645dfa5"
+checksum = "0ce6c1ce859f18ccaf874164f71bdd5d2ce2cb1021c705b3194cb56e584b880b"
 dependencies = [
  "greentic-interfaces",
  "greentic-types",
@@ -2789,9 +2789,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-interfaces-wasmtime"
-version = "0.4.113"
+version = "0.4.112"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "19ee840b722537370e98c8f8d36a46b3eb6a09916b2b40df9a0e702947adfe39"
+checksum = "da64ddd6204c0eb4c1eaefc9b14252f9b18e62e325705162165a0b1784aaefa9"
 dependencies = [
  "anyhow",
  "camino",
@@ -2954,9 +2954,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-telemetry"
-version = "0.4.5"
+version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "90f6019fe254034247e9a752e4c982d9b48bf9e346ecad72e74e26906c63e712"
+checksum = "1d7a9e8d0693e9752dd9cdf633922901bd65591a895b4186454abc7d3741e473"
 dependencies = [
  "anyhow",
  "once_cell",
@@ -2976,9 +2976,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-types"
-version = "0.4.59"
+version = "0.4.58"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea24d197bd6a175ce2fdc2923c0e4f0fa94f74603c47557f4c2e90b4b2645d1f"
+checksum = "eee55ef0e8a21fb642a6a2aed9d86dfc4b5ca745328da2093ec617ff274df7ad"
 dependencies = [
  "anyhow",
  "blake3",
@@ -3006,9 +3006,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-types-macros"
-version = "0.4.59"
+version = "0.4.58"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "13ed151cc07c5eafa08ca88640ebb68d5e9fe4c275fda8d3845fb020d3af730a"
+checksum = "e0f75e3f64ec1ecc5477b48716248fa9388bbbbc60f275b8e4ee7666791cc792"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3306,9 +3306,9 @@ dependencies = [
 
 [[package]]
 name = "hyper-rustls"
-version = "0.27.9"
+version = "0.27.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "33ca68d021ef39cf6463ab54c1d0f5daf03377b70561305bb89a8f83aab66e0f"
+checksum = "c2b52f86d1d4bc0d6b4e6826d960b1b333217e07d36b882dca570a5e1c48895b"
 dependencies = [
  "http 1.4.0",
  "hyper 1.9.0",
@@ -3834,9 +3834,9 @@ checksum = "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897"
 
 [[package]]
 name = "lru"
-version = "0.16.4"
+version = "0.16.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f66e8d5d03f609abc3a39e6f08e4164ebf1447a732906d39eb9b99b7919ef39"
+checksum = "a1dc47f592c06f33f8e3aea9591776ec7c9f9e4124778ff8a3c3b87159f7e593"
 dependencies = [
  "hashbrown 0.16.1",
 ]
@@ -4703,9 +4703,9 @@ dependencies = [
 
 [[package]]
 name = "rayon"
-version = "1.12.0"
+version = "1.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fb39b166781f92d482534ef4b4b1b2568f42613b53e5b6c160e24cfbfa30926d"
+checksum = "368f01d005bf8fd9b1206fb6fa653e6c4a81ceb1466406b81792d87c5677a58f"
 dependencies = [
  "either",
  "rayon-core",
@@ -4890,7 +4890,7 @@ dependencies = [
  "http-body 1.0.1",
  "http-body-util",
  "hyper 1.9.0",
- "hyper-rustls 0.27.9",
+ "hyper-rustls 0.27.8",
  "hyper-util",
  "js-sys",
  "log",
@@ -4933,7 +4933,7 @@ dependencies = [
  "http-body 1.0.1",
  "http-body-util",
  "hyper 1.9.0",
- "hyper-rustls 0.27.9",
+ "hyper-rustls 0.27.8",
  "hyper-util",
  "js-sys",
  "log",
@@ -5100,7 +5100,7 @@ dependencies = [
  "once_cell",
  "ring",
  "rustls-pki-types",
- "rustls-webpki 0.103.12",
+ "rustls-webpki 0.103.11",
  "subtle",
  "zeroize",
 ]
@@ -5141,7 +5141,7 @@ dependencies = [
  "rustls 0.23.38",
  "rustls-native-certs",
  "rustls-platform-verifier-android",
- "rustls-webpki 0.103.12",
+ "rustls-webpki 0.103.11",
  "security-framework",
  "security-framework-sys",
  "webpki-root-certs",
@@ -5166,9 +5166,9 @@ dependencies = [
 
 [[package]]
 name = "rustls-webpki"
-version = "0.103.12"
+version = "0.103.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8279bb85272c9f10811ae6a6c547ff594d6a7f3c6c6b02ee9726d1d0dcfcdd06"
+checksum = "20a6af516fea4b20eccceaf166e8aa666ac996208e8a644ce3ef5aa783bc7cd4"
 dependencies = [
  "aws-lc-rs",
  "ring",
@@ -5822,9 +5822,9 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.52.0"
+version = "1.51.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a91135f59b1cbf38c91e73cf3386fca9bb77915c45ce2771460c9d92f0f3d776"
+checksum = "f66bf9585cda4b724d3e78ab34b73fb2bbaba9011b9bfdf69dc836382ea13b8c"
 dependencies = [
  "bytes",
  "libc",
