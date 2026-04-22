@@ -1,0 +1,56 @@
+{
+  "fragments": [
+    {
+      "id": "intro",
+      "content": {
+        "text": "system prompt"
+      },
+      "provenance_ref": "static/intro",
+      "source_kind": "static",
+      "score": 0.9,
+      "pinned": true
+    },
+    {
+      "id": "runtime-metadata",
+      "content": {
+        "stage": "golden"
+      },
+      "provenance_ref": "request:req-static-golden",
+      "source_kind": "static",
+      "score": 1.0,
+      "pinned": true
+    },
+    {
+      "id": "workspace:analysis:plan-doc",
+      "content": {
+        "plan_id": "plan-compose",
+        "step_count": 2
+      },
+      "provenance_ref": "workspace/analysis/plan-doc/v1",
+      "source_kind": "workspace",
+      "score": 0.95,
+      "pinned": false
+    },
+    {
+      "id": "overflow-summary",
+      "content": {
+        "count": 3,
+        "summary_of": [
+          "policy",
+          "plan-step:step-1",
+          "memory:constraints"
+        ]
+      },
+      "provenance_ref": "compression/overflow-summary",
+      "source_kind": "summary",
+      "score": 0.0,
+      "pinned": true
+    }
+  ],
+  "metadata": {
+    "kept_count": 4,
+    "overflow_count": 3,
+    "provider": "compressor",
+    "truncated_without_summary": false
+  }
+}

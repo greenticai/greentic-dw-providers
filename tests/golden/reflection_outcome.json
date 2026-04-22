@@ -1,0 +1,9 @@
+{
+  "disposition": "Revise",
+  "findings": [
+    {
+      "code": "schema.required",
+      "message": "$ missing required field `fragments`"
+    }
+  ]
+}

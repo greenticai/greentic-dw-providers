@@ -9,6 +9,11 @@ This repository is the starting point for provider implementations that will plu
 - state
 - engine
 - control
+- planning
+- workspace
+- delegation
+- reflection
+- context
 - observer
 - tool
 
@@ -78,6 +83,28 @@ The repository is organized by provider family:
 - `engine/`
   - `default/`
   - `router-lite/`
+- `planning/`
+  - `core/`
+  - `static/`
+  - `llm-outline/`
+- `workspace/`
+  - `core/`
+  - `in-memory/`
+  - `fs/`
+- `delegation/`
+  - `core/`
+  - `static-router/`
+  - `capability-match/`
+- `reflection/`
+  - `core/`
+  - `schema-check/`
+  - `rules/`
+  - `llm-critic/`
+- `context/`
+  - `core/`
+  - `static/`
+  - `retrieval/`
+  - `compressor/`
 - `control/`
   - `basic-policy/`
   - `delegation-guard/`
@@ -94,7 +121,18 @@ The repository is organized by provider family:
   - `task-store/in-memory/`
   - `task-store/redis/`
 
-The category roots are still placeholders, but `llm/core/...`, `llm/anthropic/...`, `llm/azure-openai/...`, `llm/bedrock/...`, `llm/gemini/...`, `llm/openai/...`, `llm/openai-compatible/...`, `engine/default/...`, `engine/router-lite/...`, `control/basic-policy/...`, `control/delegation-guard/...`, `observer/basic-audit/...`, `observer/basic-metrics/...`, `tool/component-adapter/...`, `tool/mcp-adapter/...`, `memory/short-term/...`, and `state/task-store/...` now carry concrete contract crates or documentation for the first LLM, engine, control, observer, tool, memory, and task-state provider families.
+The category roots are still placeholders, but `llm/core/...`, `llm/anthropic/...`, `llm/azure-openai/...`, `llm/bedrock/...`, `llm/gemini/...`, `llm/openai/...`, `llm/openai-compatible/...`, `engine/default/...`, `engine/router-lite/...`, `planning/core/...`, `planning/static/...`, `planning/llm-outline/...`, `workspace/core/...`, `workspace/in-memory/...`, `workspace/fs/...`, `delegation/core/...`, `delegation/static-router/...`, `delegation/capability-match/...`, `reflection/core/...`, `reflection/schema-check/...`, `reflection/rules/...`, `reflection/llm-critic/...`, `context/core/...`, `context/static/...`, `context/retrieval/...`, `context/compressor/...`, `control/basic-policy/...`, `control/delegation-guard/...`, `observer/basic-audit/...`, `observer/basic-metrics/...`, `tool/component-adapter/...`, `tool/mcp-adapter/...`, `memory/short-term/...`, and `state/task-store/...` now carry concrete contract crates or documentation for the first LLM, engine, planning, workspace, delegation, reflection, context, control, observer, tool, memory, and task-state provider families.
+
+## Deep-Agent Family Guides
+
+The planning, workspace, delegation, reflection, and context families now also include dedicated
+authoring guides so a developer can wire them without reading source first:
+
+- [planning/README.md](planning/README.md)
+- [workspace/README.md](workspace/README.md)
+- [delegation/README.md](delegation/README.md)
+- [reflection/README.md](reflection/README.md)
+- [context/README.md](context/README.md)
 
 ## Versioning
 
@@ -117,6 +155,12 @@ The repo is still a scaffold, but the shared helper layer is now functional:
 - the llm family now also has an `openai-compatible` backend crate for self-hosted and gateway targets,
 - the llm family now also has a `nvidia-nim` backend crate for NIM-aware discovery, health-aware deployments, and mode-gated startup probing,
 - the engine family has shared contract helpers plus `default` and `router-lite` example directories,
+- the planning family now has shared contract helpers plus `static` and `llm-outline` planner backends,
+- the workspace family now has shared artifact models plus `in-memory` and `fs` backends for deterministic local storage,
+- the delegation family now has shared routing models plus `static-router` and `capability-match` backends with explicit rationale output,
+- the reflection family now has deterministic schema and rules reviewers plus a strict typed `llm-critic` backend,
+- the context family now has static, retrieval, and compression backends that produce deterministic context packages with explicit provenance,
+- the planning, workspace, delegation, reflection, and context families now have shared core scaffold crates so future provider implementations can follow the same workspace conventions as the other families,
 - the control family has shared contract helpers plus `basic-policy` and `delegation-guard` example directories,
 - the observer family has shared contract helpers plus `basic-audit` and `basic-metrics` example directories,
 - the tool family has shared contract helpers plus `component-adapter` and `mcp-adapter` example directories,
@@ -140,7 +184,7 @@ Lightweight performance and concurrency checks run through [`benches/perf.rs`](b
 
 Release automation now lives in [`.github/workflows/publish.yml`](.github/workflows/publish.yml). It runs the local CI checks on pull requests and pushes to `main`/`master`, validates release tags against the root Cargo version, publishes the shared crate to crates.io on release-capable pushes, and reserves the GHCR pack namespace `oci://ghcr.io/greenticai/packs/dw/<dw-type>/<dw-name>-pack:<version>` for future `gtpack` artifacts.
 
-The release job now generates those `.gtpack` artifacts from `packs/gtpacks.manifest.json` using `cargo binstall gtc`, `gtc install`, `gtc wizard --schema`, and `gtc wizard --answers`, then publishes the resulting archives to GHCR with `oras` under the same `packs/dw/<dw-type>/<dw-name>-pack` namespace.
+The release job now generates those `.gtpack` artifacts from `packs/gtpacks.manifest.json` using `cargo binstall gtc`, `gtc install`, `gtc wizard --schema`, and `gtc wizard --answers`, then publishes the resulting archives to GHCR with `oras` under the same `packs/dw/<dw-type>/<dw-name>-pack` namespace. The manifest now covers the implemented deep-agent families too, including `planning`, `workspace`, `delegation`, `reflection`, and `context`.
 
 ## Examples
 

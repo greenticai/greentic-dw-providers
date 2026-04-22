@@ -1,0 +1,44 @@
+{
+  "targets": [
+    {
+      "target_id": "agent-blue",
+      "capabilities": [
+        "search",
+        "verify"
+      ],
+      "schemas": [
+        "plan.fragment"
+      ],
+      "tags": [
+        "parallel",
+        "research"
+      ],
+      "available": true
+    },
+    {
+      "target_id": "agent-green",
+      "capabilities": [
+        "search",
+        "summarize"
+      ],
+      "schemas": [
+        "plan.fragment"
+      ],
+      "tags": [
+        "research"
+      ],
+      "available": true
+    }
+  ],
+  "fanout": "parallel",
+  "rationale": [
+    {
+      "code": "static.route",
+      "message": "matched deterministic static route"
+    },
+    {
+      "code": "static.targets",
+      "message": "selected targets: agent-blue, agent-green"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "plan_id": "plan-golden",
+  "steps": [
+    {
+      "id": "step-1",
+      "kind": "research",
+      "depends_on": [],
+      "payload": {
+        "audience": "reviewers",
+        "topic": "golden testing"
+      }
+    },
+    {
+      "id": "step-2",
+      "kind": "draft",
+      "depends_on": [
+        "step-1"
+      ],
+      "payload": {
+        "format": "json",
+        "style": "deterministic"
+      }
+    }
+  ],
+  "metadata": {}
+}

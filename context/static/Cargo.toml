@@ -1,0 +1,13 @@
+[package]
+name = "greentic-dw-context-static"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Deterministic static context provider for Greentic DW."
+
+[dependencies]
+greentic-dw-context = { workspace = true }
+greentic-types = { workspace = true }
+serde_json = { workspace = true }

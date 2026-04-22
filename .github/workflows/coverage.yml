@@ -1,0 +1,24 @@
+name: Coverage
+# Moved off pull_request onto a nightly schedule. See plans/binary-bifurcation.md
+# Phase A (heavy-job sweep). Manual runs remain via workflow_dispatch. push
+# trigger preserved so main-merge still catches regressions immediately.
+
+on:
+  schedule:
+    - cron: "44 3 * * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: read
+
+concurrency:
+  group: coverage-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  coverage:
+    uses: ./.github/workflows/_reusable_coverage.yml

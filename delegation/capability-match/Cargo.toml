@@ -1,0 +1,12 @@
+[package]
+name = "greentic-dw-delegation-capability-match"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Capability-based delegation router for Greentic DW."
+
+[dependencies]
+greentic-dw-delegation = { workspace = true }
+greentic-types = { workspace = true }

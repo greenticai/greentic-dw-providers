@@ -11,8 +11,14 @@ cargo fmt --all -- --check
 step "cargo clippy --workspace --all-targets --all-features -- -D warnings"
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 
-step "cargo test --workspace"
-cargo test --workspace
+step "cargo test --workspace --lib"
+cargo test --workspace --lib
+
+step "cargo test --workspace --tests"
+cargo test --workspace --tests
+
+step "cargo test -p greentic-dw-providers --test provider_composition --test provider_golden"
+cargo test -p greentic-dw-providers --test provider_composition --test provider_golden
 
 step "cargo build --workspace --all-features"
 cargo build --workspace --all-features

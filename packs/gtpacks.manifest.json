@@ -62,39 +62,64 @@
       "pack_id": "greentic.dw.providers.tool.component-adapter"
     },
     {
-      "category": "llm",
-      "name": "anthropic",
-      "pack_id": "greentic.dw.providers.llm.anthropic"
+      "category": "planning",
+      "name": "static",
+      "pack_id": "greentic.dw.providers.planning.static"
     },
     {
-      "category": "llm",
-      "name": "azure-openai",
-      "pack_id": "greentic.dw.providers.llm.azure-openai"
+      "category": "planning",
+      "name": "llm-outline",
+      "pack_id": "greentic.dw.providers.planning.llm-outline"
     },
     {
-      "category": "llm",
-      "name": "bedrock",
-      "pack_id": "greentic.dw.providers.llm.bedrock"
+      "category": "workspace",
+      "name": "in-memory",
+      "pack_id": "greentic.dw.providers.workspace.in-memory"
     },
     {
-      "category": "llm",
-      "name": "gemini",
-      "pack_id": "greentic.dw.providers.llm.gemini"
+      "category": "workspace",
+      "name": "fs",
+      "pack_id": "greentic.dw.providers.workspace.fs"
     },
     {
-      "category": "llm",
-      "name": "openai",
-      "pack_id": "greentic.dw.providers.llm.openai"
+      "category": "delegation",
+      "name": "static-router",
+      "pack_id": "greentic.dw.providers.delegation.static-router"
     },
     {
-      "category": "llm",
-      "name": "openai-compatible",
-      "pack_id": "greentic.dw.providers.llm.openai-compatible"
+      "category": "delegation",
+      "name": "capability-match",
+      "pack_id": "greentic.dw.providers.delegation.capability-match"
     },
     {
-      "category": "llm",
-      "name": "nvidia-nim",
-      "pack_id": "greentic.dw.providers.llm.nvidia-nim"
+      "category": "reflection",
+      "name": "schema-check",
+      "pack_id": "greentic.dw.providers.reflection.schema-check"
+    },
+    {
+      "category": "reflection",
+      "name": "rules",
+      "pack_id": "greentic.dw.providers.reflection.rules"
+    },
+    {
+      "category": "reflection",
+      "name": "llm-critic",
+      "pack_id": "greentic.dw.providers.reflection.llm-critic"
+    },
+    {
+      "category": "context",
+      "name": "static",
+      "pack_id": "greentic.dw.providers.context.static"
+    },
+    {
+      "category": "context",
+      "name": "retrieval",
+      "pack_id": "greentic.dw.providers.context.retrieval"
+    },
+    {
+      "category": "context",
+      "name": "compressor",
+      "pack_id": "greentic.dw.providers.context.compressor"
     }
   ]
 }

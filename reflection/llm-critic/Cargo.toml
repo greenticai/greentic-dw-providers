@@ -1,0 +1,13 @@
+[package]
+name = "greentic-dw-reflection-llm-critic"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Strict typed LLM critic reflection provider for Greentic DW."
+
+[dependencies]
+greentic-dw-reflection = { workspace = true }
+greentic-types = { workspace = true }
+serde_json = { workspace = true }
