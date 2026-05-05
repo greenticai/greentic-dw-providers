@@ -213,6 +213,9 @@ publish_gtpacks() {
     exit 1
   fi
 
+  publish_latest="${PUBLISH_LATEST:-1}"
+  publish_stable="${PUBLISH_STABLE:-0}"
+
   version="$(sed -n 's/^version = "\([^"]*\)"/\1/p' Cargo.toml | head -n1)"
   if [ -z "$version" ]; then
     echo "Unable to determine root package version from Cargo.toml" >&2
@@ -247,7 +250,13 @@ publish_gtpacks() {
       exit 1
     fi
     repo="ghcr.io/greenticai/${rel%.gtpack}"
-    tags=("${version}" "latest")
+    tags=("${version}")
+    if [[ "${publish_latest}" =~ ^(1|true|TRUE|yes|YES)$ ]]; then
+      tags+=("latest")
+    fi
+    if [[ "${publish_stable}" =~ ^(1|true|TRUE|yes|YES)$ ]]; then
+      tags+=("stable")
+    fi
 
     for tag in "${tags[@]}"; do
       ref="${repo}:${tag}"
