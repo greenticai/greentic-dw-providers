@@ -272,13 +272,13 @@ pub fn end_to_end_binding_overrides(variant: EndToEndVariant) -> Vec<BindingOver
     let memory_provider_ref = match variant {
         EndToEndVariant::InMemory => "component:memory.short-term.in-memory".to_string(),
         EndToEndVariant::Redis => {
-            "oci://ghcr.io/greenticai/packs/dw/memory/short-term-redis-pack:latest".to_string()
+            "oci://ghcr.io/greenticai/packs/dw/memory/short-term-redis-pack:stable".to_string()
         }
     };
     let state_provider_ref = match variant {
         EndToEndVariant::InMemory => "component:state.task-store.in-memory".to_string(),
         EndToEndVariant::Redis => {
-            "oci://ghcr.io/greenticai/packs/dw/state/task-store-redis-pack:latest".to_string()
+            "oci://ghcr.io/greenticai/packs/dw/state/task-store-redis-pack:stable".to_string()
         }
     };
     let observer_provider_ref = "component:observer.basic-audit".to_string();
