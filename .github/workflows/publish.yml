@@ -247,5 +247,7 @@ jobs:
         env:
           GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISH_LATEST: "1"
+          PUBLISH_STABLE: "1"
         shell: bash
         run: bash ci/gtpacks.sh publish
