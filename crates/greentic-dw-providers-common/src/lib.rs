@@ -9,6 +9,7 @@
 //! during local development and integration tests.
 
 mod capability;
+mod catalog;
 mod category;
 mod control;
 mod engine;
@@ -27,6 +28,7 @@ pub use capability::{
     pack_capabilities_extension, pack_capability_id, sample_capability_declaration,
     sample_capability_offer_v1, validate_capability_declaration,
 };
+pub use catalog::{ProviderCatalog, ProviderCatalogEntry, unified_catalog};
 pub use category::{
     ProviderCategory, planned_categories, provider_type, workspace_banner, workspace_version,
 };
