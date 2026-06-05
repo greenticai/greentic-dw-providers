@@ -59,6 +59,7 @@ readme = "README.md"
 description = "Greentic digital worker provider workspace scaffold."
 
 [workspace.dependencies]
+async-trait = "0.1"
 aws-config = "1"
 aws-credential-types = "1"
 aws-sdk-bedrockruntime = "1"
@@ -66,6 +67,7 @@ aws-smithy-runtime-api = "1"
 aws-smithy-types = "1"
 aws-types = "1"
 blake3 = "1"
+chrono = { version = "0.4", features = ["serde"] }
 criterion = "0.8"
 greentic-dw-control = { path = "control/core" }
 greentic-dw-context = { path = "context/core" }

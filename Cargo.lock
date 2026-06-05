@@ -2513,10 +2513,14 @@ dependencies = [
 name = "greentic-dw-memory-long-term"
 version = "1.1.0-dev.0"
 dependencies = [
+ "async-trait",
+ "chrono",
  "greentic-dw-providers-common",
  "greentic-types 1.1.0-dev.25540461571",
  "serde",
  "serde_json",
+ "thiserror 2.0.18",
+ "tokio",
 ]
 
 [[package]]

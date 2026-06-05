@@ -9,7 +9,13 @@ readme = "README.md"
 description = "Shared long-term memory contract for Greentic DW."
 
 [dependencies]
+async-trait = { workspace = true }
+chrono = { workspace = true }
 greentic-dw-providers-common = { workspace = true }
 greentic-types = { workspace = true }
 serde = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
 serde_json = { workspace = true }
+tokio = { workspace = true }
