@@ -257,15 +257,10 @@ pub fn long_term_memory_pack_capability_id() -> String {
     crate::pack_capability_id(ProviderCategory::Memory, "long-term")
 }
 
-/// Returns the operations expected from a long-term memory provider.
+/// Operations match the LongTermMemory trait surface (ingest_episode -> memory.ingest, recall -> memory.recall). Extend only when the trait grows.
 #[must_use]
-pub const fn long_term_memory_operations() -> [&'static str; 4] {
-    [
-        "memory.search",
-        "memory.add",
-        "memory.delete",
-        "memory.clear",
-    ]
+pub const fn long_term_memory_operations() -> [&'static str; 2] {
+    ["memory.ingest", "memory.recall"]
 }
 
 /// Returns the canonical provider declaration for a long-term memory backend.
@@ -319,7 +314,7 @@ pub fn long_term_memory_capability_declaration(
     );
     offer.provider = Some(capability_provider_ref(
         variant.component_ref(),
-        "memory.search",
+        "memory.ingest",
     ));
     Ok(capability_declaration(
         vec![offer],
@@ -339,7 +334,7 @@ pub fn long_term_memory_pack_capabilities(
         "long-term",
         format!("offer.long-term.{}", variant.as_str()),
         variant.component_ref(),
-        "memory.search",
+        "memory.ingest",
     )
 }
 

@@ -21,12 +21,7 @@ fn long_term_memory_contract_is_shared_across_variants() {
     );
     assert_eq!(
         long_term_memory_operations(),
-        [
-            "memory.search",
-            "memory.add",
-            "memory.delete",
-            "memory.clear"
-        ]
+        ["memory.ingest", "memory.recall"]
     );
     assert_eq!(
         long_term_memory_provider_decl(LongTermMemoryVariant::Chronicle).provider_type,
