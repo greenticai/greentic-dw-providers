@@ -1,0 +1,15 @@
+[package]
+name = "greentic-dw-memory-long-term"
+version.workspace = true
+edition.workspace = true
+rust-version = "1.94"
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Shared long-term memory contract for Greentic DW."
+
+[dependencies]
+greentic-dw-providers-common = { workspace = true }
+greentic-types = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

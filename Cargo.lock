@@ -724,6 +724,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "blake2"
+version = "0.10.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "46502ad458c9a52b69d4d4d32775c788b7a1b85e8bc9d482d92250fc0e3f8efe"
+dependencies = [
+ "digest 0.10.7",
+]
+
+[[package]]
 name = "blake3"
 version = "1.8.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -925,6 +934,24 @@ dependencies = [
  "cfg-if",
  "cpufeatures 0.3.0",
  "rand_core 0.10.1",
+]
+
+[[package]]
+name = "chronicle-core"
+version = "0.1.0"
+source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?tag=v0.1.0#3faf8903bd2a1d3d9b3c71a31a3c2ed771f13642"
+dependencies = [
+ "async-trait",
+ "blake2",
+ "chrono",
+ "rand 0.9.4",
+ "schemars 1.2.1",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+ "tokio",
+ "tracing",
+ "uuid",
 ]
 
 [[package]]
@@ -2460,6 +2487,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "greentic-dw-memory-chronicle"
+version = "1.1.0-dev.0"
+dependencies = [
+ "chronicle-core",
+ "greentic-dw-memory-long-term",
+ "greentic-dw-providers-common",
+ "greentic-types 1.1.0-dev.25540461571",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "greentic-dw-memory-in-memory"
 version = "1.1.0-dev.0"
 dependencies = [
@@ -2467,6 +2506,16 @@ dependencies = [
  "greentic-dw-providers-common",
  "greentic-state",
  "greentic-types 1.1.0-dev.25540461571",
+ "serde_json",
+]
+
+[[package]]
+name = "greentic-dw-memory-long-term"
+version = "1.1.0-dev.0"
+dependencies = [
+ "greentic-dw-providers-common",
+ "greentic-types 1.1.0-dev.25540461571",
+ "serde",
  "serde_json",
 ]
 
@@ -6444,6 +6493,7 @@ checksum = "ddd74a9687298c6858e9b88ec8935ec45d22e8fd5e6394fa1bd4e99a87789c76"
 dependencies = [
  "getrandom 0.4.2",
  "js-sys",
+ "serde_core",
  "wasm-bindgen",
 ]
 
