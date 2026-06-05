@@ -21,6 +21,7 @@ jobs:
       CARGO_BUILD_JOBS: 1
       CARGO_INCREMENTAL: 0
       RUSTFLAGS: -C debuginfo=0
+      CARGO_NET_GIT_FETCH_WITH_CLI: "true"
     steps:
       - uses: actions/checkout@v4
 
@@ -29,6 +30,10 @@ jobs:
 
       - name: Cache Cargo
         uses: Swatinem/rust-cache@v2
+
+      - name: Configure git auth for private chronicle dep
+        run: |
+          git config --global url."https://x-access-token:${{ secrets.CHRONICLE_REPO_TOKEN }}@github.com/greentic-biz/greentic-chronicle-ext".insteadOf "https://github.com/greentic-biz/greentic-chronicle-ext"
 
       - name: Run perf guard tests
         run: cargo test -p greentic-dw-providers --test perf_timeout --test perf_scaling

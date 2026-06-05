@@ -168,6 +168,12 @@ The repo is still a scaffold, but the shared helper layer is now functional:
 - the task-store family has shared contract helpers plus `in-memory` and `redis` example directories,
 - the provider families now include real backend crates for engine, control, observer, tool, memory, and task-state work.
 
+## Build Prerequisites
+
+This workspace has a private git dependency on `greentic-biz/greentic-chronicle-ext`.
+Developers need read access to that repo and a working git credential (via `gh auth login` or SSH).
+CI requires the `CHRONICLE_REPO_TOKEN` Actions secret to be set. See [docs/chronicle-dep.md](docs/chronicle-dep.md) for full details.
+
 ## CI and Releases
 
 Local validation runs through [`ci/local_check.sh`](ci/local_check.sh). The script is intended to mirror the basic workspace checks used by Greentic Rust repos:
