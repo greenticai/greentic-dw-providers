@@ -170,9 +170,10 @@ The repo is still a scaffold, but the shared helper layer is now functional:
 
 ## Build Prerequisites
 
-This workspace has a private git dependency on `greentic-biz/greentic-chronicle-ext`.
-Developers need read access to that repo and a working git credential (via `gh auth login` or SSH).
-CI requires the `CHRONICLE_REPO_TOKEN` Actions secret to be set. See [docs/chronicle-dep.md](docs/chronicle-dep.md) for full details.
+This workspace has a git dependency on `greentic-biz/greentic-chronicle-ext` (public
+as of 2026-06-05). No token or special credential is required — Cargo resolves the
+dependency over public HTTPS automatically. See [docs/chronicle-dep.md](docs/chronicle-dep.md)
+for the pin, rationale, and bump procedure.
 
 ## CI and Releases
 

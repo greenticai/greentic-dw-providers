@@ -22,8 +22,6 @@ permissions:
 jobs:
   ci:
     runs-on: ubuntu-latest
-    env:
-      CARGO_NET_GIT_FETCH_WITH_CLI: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,10 +33,6 @@ jobs:
 
       - name: Cache Cargo
         uses: Swatinem/rust-cache@v2
-
-      - name: Configure git auth for private chronicle dep
-        run: |
-          git config --global url."https://x-access-token:${{ secrets.CHRONICLE_REPO_TOKEN }}@github.com/greentic-biz/greentic-chronicle-ext".insteadOf "https://github.com/greentic-biz/greentic-chronicle-ext"
 
       - name: Install cargo-binstall
         uses: cargo-bins/cargo-binstall@main
@@ -122,8 +116,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: crates-io
-    env:
-      CARGO_NET_GIT_FETCH_WITH_CLI: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -133,10 +125,6 @@ jobs:
 
       - name: Cache Cargo
         uses: Swatinem/rust-cache@v2
-
-      - name: Configure git auth for private chronicle dep
-        run: |
-          git config --global url."https://x-access-token:${{ secrets.CHRONICLE_REPO_TOKEN }}@github.com/greentic-biz/greentic-chronicle-ext".insteadOf "https://github.com/greentic-biz/greentic-chronicle-ext"
 
       - name: Publish common crate to crates.io
         env:
@@ -189,8 +177,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    env:
-      CARGO_NET_GIT_FETCH_WITH_CLI: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -200,10 +186,6 @@ jobs:
 
       - name: Cache Cargo
         uses: Swatinem/rust-cache@v2
-
-      - name: Configure git auth for private chronicle dep
-        run: |
-          git config --global url."https://x-access-token:${{ secrets.CHRONICLE_REPO_TOKEN }}@github.com/greentic-biz/greentic-chronicle-ext".insteadOf "https://github.com/greentic-biz/greentic-chronicle-ext"
 
       - name: Install cargo-binstall
         uses: cargo-bins/cargo-binstall@main
