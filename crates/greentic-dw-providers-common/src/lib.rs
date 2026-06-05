@@ -83,12 +83,17 @@ pub use llm::{
     openai_llm_provider_id, openai_llm_provider_manifest, openai_llm_wizard_qa,
 };
 pub use memory::{
-    MemoryFixtureError, ShortTermMemoryVariant, short_term_memory_capability_declaration,
-    short_term_memory_capability_id, short_term_memory_capability_uri,
-    short_term_memory_operations, short_term_memory_pack_capabilities,
-    short_term_memory_pack_capability_id, short_term_memory_pack_manifest,
-    short_term_memory_pack_manifest_cbor, short_term_memory_provider_decl,
-    short_term_memory_provider_extension_inline,
+    LongTermMemoryVariant, MemoryFixtureError, ShortTermMemoryVariant,
+    long_term_memory_capability_declaration, long_term_memory_capability_id,
+    long_term_memory_capability_uri, long_term_memory_operations,
+    long_term_memory_pack_capabilities, long_term_memory_pack_capability_id,
+    long_term_memory_pack_manifest, long_term_memory_pack_manifest_cbor,
+    long_term_memory_provider_decl, long_term_memory_provider_extension_inline,
+    short_term_memory_capability_declaration, short_term_memory_capability_id,
+    short_term_memory_capability_uri, short_term_memory_operations,
+    short_term_memory_pack_capabilities, short_term_memory_pack_capability_id,
+    short_term_memory_pack_manifest, short_term_memory_pack_manifest_cbor,
+    short_term_memory_provider_decl, short_term_memory_provider_extension_inline,
 };
 pub use observer::{
     ObserverFixtureError, ObserverVariant, observer_capability_declaration, observer_capability_id,
