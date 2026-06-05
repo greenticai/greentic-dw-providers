@@ -10,8 +10,19 @@ description = "Chronicle-backed long-term memory provider for Greentic DW."
 
 [dependencies]
 greentic-dw-memory-long-term = { workspace = true }
-greentic-dw-providers-common = { workspace = true }
+greentic-dw-llm = { workspace = true }
 greentic-types = { workspace = true }
+chronicle-core = { workspace = true }
+chronicle-driver-neo4j = { workspace = true }
+chronicle-llm-openai = { workspace = true }
+async-trait = { workspace = true }
+chrono = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
-chronicle-core = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tracing = "0.1"
+
+[dev-dependencies]
+chronicle-testkit = { workspace = true }
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
