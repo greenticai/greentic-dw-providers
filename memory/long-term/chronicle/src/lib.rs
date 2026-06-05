@@ -425,4 +425,60 @@ mod tests {
             .expect_err("invalid tenant must be rejected on recall");
         assert!(matches!(err, LongTermMemoryError::InvalidTenant(_)));
     }
+
+    /// Tenant B must not see facts ingested by tenant A, even when both share the
+    /// same in-memory [`FakeDriver`] instance. Tenant A recall is included as a
+    /// positive control to confirm the fact is actually stored.
+    #[tokio::test]
+    async fn cross_tenant_isolation() {
+        let (memory, _driver) = memory_with_scripted_llm();
+
+        let tenant_a = tenant("tenant-a");
+        let tenant_b = tenant("tenant-b");
+
+        // Ingest an episode as tenant-a.
+        let episode = EpisodeIngest {
+            name: "ep1".into(),
+            body: "Alice works at Acme.".into(),
+            source: EpisodeSource::Message,
+            source_description: Some("test".into()),
+            reference_time: fixed_ts(),
+        };
+        memory
+            .ingest_episode(&tenant_a, episode)
+            .await
+            .expect("ingest as tenant-a succeeds");
+
+        // Tenant-b must not see tenant-a's facts.
+        let facts_b = memory
+            .recall(
+                &tenant_b,
+                RecallQuery {
+                    query: "where does Alice work".into(),
+                    limit: None,
+                },
+            )
+            .await
+            .expect("recall as tenant-b succeeds");
+        assert!(
+            facts_b.is_empty(),
+            "tenant-b must not see tenant-a's facts; got: {facts_b:?}"
+        );
+
+        // Positive control: tenant-a should still see the fact.
+        let facts_a = memory
+            .recall(
+                &tenant_a,
+                RecallQuery {
+                    query: "where does Alice work".into(),
+                    limit: None,
+                },
+            )
+            .await
+            .expect("recall as tenant-a succeeds");
+        assert!(
+            !facts_a.is_empty(),
+            "tenant-a must see its own ingested facts"
+        );
+    }
 }
