@@ -18,14 +18,14 @@ Three crates are pulled from that repo:
 
 ## Pin
 
-All four crates are pinned to **tag `v0.1.0`**, commit rev
-`3faf8903bd2a1d3d9b3c71a31a3c2ed771f13642`, in the root `Cargo.toml`:
+All four crates are pinned to **tag `v0.2.0`**, commit rev
+`ca8bc761`, in the root `Cargo.toml`:
 
 ```toml
-chronicle-core         = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "v0.1.0" }
-chronicle-driver-neo4j = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "v0.1.0" }
-chronicle-llm-openai   = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "v0.1.0" }
-chronicle-testkit      = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "v0.1.0" }
+chronicle-core         = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "v0.2.0" }
+chronicle-driver-neo4j = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "v0.2.0" }
+chronicle-llm-openai   = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "v0.2.0" }
+chronicle-testkit      = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "v0.2.0" }
 ```
 
 ## Public repository — no auth required
