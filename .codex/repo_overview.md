@@ -15,8 +15,8 @@
 ## 2. Main Components and Functionality
 - **Path:** `Cargo.toml`
   - **Role:** Root workspace and package manifest.
-  - **Key functionality:** Declares the authoritative workspace version, configures the root binary package, and wires in the shared support crate plus versioned Greentic workspace crates.
-  - **Key dependencies / integration points:** Uses the `0.4` Greentic crate line for shared published crates and the `0.5` `greentic-dw` / `greentic-cap` crate lines.
+  - **Key functionality:** Declares the authoritative workspace version (`1.2.0-research` on the research tier, following the three-tier scheme: research=1.2.x-research / develop=1.1.x-develop / main=1.0.x), configures the root binary package, and wires in the shared support crate plus versioned Greentic workspace crates.
+  - **Key dependencies / integration points:** Uses compatibility ranges `>=1.1.0-dev, <1.2.0-0` for shared external published crates (greentic-dw, greentic-cap, greentic-types, etc.) and path dependencies for all workspace-internal members.
 
 - **Path:** `README.md`
   - **Role:** Root workspace overview.
