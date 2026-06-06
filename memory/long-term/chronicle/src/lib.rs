@@ -218,6 +218,11 @@ impl LongTermMemory for ChronicleLongTermMemory {
             previous_episode_uuids: None,
             entity_types: None,
             custom_extraction_instructions: None,
+            // Phase-4 additive fields (`update_communities`, `saga`,
+            // `saga_previous_episode_uuid`). This provider does not yet expose
+            // communities or saga; defaulting preserves prior behaviour exactly
+            // (`update_communities = false`, no saga threading).
+            ..Default::default()
         };
 
         let results = self.chronicle.add_episode(request).await.map_err(|e| {
