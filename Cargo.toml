@@ -77,10 +77,10 @@ greentic-dw-engine = { path = "engine/core" }
 greentic-dw-llm = { path = "llm/core" }
 greentic-dw-memory = { path = "memory/short-term/core" }
 greentic-dw-memory-long-term = { path = "memory/long-term/core" }
-chronicle-core = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "v0.1.0" }
-chronicle-driver-neo4j = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "v0.1.0" }
-chronicle-llm-openai = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "v0.1.0" }
-chronicle-testkit = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "v0.1.0" }
+chronicle-core = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "1.2.0-research" }
+chronicle-driver-neo4j = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "1.2.0-research" }
+chronicle-llm-openai = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "1.2.0-research" }
+chronicle-testkit = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", tag = "1.2.0-research" }
 greentic-dw-planning = { path = "planning/core" }
 greentic-dw-reflection = { path = "reflection/core" }
 greentic-dw-task-store = { path = "state/task-store/core" }

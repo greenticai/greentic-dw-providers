@@ -288,7 +288,7 @@
 
 - **Path:** `docs/chronicle-dep.md`
   - **Role:** Documentation of the private chronicle git dependency and its CI requirements.
-  - **Key functionality:** Records why the `chronicle-*` crates are pulled from `greentic-biz/greentic-chronicle-ext` (pinned to tag `v0.1.0`), the required `CHRONICLE_REPO_TOKEN` Actions secret, the workflows wired with the git-auth step, the reusable workflows in `greenticai/.github` that still need it, and a devops handoff section.
+  - **Key functionality:** Records why the `chronicle-*` crates are pulled from `greentic-biz/greentic-chronicle-ext` (pinned to tag `1.2.0-research`, full graphiti-core parity), why no auth token is required (repo is public), and the bump procedure for future version upgrades.
 
 - **Path:** `state/task-store/in-memory/`, `state/task-store/redis/`
   - **Role:** Task-store provider documentation anchors.
@@ -419,7 +419,7 @@
 - Future `gtpack` and `gtbundle` generation should use `gtc wizard --answers` with the schema from `gtc wizard --schema`; if that flow needs `greentic-pack` or bundle support updates, the repo should be adjusted before introducing new artifact-generation scripts.
 
 ## 5. Notes for Future Work
-- For the long-term memory family: wire the `chronicle` variant into `unified_catalog()`, add its `packs/gtpacks.manifest.json` entries and pack source trees, supply a runtime KV adapter for chronicle storage, and follow up with an embeddings family. CI for cargo-running jobs depends on the `CHRONICLE_REPO_TOKEN` Actions secret (see `docs/chronicle-dep.md`); the two `greenticai/.github` reusable workflows consumed without `secrets: inherit` also need the git-auth step.
+- For the long-term memory family: wire the `chronicle` variant into `unified_catalog()`, add its `packs/gtpacks.manifest.json` entries and pack source trees, and supply a runtime KV adapter for chronicle storage. The chronicle dependency is now at `1.2.0-research` (full graphiti-core parity: Phase-4 communities/saga/bulk; the `AddEpisodeRequest` literal in `memory/long-term/chronicle/src/lib.rs` uses `..Default::default()` for the three new additive fields). The upstream repo is public so no CI token is required (see `docs/chronicle-dep.md`).
 - Add the first real provider crates under the category directories, starting with the engine, control, observer, tool, short-term memory, and task-store families.
 - Add the remaining planned LLM provider crates after the now-landed normalized core contract, Anthropic backend, Azure OpenAI backend, Gemini backend, native OpenAI backend, generic OpenAI-compatible backend, and NVIDIA NIM backend.
 - Build additional provider-specific transports on top of the normalized `llm/core` request/response model and the shared family-level helper metadata.
