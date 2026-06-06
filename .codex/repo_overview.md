@@ -44,7 +44,7 @@
 
 - **Path:** `packs/gtpacks.manifest.json`
   - **Role:** Source manifest for release-time gtpack generation.
-  - **Key functionality:** Lists the current pack categories, pack names, and pack ids that the release workflow turns into `.gtpack` artifacts.
+  - **Key functionality:** Lists the current pack categories, pack names, and pack ids that the release workflow turns into `.gtpack` artifacts. Now includes the `memory.long-term.chronicle` entry (`greentic.dw.providers.memory.long-term.chronicle`) alongside the short-term memory packs.
   - **Key dependencies / integration points:** Consumed by `ci/gtpacks.sh`.
 
 - **Path:** `coverage-policy.json`
