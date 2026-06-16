@@ -2508,6 +2508,40 @@ dependencies = [
 ]
 
 [[package]]
+name = "greentic-dw-embedding"
+version = "1.2.0-research"
+dependencies = [
+ "greentic-types 1.1.0-dev.25540461571",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+]
+
+[[package]]
+name = "greentic-dw-embedding-openai"
+version = "1.2.0-research"
+dependencies = [
+ "greentic-dw-embedding",
+ "greentic-types 1.1.0-dev.25540461571",
+ "reqwest 0.13.3",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+]
+
+[[package]]
+name = "greentic-dw-embedding-openai-compatible"
+version = "1.2.0-research"
+dependencies = [
+ "greentic-dw-embedding",
+ "greentic-types 1.1.0-dev.25540461571",
+ "reqwest 0.13.3",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+]
+
+[[package]]
 name = "greentic-dw-engine"
 version = "1.2.0-research"
 dependencies = [
@@ -2796,6 +2830,7 @@ name = "greentic-dw-providers-common"
 version = "1.2.0-research"
 dependencies = [
  "greentic-cap-types",
+ "greentic-dw-embedding",
  "greentic-dw-llm",
  "greentic-dw-llm-anthropic",
  "greentic-dw-llm-azure-openai",

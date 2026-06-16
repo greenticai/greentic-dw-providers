@@ -7,6 +7,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::control::ControlVariant;
+use crate::embedding::EmbeddingVariant;
 use crate::engine::EngineVariant;
 use crate::llm::{LlmWizardProviderQa, implemented_llm_wizard_qas};
 use crate::memory::ShortTermMemoryVariant;
@@ -35,6 +36,8 @@ pub struct ProviderCatalog {
     pub control: Vec<ProviderCatalogEntry>,
     /// Tool variants.
     pub tool: Vec<ProviderCatalogEntry>,
+    /// Embedding variants.
+    pub embedding: Vec<ProviderCatalogEntry>,
 }
 
 /// One provider variant entry in the catalog.
@@ -69,6 +72,7 @@ pub fn unified_catalog() -> ProviderCatalog {
         observer: observer_entries(),
         control: control_entries(),
         tool: tool_entries(),
+        embedding: embedding_entries(),
     }
 }
 
@@ -140,6 +144,18 @@ fn tool_entries() -> Vec<ProviderCatalogEntry> {
         .into_iter()
         .map(|v| ProviderCatalogEntry {
             family: "tool".to_string(),
+            provider_name: v.as_str().to_string(),
+            component_ref: v.component_ref(),
+            provider_type: v.provider_type(),
+        })
+        .collect()
+}
+
+fn embedding_entries() -> Vec<ProviderCatalogEntry> {
+    [EmbeddingVariant::Openai, EmbeddingVariant::OpenaiCompatible]
+        .into_iter()
+        .map(|v| ProviderCatalogEntry {
+            family: "embedding".to_string(),
             provider_name: v.as_str().to_string(),
             component_ref: v.component_ref(),
             provider_type: v.provider_type(),
@@ -244,6 +260,26 @@ mod tests {
         let names: Vec<&str> = cat.tool.iter().map(|e| e.provider_name.as_str()).collect();
         assert!(names.contains(&"component-adapter"));
         assert!(names.contains(&"mcp-adapter"));
+    }
+
+    #[test]
+    fn unified_catalog_includes_embedding_family() {
+        let cat = unified_catalog();
+        assert_eq!(cat.embedding.len(), 2);
+        assert!(cat.embedding.iter().any(|e| e.provider_name == "openai"));
+        assert!(
+            cat.embedding
+                .iter()
+                .any(|e| e.provider_name == "openai-compatible")
+        );
+        let openai = cat
+            .embedding
+            .iter()
+            .find(|e| e.provider_name == "openai")
+            .expect("openai");
+        assert_eq!(openai.family, "embedding");
+        assert_eq!(openai.provider_type, "dw.embedding.openai");
+        assert_eq!(openai.component_ref, "component:embedding.openai");
     }
 
     #[test]
