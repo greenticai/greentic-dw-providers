@@ -167,7 +167,10 @@ mod tests {
         assert_eq!(back.doc_id, chunk.doc_id);
         assert_eq!(back.chunk_index, chunk.chunk_index);
         assert_eq!(back.text, chunk.text);
-        assert_eq!(back.metadata["source"], Value::String("readme.md".to_string()));
+        assert_eq!(
+            back.metadata["source"],
+            Value::String("readme.md".to_string())
+        );
     }
 
     #[test]
@@ -237,7 +240,10 @@ mod tests {
         };
         let json = serde_json::to_string(&chunk).expect("serialize");
         assert!(!json.contains("doc_id"), "doc_id should be omitted: {json}");
-        assert!(!json.contains("chunk_index"), "chunk_index should be omitted: {json}");
+        assert!(
+            !json.contains("chunk_index"),
+            "chunk_index should be omitted: {json}"
+        );
     }
 
     // ── error display ──────────────────────────────────────────────────────

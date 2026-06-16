@@ -4,14 +4,15 @@ use semver::Version;
 
 use crate::category::ProviderCategory;
 use crate::{
-    CapabilityIdError, ProviderDeclSpec, capability_declaration,
-    capability_provider_ref, provider_decl,
+    CapabilityIdError, ProviderDeclSpec, capability_declaration, capability_provider_ref,
+    provider_decl,
 };
 
 use greentic_cap_types::CapabilityId;
 use greentic_types::{
-    CapabilitiesExtensionError, CborError, CapabilitiesExtensionV1, CapabilityOfferV1,
-    CapabilityProviderRefV1, PackId, PackKind, PackManifest, PackSignatures, encode_pack_manifest,
+    CapabilitiesExtensionError, CapabilitiesExtensionV1, CapabilityOfferV1,
+    CapabilityProviderRefV1, CborError, PackId, PackKind, PackManifest, PackSignatures,
+    encode_pack_manifest,
 };
 
 use serde::{Deserialize, Serialize};
@@ -97,10 +98,7 @@ pub fn knowledge_provider_decl(variant: KnowledgeVariant) -> greentic_types::Pro
         component_ref: variant.component_ref(),
         export: "greentic_provider".to_string(),
         world: "greentic:provider/runtime".to_string(),
-        docs_ref: Some(format!(
-            "docs/providers/knowledge/{}.md",
-            variant.as_str()
-        )),
+        docs_ref: Some(format!("docs/providers/knowledge/{}.md", variant.as_str())),
     })
 }
 
