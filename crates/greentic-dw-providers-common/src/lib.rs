@@ -12,6 +12,7 @@ mod capability;
 mod catalog;
 mod category;
 mod control;
+pub mod embedding;
 mod engine;
 mod fixtures;
 mod integration;

@@ -21,6 +21,8 @@ pub enum ProviderCategory {
     Observer,
     /// Tool providers.
     Tool,
+    /// Embedding providers.
+    Embedding,
 }
 
 impl ProviderCategory {
@@ -35,6 +37,7 @@ impl ProviderCategory {
             Self::Control => "control",
             Self::Observer => "observer",
             Self::Tool => "tool",
+            Self::Embedding => "embedding",
         }
     }
 
@@ -69,6 +72,7 @@ impl FromStr for ProviderCategory {
             "control" => Ok(Self::Control),
             "observer" => Ok(Self::Observer),
             "tool" => Ok(Self::Tool),
+            "embedding" => Ok(Self::Embedding),
             _ => Err("unknown provider category"),
         }
     }
@@ -88,7 +92,7 @@ pub fn capability_uri(category: ProviderCategory, capability: impl AsRef<str>) -
 
 /// Returns the planned provider categories in workspace order.
 #[must_use]
-pub const fn planned_categories() -> [ProviderCategory; 7] {
+pub const fn planned_categories() -> [ProviderCategory; 8] {
     [
         ProviderCategory::Engine,
         ProviderCategory::Llm,
@@ -97,6 +101,7 @@ pub const fn planned_categories() -> [ProviderCategory; 7] {
         ProviderCategory::Control,
         ProviderCategory::Observer,
         ProviderCategory::Tool,
+        ProviderCategory::Embedding,
     ]
 }
 
