@@ -58,8 +58,17 @@ mod tests {
 
     #[test]
     fn variant_metadata() {
-        assert_eq!(EmbeddingVariant::OpenaiCompatible.as_str(), "openai-compatible");
-        assert_eq!(EmbeddingVariant::Openai.component_ref(), "component:embedding.openai");
-        assert_eq!(EmbeddingVariant::Openai.provider_type(), "dw.embedding.openai");
+        assert_eq!(
+            EmbeddingVariant::OpenaiCompatible.as_str(),
+            "openai-compatible"
+        );
+        assert_eq!(
+            EmbeddingVariant::Openai.component_ref(),
+            "component:embedding.openai"
+        );
+        assert_eq!(
+            EmbeddingVariant::Openai.provider_type(),
+            "dw.embedding.openai"
+        );
     }
 }

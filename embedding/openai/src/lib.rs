@@ -6,7 +6,7 @@ mod errors;
 mod mapping;
 mod transport;
 
-pub use config::{OpenAiEmbeddingConfig, OPENAI_DEFAULT_BASE_URL};
+pub use config::{OPENAI_DEFAULT_BASE_URL, OpenAiEmbeddingConfig};
 pub use errors::OpenAiEmbeddingError;
 pub use transport::{HttpOpenAiEmbeddingTransport, OpenAiEmbeddingTransport};
 
@@ -36,10 +36,16 @@ where
     T: OpenAiEmbeddingTransport,
 {
     pub fn with_transport(config: OpenAiEmbeddingConfig, transport: T) -> EmbeddingResult<Self> {
-        config.validate().map_err(greentic_dw_embedding::EmbeddingError::from)?;
+        config
+            .validate()
+            .map_err(greentic_dw_embedding::EmbeddingError::from)?;
         // batch supported, dim configurable, not local.
         let features = EmbeddingProviderFeatures::new(true, true, false);
-        Ok(Self { config, features, transport })
+        Ok(Self {
+            config,
+            features,
+            transport,
+        })
     }
 
     #[must_use]
@@ -56,7 +62,11 @@ where
         &self.features
     }
 
-    fn embed(&self, _tenant: &TenantCtx, request: EmbeddingRequest) -> EmbeddingResult<EmbeddingResponse> {
+    fn embed(
+        &self,
+        _tenant: &TenantCtx,
+        request: EmbeddingRequest,
+    ) -> EmbeddingResult<EmbeddingResponse> {
         self.validate_request(&request)?;
         let payload = build_embeddings_request(&self.config, &request);
         let raw = self.transport.create_embeddings(&self.config, &payload)?;
@@ -78,14 +88,25 @@ mod tests {
     }
     impl RecordingTransport {
         fn new(response: Value) -> Self {
-            Self { payload: Mutex::new(None), response }
+            Self {
+                payload: Mutex::new(None),
+                response,
+            }
         }
         fn payload(&self) -> Value {
-            self.payload.lock().expect("payload mutex").clone().expect("captured payload")
+            self.payload
+                .lock()
+                .expect("payload mutex")
+                .clone()
+                .expect("captured payload")
         }
     }
     impl OpenAiEmbeddingTransport for RecordingTransport {
-        fn create_embeddings(&self, _config: &OpenAiEmbeddingConfig, payload: &Value) -> EmbeddingResult<Value> {
+        fn create_embeddings(
+            &self,
+            _config: &OpenAiEmbeddingConfig,
+            payload: &Value,
+        ) -> EmbeddingResult<Value> {
             *self.payload.lock().expect("payload mutex") = Some(payload.clone());
             Ok(self.response.clone())
         }
@@ -105,8 +126,10 @@ mod tests {
 
     #[test]
     fn request_maps_to_model_and_input() {
-        let transport = RecordingTransport::new(json!({"data": [], "model": "text-embedding-3-small"}));
-        let provider = OpenAiEmbeddingProvider::with_transport(config(), transport).expect("provider");
+        let transport =
+            RecordingTransport::new(json!({"data": [], "model": "text-embedding-3-small"}));
+        let provider =
+            OpenAiEmbeddingProvider::with_transport(config(), transport).expect("provider");
         let req = EmbeddingRequest::new("r1", vec!["alpha".into(), "beta".into()]);
         let _ = provider.embed(&tenant(), req).expect("embed");
         let payload = provider_payload(&provider);
@@ -129,7 +152,8 @@ mod tests {
             ],
             "usage": {"prompt_tokens": 4, "total_tokens": 4}
         }));
-        let provider = OpenAiEmbeddingProvider::with_transport(config(), transport).expect("provider");
+        let provider =
+            OpenAiEmbeddingProvider::with_transport(config(), transport).expect("provider");
         let req = EmbeddingRequest::new("r1", vec!["a".into(), "b".into()]);
         let resp = provider.embed(&tenant(), req).expect("embed");
         assert_eq!(resp.dim, 3);
@@ -141,8 +165,19 @@ mod tests {
     #[test]
     fn empty_inputs_rejected_before_transport() {
         let transport = RecordingTransport::new(json!({"data": []}));
-        let provider = OpenAiEmbeddingProvider::with_transport(config(), transport).expect("provider");
+        let provider =
+            OpenAiEmbeddingProvider::with_transport(config(), transport).expect("provider");
         let req = EmbeddingRequest::new("r1", vec![]);
         assert!(provider.embed(&tenant(), req).is_err());
+    }
+
+    #[test]
+    fn request_model_override_is_used() {
+        let transport = RecordingTransport::new(json!({"data": [], "model": "custom"}));
+        let provider =
+            OpenAiEmbeddingProvider::with_transport(config(), transport).expect("provider");
+        let req = EmbeddingRequest::new("r1", vec!["x".into()]).with_model("custom-model");
+        let _ = provider.embed(&tenant(), req).expect("embed");
+        assert_eq!(provider_payload(&provider)["model"], "custom-model");
     }
 }

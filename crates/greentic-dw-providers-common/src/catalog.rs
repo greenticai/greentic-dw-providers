@@ -267,8 +267,16 @@ mod tests {
         let cat = unified_catalog();
         assert_eq!(cat.embedding.len(), 2);
         assert!(cat.embedding.iter().any(|e| e.provider_name == "openai"));
-        assert!(cat.embedding.iter().any(|e| e.provider_name == "openai-compatible"));
-        let openai = cat.embedding.iter().find(|e| e.provider_name == "openai").expect("openai");
+        assert!(
+            cat.embedding
+                .iter()
+                .any(|e| e.provider_name == "openai-compatible")
+        );
+        let openai = cat
+            .embedding
+            .iter()
+            .find(|e| e.provider_name == "openai")
+            .expect("openai");
         assert_eq!(openai.family, "embedding");
         assert_eq!(openai.provider_type, "dw.embedding.openai");
         assert_eq!(openai.component_ref, "component:embedding.openai");

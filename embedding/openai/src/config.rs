@@ -20,7 +20,11 @@ pub struct OpenAiEmbeddingConfig {
 
 impl OpenAiEmbeddingConfig {
     #[must_use]
-    pub fn new(api_key_secret: impl Into<String>, model: impl Into<String>, timeout_ms: u64) -> Self {
+    pub fn new(
+        api_key_secret: impl Into<String>,
+        model: impl Into<String>,
+        timeout_ms: u64,
+    ) -> Self {
         Self {
             api_key_secret: api_key_secret.into(),
             base_url: None,
@@ -37,16 +41,22 @@ impl OpenAiEmbeddingConfig {
 
     pub fn validate(&self) -> Result<(), OpenAiEmbeddingError> {
         if self.api_key_secret.trim().is_empty() {
-            return Err(OpenAiEmbeddingError::config("api_key_secret must not be empty"));
+            return Err(OpenAiEmbeddingError::config(
+                "api_key_secret must not be empty",
+            ));
         }
         if self.model.trim().is_empty() {
             return Err(OpenAiEmbeddingError::config("model must not be empty"));
         }
         if self.embedding_dim == 0 {
-            return Err(OpenAiEmbeddingError::config("embedding_dim must be greater than zero"));
+            return Err(OpenAiEmbeddingError::config(
+                "embedding_dim must be greater than zero",
+            ));
         }
         if self.timeout_ms == 0 {
-            return Err(OpenAiEmbeddingError::config("timeout_ms must be greater than zero"));
+            return Err(OpenAiEmbeddingError::config(
+                "timeout_ms must be greater than zero",
+            ));
         }
         if let Some(base_url) = &self.base_url {
             validate_https_override(base_url)?;
@@ -56,7 +66,10 @@ impl OpenAiEmbeddingConfig {
 
     #[must_use]
     pub fn base_url(&self) -> &str {
-        self.base_url.as_deref().unwrap_or(OPENAI_DEFAULT_BASE_URL).trim_end_matches('/')
+        self.base_url
+            .as_deref()
+            .unwrap_or(OPENAI_DEFAULT_BASE_URL)
+            .trim_end_matches('/')
     }
 
     #[must_use]
@@ -84,14 +97,20 @@ mod tests {
     #[test]
     fn validate_rejects_empty_key() {
         let cfg = OpenAiEmbeddingConfig::new("  ", "text-embedding-3-small", 10_000);
-        assert_eq!(cfg.validate().expect_err("empty key").to_string(), "api_key_secret must not be empty");
+        assert_eq!(
+            cfg.validate().expect_err("empty key").to_string(),
+            "api_key_secret must not be empty"
+        );
     }
 
     #[test]
     fn validate_rejects_zero_dim() {
         let mut cfg = OpenAiEmbeddingConfig::with_defaults("sk-test", 10_000);
         cfg.embedding_dim = 0;
-        assert_eq!(cfg.validate().expect_err("zero dim").to_string(), "embedding_dim must be greater than zero");
+        assert_eq!(
+            cfg.validate().expect_err("zero dim").to_string(),
+            "embedding_dim must be greater than zero"
+        );
     }
 
     #[test]
@@ -105,6 +124,9 @@ mod tests {
     fn embeddings_url_trims_and_appends() {
         let mut cfg = OpenAiEmbeddingConfig::with_defaults("sk-test", 10_000);
         cfg.base_url = Some("https://proxy.example.com/v1/".to_string());
-        assert_eq!(cfg.embeddings_url(), "https://proxy.example.com/v1/embeddings");
+        assert_eq!(
+            cfg.embeddings_url(),
+            "https://proxy.example.com/v1/embeddings"
+        );
     }
 }

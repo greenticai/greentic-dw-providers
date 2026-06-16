@@ -45,7 +45,11 @@ pub struct EmbeddingError {
 impl EmbeddingError {
     #[must_use]
     pub fn new(kind: EmbeddingErrorKind, message: impl Into<String>) -> Self {
-        Self { kind, message: message.into(), retryable: false }
+        Self {
+            kind,
+            message: message.into(),
+            retryable: false,
+        }
     }
     #[must_use]
     pub fn invalid_request(message: impl Into<String>) -> Self {
@@ -91,7 +95,12 @@ pub struct EmbeddingRequest {
 impl EmbeddingRequest {
     #[must_use]
     pub fn new(request_id: impl Into<String>, inputs: Vec<String>) -> Self {
-        Self { request_id: request_id.into(), model: None, inputs, metadata: Value::Null }
+        Self {
+            request_id: request_id.into(),
+            model: None,
+            inputs,
+            metadata: Value::Null,
+        }
     }
     #[must_use]
     pub fn with_model(mut self, model: impl Into<String>) -> Self {
@@ -138,7 +147,11 @@ pub struct EmbeddingProviderFeatures {
 impl EmbeddingProviderFeatures {
     #[must_use]
     pub const fn new(batch: bool, configurable_dim: bool, local_self_hosted: bool) -> Self {
-        Self { batch, configurable_dim, local_self_hosted }
+        Self {
+            batch,
+            configurable_dim,
+            local_self_hosted,
+        }
     }
 
     #[must_use]
@@ -156,7 +169,9 @@ impl EmbeddingProviderFeatures {
             return Err(EmbeddingError::invalid_request("inputs must not be empty"));
         }
         if request.inputs.iter().any(|i| i.is_empty()) {
-            return Err(EmbeddingError::invalid_request("inputs must not contain empty strings"));
+            return Err(EmbeddingError::invalid_request(
+                "inputs must not contain empty strings",
+            ));
         }
         if request.inputs.len() > 1 && !self.batch {
             return Err(EmbeddingError::invalid_request(
@@ -174,7 +189,11 @@ impl EmbeddingProviderFeatures {
 /// Backends override only `features` and `embed`.
 pub trait EmbeddingProvider: Send + Sync {
     fn features(&self) -> &EmbeddingProviderFeatures;
-    fn embed(&self, tenant: &TenantCtx, request: EmbeddingRequest) -> EmbeddingResult<EmbeddingResponse>;
+    fn embed(
+        &self,
+        tenant: &TenantCtx,
+        request: EmbeddingRequest,
+    ) -> EmbeddingResult<EmbeddingResponse>;
     fn validate_request(&self, request: &EmbeddingRequest) -> EmbeddingResult<()> {
         self.features().validate_request(request)
     }
@@ -207,7 +226,10 @@ mod tests {
         let batch = EmbeddingProviderFeatures::new(true, true, false);
         assert_eq!(
             batch.operations(),
-            vec!["embedding.embed".to_string(), "embedding.embed_batch".to_string()]
+            vec![
+                "embedding.embed".to_string(),
+                "embedding.embed_batch".to_string()
+            ]
         );
     }
 
@@ -223,7 +245,9 @@ mod tests {
     fn validate_request_rejects_batch_when_unsupported() {
         let features = EmbeddingProviderFeatures::new(false, true, false);
         let req = EmbeddingRequest::new("r1", vec!["a".into(), "b".into()]);
-        let err = features.validate_request(&req).expect_err("batch unsupported");
+        let err = features
+            .validate_request(&req)
+            .expect_err("batch unsupported");
         assert_eq!(err.kind, EmbeddingErrorKind::InvalidRequest);
     }
 
@@ -239,7 +263,10 @@ mod tests {
             model: Some("m".into()),
             dim: 3,
             vectors: vec![vec![0.1, 0.2, 0.3]],
-            usage: Some(EmbeddingUsage { prompt_tokens: Some(2), total_tokens: Some(2) }),
+            usage: Some(EmbeddingUsage {
+                prompt_tokens: Some(2),
+                total_tokens: Some(2),
+            }),
             metadata: Value::Null,
         };
         let json = serde_json::to_string(&resp).expect("ser");
