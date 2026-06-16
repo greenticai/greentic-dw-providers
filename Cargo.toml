@@ -3,6 +3,7 @@ members = [
     "crates/greentic-dw-providers-common",
     "embedding/core",
     "embedding/openai",
+    "embedding/openai-compatible",
     "control/core",
     "control/basic-policy",
     "control/delegation-guard",
