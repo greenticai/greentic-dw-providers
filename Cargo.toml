@@ -50,6 +50,7 @@ members = [
     "workspace/fs",
     "workspace/in-memory",
     "knowledge/core",
+    "knowledge/chronicle",
 ]
 resolver = "2"
 
