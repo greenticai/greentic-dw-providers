@@ -169,6 +169,9 @@ impl EmbeddingProviderFeatures {
 
 /// Contract implemented by embedding backends. Sync, mirroring `LlmProvider`;
 /// the async bridge to Chronicle's `EmbedderClient` lives in W2.
+///
+/// All methods default to delegating to [`EmbeddingProviderFeatures::validate_request`].
+/// Backends override only `features` and `embed`.
 pub trait EmbeddingProvider: Send + Sync {
     fn features(&self) -> &EmbeddingProviderFeatures;
     fn embed(&self, tenant: &TenantCtx, request: EmbeddingRequest) -> EmbeddingResult<EmbeddingResponse>;
