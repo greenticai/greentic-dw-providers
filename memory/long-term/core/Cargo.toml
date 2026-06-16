@@ -11,11 +11,13 @@ description = "Shared long-term memory contract for Greentic DW."
 [dependencies]
 async-trait = { workspace = true }
 chrono = { workspace = true }
-greentic-dw-providers-common = { workspace = true }
 greentic-types = { workspace = true }
 serde = { workspace = true }
 thiserror = { workspace = true }
 
 [dev-dependencies]
 serde_json = { workspace = true }
-tokio = { workspace = true }
+# `macros` enables `#[tokio::test]`; the workspace default omits it. Previously
+# satisfied incidentally via feature unification through an (unused) dep, so it
+# must be declared explicitly now that this crate builds standalone.
+tokio = { workspace = true, features = ["macros"] }
