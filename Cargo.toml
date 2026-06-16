@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "crates/greentic-dw-providers-common",
+    "embedding/core",
     "control/core",
     "control/basic-policy",
     "control/delegation-guard",
@@ -70,6 +71,7 @@ blake3 = "1"
 chrono = { version = "0.4", features = ["serde"] }
 criterion = "0.8"
 greentic-dw-control = { path = "control/core" }
+greentic-dw-embedding = { path = "embedding/core" }
 greentic-dw-context = { path = "context/core" }
 greentic-dw-delegation = { path = "delegation/core" }
 greentic-dw-providers-common = { path = "crates/greentic-dw-providers-common" }
