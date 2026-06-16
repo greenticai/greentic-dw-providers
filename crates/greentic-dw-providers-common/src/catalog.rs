@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 use crate::control::ControlVariant;
 use crate::embedding::EmbeddingVariant;
 use crate::engine::EngineVariant;
+use crate::knowledge::KnowledgeVariant;
 use crate::llm::{LlmWizardProviderQa, implemented_llm_wizard_qas};
 use crate::memory::ShortTermMemoryVariant;
 use crate::observer::ObserverVariant;
@@ -38,6 +39,8 @@ pub struct ProviderCatalog {
     pub tool: Vec<ProviderCatalogEntry>,
     /// Embedding variants.
     pub embedding: Vec<ProviderCatalogEntry>,
+    /// Knowledge (document-RAG) variants.
+    pub knowledge: Vec<ProviderCatalogEntry>,
 }
 
 /// One provider variant entry in the catalog.
@@ -73,6 +76,7 @@ pub fn unified_catalog() -> ProviderCatalog {
         control: control_entries(),
         tool: tool_entries(),
         embedding: embedding_entries(),
+        knowledge: knowledge_entries(),
     }
 }
 
@@ -156,6 +160,18 @@ fn embedding_entries() -> Vec<ProviderCatalogEntry> {
         .into_iter()
         .map(|v| ProviderCatalogEntry {
             family: "embedding".to_string(),
+            provider_name: v.as_str().to_string(),
+            component_ref: v.component_ref(),
+            provider_type: v.provider_type(),
+        })
+        .collect()
+}
+
+fn knowledge_entries() -> Vec<ProviderCatalogEntry> {
+    [KnowledgeVariant::Chronicle]
+        .into_iter()
+        .map(|v| ProviderCatalogEntry {
+            family: "knowledge".to_string(),
             provider_name: v.as_str().to_string(),
             component_ref: v.component_ref(),
             provider_type: v.provider_type(),
@@ -280,6 +296,20 @@ mod tests {
         assert_eq!(openai.family, "embedding");
         assert_eq!(openai.provider_type, "dw.embedding.openai");
         assert_eq!(openai.component_ref, "component:embedding.openai");
+    }
+
+    #[test]
+    fn unified_catalog_includes_knowledge_family() {
+        let cat = unified_catalog();
+        assert_eq!(cat.knowledge.len(), 1);
+        let chronicle = cat
+            .knowledge
+            .iter()
+            .find(|e| e.provider_name == "chronicle")
+            .expect("chronicle entry");
+        assert_eq!(chronicle.family, "knowledge");
+        assert_eq!(chronicle.provider_type, "dw.knowledge.chronicle");
+        assert_eq!(chronicle.component_ref, "component:knowledge.chronicle");
     }
 
     #[test]

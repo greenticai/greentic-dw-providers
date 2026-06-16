@@ -13,6 +13,7 @@ mod catalog;
 mod category;
 mod control;
 pub mod embedding;
+pub mod knowledge;
 mod engine;
 mod fixtures;
 mod integration;
@@ -120,6 +121,13 @@ pub use tool::{
     tool_capability_uri, tool_operations, tool_pack_capabilities, tool_pack_capability_id,
     tool_pack_manifest, tool_pack_manifest_cbor, tool_provider_decl,
     tool_provider_extension_inline, tool_variant_from_pack_capability_id,
+};
+
+pub use knowledge::{
+    KnowledgeFixtureError, KnowledgeVariant, knowledge_capability_declaration,
+    knowledge_capability_uri, knowledge_operations, knowledge_pack_capabilities,
+    knowledge_pack_capability_id, knowledge_pack_manifest, knowledge_pack_manifest_cbor,
+    knowledge_provider_decl,
 };
 
 pub use greentic_cap_types as cap;
