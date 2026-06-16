@@ -12,9 +12,11 @@
 //! `group_id`; all reads and writes are scoped to that group.
 
 mod bridge;
+mod bridge_embedder;
 mod config;
 
 pub use bridge::DwLlmBridge;
+pub use bridge_embedder::DwEmbedderBridge;
 pub use config::{
     ChronicleMemoryConfig, DEFAULT_MAX_CONCURRENCY, DEFAULT_NEO4J_DATABASE, DEFAULT_RECALL_LIMIT,
 };
@@ -30,6 +32,7 @@ use chronicle_core::search::edge_hybrid_search_rrf;
 use chronicle_core::types::EpisodeType;
 use chronicle_driver_neo4j::Neo4jDriver;
 use chronicle_llm_openai::{OpenAiEmbedder, OpenAiEmbedderConfig, OpenAiLlm};
+use greentic_dw_embedding::{DEFAULT_EMBEDDING_DIM, EmbeddingProvider};
 use greentic_dw_llm::LlmProvider;
 use greentic_dw_memory_long_term::{
     EpisodeIngest, EpisodeSource, IngestOutcome, LongTermMemory, LongTermMemoryError, RecallQuery,
@@ -75,6 +78,40 @@ impl ChronicleLongTermMemory {
         let driver = Self::connect_driver(&config).await?;
         let llm: Arc<dyn LlmClient> = Arc::new(DwLlmBridge::new(provider, tenant));
         let embedder = Self::openai_embedder(&config)?;
+
+        Self::assemble(
+            Arc::new(driver),
+            llm,
+            embedder,
+            config.max_concurrency,
+            config.recall_limit,
+        )
+        .await
+    }
+
+    /// Connects to Neo4j and builds a Chronicle engine driven entirely by
+    /// provider-neutral Greentic DW backends: the supplied [`LlmProvider`] for
+    /// entity / edge extraction (via [`DwLlmBridge`]) and the supplied
+    /// [`EmbeddingProvider`] for vector recall (via [`DwEmbedderBridge`]).
+    ///
+    /// No hard dependency on any single provider — the operator chooses which
+    /// LLM and embedding backends (and endpoints) to wire in. The embedding
+    /// dimension comes from `config.embedding_dim`, falling back to
+    /// [`DEFAULT_EMBEDDING_DIM`]; it MUST match the configured provider's output.
+    pub async fn connect_with_dw_providers(
+        config: ChronicleMemoryConfig,
+        llm_provider: Arc<dyn LlmProvider>,
+        embedding_provider: Arc<dyn EmbeddingProvider>,
+        tenant: TenantCtx,
+    ) -> Result<Self, LongTermMemoryError> {
+        let driver = Self::connect_driver(&config).await?;
+        let llm: Arc<dyn LlmClient> = Arc::new(DwLlmBridge::new(llm_provider, tenant.clone()));
+        let embedding_dim = config.embedding_dim.unwrap_or(DEFAULT_EMBEDDING_DIM);
+        let embedder: Arc<dyn EmbedderClient> = Arc::new(DwEmbedderBridge::new(
+            embedding_provider,
+            tenant,
+            embedding_dim,
+        ));
 
         Self::assemble(
             Arc::new(driver),
