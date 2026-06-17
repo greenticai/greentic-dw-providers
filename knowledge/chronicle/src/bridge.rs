@@ -59,6 +59,18 @@ impl DwEmbedderBridge {
             .await
             .map_err(|e| EmbedderError::Transport(format!("embedder bridge join error: {e}")))?
             .map_err(|e| EmbedderError::Transport(format!("dw embedding provider error: {e}")))?;
+        // Dimension is load-bearing: Chronicle sizes its HNSW index from
+        // `embedding_dim()` (== `self.dim`). If the provider's actual output
+        // dimension diverges (wrong model / misconfigured `embedding_dim`),
+        // mismatched vectors would be indexed → backend insert error or silent
+        // index corruption. Fail loud at the bridge instead.
+        if response.dim != self.dim {
+            return Err(EmbedderError::Transport(format!(
+                "embedding dim mismatch: provider returned {}, expected {} (configured embedding_dim); \
+                 corpus and query must use the same embedding model/dimension",
+                response.dim, self.dim
+            )));
+        }
         Ok(response.vectors)
     }
 }
@@ -187,6 +199,24 @@ mod tests {
         match err {
             EmbedderError::Transport(msg) => {
                 assert!(msg.contains("dw embedding provider error"), "got: {msg}");
+            }
+            other => panic!("expected Transport error, got {other:?}"),
+        }
+    }
+
+    #[tokio::test]
+    async fn dim_mismatch_is_a_loud_error() {
+        // Provider emits STUB_DIM (4) but the bridge is configured for 8 — the
+        // guard must reject it rather than feed wrong-sized vectors to the index.
+        let b = DwEmbedderBridge::new(Arc::new(StubEmbeddingProvider), tenant(), STUB_DIM + 4);
+        let err = b.create("text").await.expect_err("dim mismatch must error");
+        match err {
+            EmbedderError::Transport(msg) => {
+                assert!(msg.contains("dim mismatch"), "got: {msg}");
+                assert!(
+                    msg.contains("returned 4") && msg.contains("expected 8"),
+                    "got: {msg}"
+                );
             }
             other => panic!("expected Transport error, got {other:?}"),
         }

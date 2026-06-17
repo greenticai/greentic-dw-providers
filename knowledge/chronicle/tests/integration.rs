@@ -132,6 +132,27 @@ async fn cross_tenant_isolation() {
         .await
         .unwrap();
 
+    // Positive control: tenant-aa MUST see its own ingested chunk. Without this,
+    // the isolation assertion below could pass vacuously (e.g. if retrieval were
+    // silently broken and returned nothing for everyone).
+    let hits_a = kb
+        .search(
+            &a,
+            KnowledgeQuery {
+                query: "Private data".to_string(),
+                limit: Some(10),
+            },
+        )
+        .await
+        .unwrap();
+    assert!(
+        hits_a
+            .iter()
+            .any(|h| h.text == "Private data for tenant AA."),
+        "tenant-aa must see its own data (positive control) — got {} hits",
+        hits_a.len()
+    );
+
     let hits_b = kb
         .search(
             &b,
