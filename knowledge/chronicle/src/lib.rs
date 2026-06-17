@@ -28,7 +28,8 @@ use chronicle_core::chronicle::Chronicle;
 use chronicle_core::document_rag::DocumentChunk as CDocumentChunk;
 use chronicle_core::driver::GraphDriver;
 use chronicle_core::embedder::EmbedderClient;
-use chronicle_core::llm::LlmClient;
+use chronicle_core::llm::{LlmClient, LlmConfig};
+use chronicle_llm_openai::{OpenAiEmbedder, OpenAiEmbedderConfig, OpenAiLlm};
 use greentic_dw_knowledge::{
     IngestOutcome, Knowledge, KnowledgeChunk, KnowledgeError, KnowledgeQuery, KnowledgeResult,
     RetrievedChunk,
@@ -75,6 +76,69 @@ impl KnowledgeChronicle {
                 search_limit
             },
         })
+    }
+
+    /// Builds a [`KnowledgeChronicle`] from a [`KnowledgeConfig`] plus an injected
+    /// graph driver.
+    ///
+    /// The embedder and LLM client are constructed from config (OpenAI /
+    /// OpenAI-compatible, mirroring the long-term-memory family). The driver stays
+    /// **injected** so this crate remains driver-agnostic and free of the optional
+    /// `surreal` / `neo4j` (bindgen / RocksDB) build: the runner-host edge — where
+    /// those features and `BINDGEN_EXTRA_CLANG_ARGS` live — constructs the driver
+    /// and passes it here.
+    ///
+    /// The LLM is wired but unused on the lite doc-RAG path (entity extraction is
+    /// off), so it constructs even without an LLM key (the key, if any, is only
+    /// consulted at call time).
+    pub async fn from_config(
+        config: &KnowledgeConfig,
+        driver: Arc<dyn GraphDriver>,
+    ) -> KnowledgeResult<Self> {
+        let embedder = Self::openai_embedder(config)?;
+        let llm = Self::openai_llm(config)?;
+        Self::from_parts(
+            driver,
+            llm,
+            embedder,
+            config.max_concurrency,
+            config.search_limit,
+        )
+        .await
+    }
+
+    /// Builds the OpenAI (or OpenAI-compatible) embedder from config. The
+    /// `embedding_dim` is load-bearing: it sizes the bridge and the index and must
+    /// match the provider's actual output.
+    fn openai_embedder(config: &KnowledgeConfig) -> KnowledgeResult<Arc<dyn EmbedderClient>> {
+        let mut embedder_config = OpenAiEmbedderConfig {
+            api_key: config.openai_api_key.clone(),
+            base_url: config.openai_base_url.clone(),
+            ..OpenAiEmbedderConfig::default()
+        };
+        if let Some(model) = &config.embedding_model {
+            embedder_config.embedding_model = model.clone();
+        }
+        embedder_config.embedding_dim = config.embedding_dim;
+        let embedder = OpenAiEmbedder::new(embedder_config)
+            .map_err(|e| KnowledgeError::Backend(e.to_string()))?;
+        Ok(Arc::new(embedder))
+    }
+
+    /// Builds the OpenAI (or OpenAI-compatible) LLM client from config. Falls back
+    /// to the embedder's `openai_api_key` when no dedicated `llm_api_key` is set.
+    fn openai_llm(config: &KnowledgeConfig) -> KnowledgeResult<Arc<dyn LlmClient>> {
+        let llm_config = LlmConfig {
+            api_key: config
+                .llm_api_key
+                .clone()
+                .or_else(|| config.openai_api_key.clone()),
+            model: config.llm_model.clone(),
+            base_url: config.openai_base_url.clone(),
+            ..LlmConfig::default()
+        };
+        let llm = OpenAiLlm::new(llm_config).map_err(|e| KnowledgeError::Backend(e.to_string()))?;
+        Ok(Arc::new(llm))
     }
 }
 
@@ -369,5 +433,18 @@ mod tests {
             .await
             .expect_err("invalid tenant must be rejected");
         assert!(matches!(err, KnowledgeError::InvalidTenant(_)));
+    }
+
+    #[tokio::test]
+    async fn from_config_constructs_with_injected_driver() {
+        // from_config builds the OpenAI embedder + LLM from config and provisions
+        // indices on the injected driver. The real OpenAI clients construct without
+        // a live key (the key is only consulted at call time), so this asserts
+        // construction only — it does not call ingest/search (which would hit the
+        // network).
+        let driver: Arc<dyn GraphDriver> = Arc::new(FakeDriver::new());
+        let config = KnowledgeConfig::new(EMB_DIM).with_openai_api_key("test-key");
+        let kb = KnowledgeChronicle::from_config(&config, driver).await;
+        assert!(kb.is_ok(), "from_config should construct: {:?}", kb.err());
     }
 }
