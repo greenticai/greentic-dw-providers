@@ -11,9 +11,12 @@ description = "Chronicle-backed long-term memory provider for Greentic DW."
 [dependencies]
 greentic-dw-memory-long-term = { workspace = true }
 greentic-dw-llm = { workspace = true }
+greentic-dw-embedding = { workspace = true }
 greentic-types = { workspace = true }
 chronicle-core = { workspace = true }
 chronicle-driver-neo4j = { workspace = true }
+chronicle-driver-surreal = { workspace = true }
+chronicle-driver-falkor = { workspace = true }
 chronicle-llm-openai = { workspace = true }
 async-trait = { workspace = true }
 chrono = { workspace = true }

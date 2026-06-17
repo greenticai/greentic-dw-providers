@@ -5,18 +5,22 @@
 //!
 //! [`ChronicleLongTermMemory`] adapts the [`LongTermMemory`] trait from
 //! `greentic-dw-memory-long-term` onto the Chronicle bi-temporal knowledge-graph
-//! engine. Episodes are ingested into a Neo4j-backed graph and recalled through
-//! Chronicle's hybrid (BM25 + cosine, RRF-fused) edge search.
+//! engine. Episodes are ingested into the operator-selected graph store — Neo4j,
+//! FalkorDB, or embedded SurrealDB (see [`ChronicleBackend`]) — and recalled
+//! through Chronicle's hybrid (BM25 + cosine, RRF-fused) edge search.
 //!
 //! Tenant isolation is enforced by mapping every [`TenantCtx`] to a Chronicle
 //! `group_id`; all reads and writes are scoped to that group.
 
 mod bridge;
+mod bridge_embedder;
 mod config;
 
 pub use bridge::DwLlmBridge;
+pub use bridge_embedder::DwEmbedderBridge;
 pub use config::{
-    ChronicleMemoryConfig, DEFAULT_MAX_CONCURRENCY, DEFAULT_NEO4J_DATABASE, DEFAULT_RECALL_LIMIT,
+    ChronicleBackend, ChronicleMemoryConfig, DEFAULT_FALKOR_GRAPH, DEFAULT_MAX_CONCURRENCY,
+    DEFAULT_NEO4J_DATABASE, DEFAULT_RECALL_LIMIT,
 };
 
 use std::sync::Arc;
@@ -28,8 +32,11 @@ use chronicle_core::embedder::EmbedderClient;
 use chronicle_core::llm::{LlmClient, LlmConfig};
 use chronicle_core::search::edge_hybrid_search_rrf;
 use chronicle_core::types::EpisodeType;
+use chronicle_driver_falkor::FalkorDriver;
 use chronicle_driver_neo4j::Neo4jDriver;
+use chronicle_driver_surreal::SurrealDriver;
 use chronicle_llm_openai::{OpenAiEmbedder, OpenAiEmbedderConfig, OpenAiLlm};
+use greentic_dw_embedding::{DEFAULT_EMBEDDING_DIM, EmbeddingProvider};
 use greentic_dw_llm::LlmProvider;
 use greentic_dw_memory_long_term::{
     EpisodeIngest, EpisodeSource, IngestOutcome, LongTermMemory, LongTermMemoryError, RecallQuery,
@@ -44,16 +51,16 @@ pub struct ChronicleLongTermMemory {
 }
 
 impl ChronicleLongTermMemory {
-    /// Connects to Neo4j and builds a Chronicle engine using OpenAI for both
-    /// extraction (LLM) and embeddings, then provisions the backend's indices and
-    /// constraints.
+    /// Connects to the configured backend and builds a Chronicle engine using
+    /// OpenAI for both extraction (LLM) and embeddings, then provisions the
+    /// backend's indices and constraints.
     pub async fn connect(config: ChronicleMemoryConfig) -> Result<Self, LongTermMemoryError> {
         let driver = Self::connect_driver(&config).await?;
         let llm = Self::openai_llm(&config)?;
         let embedder = Self::openai_embedder(&config)?;
 
         Self::assemble(
-            Arc::new(driver),
+            driver,
             llm,
             embedder,
             config.max_concurrency,
@@ -62,8 +69,9 @@ impl ChronicleLongTermMemory {
         .await
     }
 
-    /// Connects to Neo4j and builds a Chronicle engine that drives entity / edge
-    /// extraction through the supplied DW [`LlmProvider`] (via [`DwLlmBridge`]).
+    /// Connects to the configured backend and builds a Chronicle engine that
+    /// drives entity / edge extraction through the supplied DW [`LlmProvider`]
+    /// (via [`DwLlmBridge`]).
     ///
     /// Embeddings still use OpenAI: there is no DW embeddings family yet, so the
     /// vector side of recall continues to rely on an OpenAI-compatible embedder.
@@ -77,7 +85,41 @@ impl ChronicleLongTermMemory {
         let embedder = Self::openai_embedder(&config)?;
 
         Self::assemble(
-            Arc::new(driver),
+            driver,
+            llm,
+            embedder,
+            config.max_concurrency,
+            config.recall_limit,
+        )
+        .await
+    }
+
+    /// Connects to Neo4j and builds a Chronicle engine driven entirely by
+    /// provider-neutral Greentic DW backends: the supplied [`LlmProvider`] for
+    /// entity / edge extraction (via [`DwLlmBridge`]) and the supplied
+    /// [`EmbeddingProvider`] for vector recall (via [`DwEmbedderBridge`]).
+    ///
+    /// No hard dependency on any single provider — the operator chooses which
+    /// LLM and embedding backends (and endpoints) to wire in. The embedding
+    /// dimension comes from `config.embedding_dim`, falling back to
+    /// [`DEFAULT_EMBEDDING_DIM`]; it MUST match the configured provider's output.
+    pub async fn connect_with_dw_providers(
+        config: ChronicleMemoryConfig,
+        llm_provider: Arc<dyn LlmProvider>,
+        embedding_provider: Arc<dyn EmbeddingProvider>,
+        tenant: TenantCtx,
+    ) -> Result<Self, LongTermMemoryError> {
+        let driver = Self::connect_driver(&config).await?;
+        let llm: Arc<dyn LlmClient> = Arc::new(DwLlmBridge::new(llm_provider, tenant.clone()));
+        let embedding_dim = config.embedding_dim.unwrap_or(DEFAULT_EMBEDDING_DIM);
+        let embedder: Arc<dyn EmbedderClient> = Arc::new(DwEmbedderBridge::new(
+            embedding_provider,
+            tenant,
+            embedding_dim,
+        ));
+
+        Self::assemble(
+            driver,
             llm,
             embedder,
             config.max_concurrency,
@@ -105,17 +147,42 @@ impl ChronicleLongTermMemory {
         }
     }
 
+    /// Connects to the configured graph store and returns it as a trait object,
+    /// so the rest of the engine is backend-agnostic. The embedding dimension
+    /// (used to size the vector index on the Falkor / Surreal backends) comes
+    /// from `config.embedding_dim`, falling back to [`DEFAULT_EMBEDDING_DIM`].
     async fn connect_driver(
         config: &ChronicleMemoryConfig,
-    ) -> Result<Neo4jDriver, LongTermMemoryError> {
-        Neo4jDriver::connect(
-            &config.neo4j_uri,
-            &config.neo4j_user,
-            &config.neo4j_password,
-            config.neo4j_database.clone(),
-        )
-        .await
-        .map_err(|e| LongTermMemoryError::Backend(e.to_string()))
+    ) -> Result<Arc<dyn GraphDriver>, LongTermMemoryError> {
+        let embedding_dim = config.embedding_dim.unwrap_or(DEFAULT_EMBEDDING_DIM);
+        let driver: Arc<dyn GraphDriver> = match &config.backend {
+            ChronicleBackend::Neo4j {
+                uri,
+                user,
+                password,
+                database,
+            } => Arc::new(
+                Neo4jDriver::connect(uri, user, password, database.clone())
+                    .await
+                    .map_err(|e| LongTermMemoryError::Backend(e.to_string()))?,
+            ),
+            ChronicleBackend::Falkor { connection, graph } => Arc::new(
+                FalkorDriver::connect(connection, graph, embedding_dim)
+                    .await
+                    .map_err(|e| LongTermMemoryError::Backend(e.to_string()))?,
+            ),
+            ChronicleBackend::SurrealEmbedded { path } => Arc::new(
+                SurrealDriver::connect_embedded(path, embedding_dim)
+                    .await
+                    .map_err(|e| LongTermMemoryError::Backend(e.to_string()))?,
+            ),
+            ChronicleBackend::SurrealMemory => Arc::new(
+                SurrealDriver::connect_memory(embedding_dim)
+                    .await
+                    .map_err(|e| LongTermMemoryError::Backend(e.to_string()))?,
+            ),
+        };
+        Ok(driver)
     }
 
     fn openai_llm(
@@ -484,6 +551,59 @@ mod tests {
         assert!(
             !facts_a.is_empty(),
             "tenant-a must see its own ingested facts"
+        );
+    }
+
+    /// Exercises a **real** embedded (in-memory) SurrealDB backend through the
+    /// full Chronicle pipeline — no `FakeDriver` stub, no external infra. Proves
+    /// the Surreal driver wiring end-to-end: connect → provision indices → ingest
+    /// → recall. The LLM/embedder remain mocked (extraction is deterministic and
+    /// backend-independent); only the graph store is real.
+    #[tokio::test]
+    async fn surreal_memory_backend_ingest_then_recall() {
+        // `connect_memory` already provisions the schema + HNSW / search indices
+        // (via `schema_ddl`), so the store is ready to ingest and recall.
+        let driver = SurrealDriver::connect_memory(EMB_DIM)
+            .await
+            .expect("connect in-memory surreal");
+        let memory = ChronicleLongTermMemory::from_parts(
+            Arc::new(driver) as Arc<dyn GraphDriver>,
+            Arc::new(scripted_llm()),
+            Arc::new(MockEmbedder::new(EMB_DIM)),
+            1, // serialize the summary fan-out (matches scripted_llm ordering)
+            5,
+        );
+
+        let t = tenant("tenant-surreal");
+        let outcome = memory
+            .ingest_episode(
+                &t,
+                EpisodeIngest {
+                    name: "ep1".into(),
+                    body: "Alice works at Acme.".into(),
+                    source: EpisodeSource::Message,
+                    source_description: Some("test".into()),
+                    reference_time: fixed_ts(),
+                },
+            )
+            .await
+            .expect("ingest into surreal succeeds");
+        assert_eq!(outcome.entity_count, 2, "Alice + Acme expected");
+        assert_eq!(outcome.fact_count, 1, "one WORKS_AT edge expected");
+
+        let facts = memory
+            .recall(
+                &t,
+                RecallQuery {
+                    query: "where does Alice work".into(),
+                    limit: None,
+                },
+            )
+            .await
+            .expect("recall from surreal succeeds");
+        assert!(
+            facts.iter().any(|f| f.fact == "Alice works at Acme."),
+            "surreal recall must surface the ingested fact; got {facts:?}"
         );
     }
 }

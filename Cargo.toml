@@ -86,6 +86,7 @@ greentic-dw-memory-long-term = { path = "memory/long-term/core" }
 chronicle-core = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", rev = "629464b055dc607ea3e1ba09eb6133c8dff6b998" }
 chronicle-driver-neo4j = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", rev = "629464b055dc607ea3e1ba09eb6133c8dff6b998" }
 chronicle-driver-surreal = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", rev = "629464b055dc607ea3e1ba09eb6133c8dff6b998" }
+chronicle-driver-falkor = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", rev = "629464b055dc607ea3e1ba09eb6133c8dff6b998" }
 chronicle-llm-openai = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", rev = "629464b055dc607ea3e1ba09eb6133c8dff6b998" }
 chronicle-testkit = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", rev = "629464b055dc607ea3e1ba09eb6133c8dff6b998" }
 greentic-dw-knowledge = { path = "knowledge/core" }
