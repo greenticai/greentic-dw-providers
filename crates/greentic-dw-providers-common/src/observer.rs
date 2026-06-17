@@ -182,6 +182,12 @@ pub fn observer_pack_manifest(
 ) -> Result<PackManifest, ObserverFixtureError> {
     let provider_decl = observer_provider_decl(variant);
     let mut manifest = PackManifest {
+        // `PackManifest.agents` exists only in the greentic-types revision the
+        // long-term-memory consumer (greentic-runner) pins; gate it behind the
+        // `pack-manifest-agents` feature so this crate also builds against the
+        // published greentic-types that lacks the field. No agent blobs here.
+        #[cfg(feature = "pack-manifest-agents")]
+        agents: Default::default(),
         schema_version: "pack-v1".to_string(),
         pack_id,
         name: Some(format!("observer {}", variant.as_str())),

@@ -8,6 +8,13 @@ repository.workspace = true
 readme.workspace = true
 description = "Shared support crate for Greentic DW provider scaffolding."
 
+[features]
+# Emit the `PackManifest.agents` field. Enable when building against a
+# greentic-types revision that has it (e.g. the rev greentic-runner pins for the
+# long-term-memory integration). Off by default so this crate also builds
+# against the published greentic-types that lacks the field.
+pack-manifest-agents = []
+
 [dependencies]
 greentic-dw-embedding = { workspace = true }
 greentic-dw-llm = { workspace = true }
