@@ -125,6 +125,11 @@
       "category": "context",
       "name": "compressor",
       "pack_id": "greentic.dw.providers.context.compressor"
+    },
+    {
+      "category": "knowledge",
+      "name": "chronicle",
+      "pack_id": "greentic.dw.providers.knowledge.chronicle"
     }
   ]
 }

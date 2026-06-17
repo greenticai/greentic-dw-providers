@@ -1,0 +1,20 @@
+[package]
+name = "greentic-dw-knowledge"
+version.workspace = true
+edition.workspace = true
+rust-version = "1.94"
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Shared knowledge (document-RAG) contract for Greentic DW."
+
+[dependencies]
+async-trait = { workspace = true }
+greentic-dw-providers-common = { workspace = true }
+greentic-types = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros"] }

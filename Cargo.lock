@@ -1154,6 +1154,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "63044e1ae8e69f3b5a92c736ca6269b8d12fa7efe39bf34ddb06d102cf0e2cab"
 dependencies = [
  "memchr",
+ "regex-automata",
  "serde",
 ]
 
@@ -1395,7 +1396,7 @@ dependencies = [
 [[package]]
 name = "chronicle-core"
 version = "1.2.0-research"
-source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?tag=1.2.2-research#59acb6ba4e7c7f0f8ba5fe0db05efaba942e74d5"
+source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#629464b055dc607ea3e1ba09eb6133c8dff6b998"
 dependencies = [
  "async-trait",
  "blake2",
@@ -1413,7 +1414,7 @@ dependencies = [
 [[package]]
 name = "chronicle-driver-falkor"
 version = "1.2.0-research"
-source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?tag=1.2.2-research#59acb6ba4e7c7f0f8ba5fe0db05efaba942e74d5"
+source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#629464b055dc607ea3e1ba09eb6133c8dff6b998"
 dependencies = [
  "async-trait",
  "chronicle-core",
@@ -1429,7 +1430,7 @@ dependencies = [
 [[package]]
 name = "chronicle-driver-neo4j"
 version = "1.2.0-research"
-source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?tag=1.2.2-research#59acb6ba4e7c7f0f8ba5fe0db05efaba942e74d5"
+source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#629464b055dc607ea3e1ba09eb6133c8dff6b998"
 dependencies = [
  "async-trait",
  "chronicle-core",
@@ -1443,7 +1444,7 @@ dependencies = [
 [[package]]
 name = "chronicle-driver-surreal"
 version = "1.2.0-research"
-source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?tag=1.2.2-research#59acb6ba4e7c7f0f8ba5fe0db05efaba942e74d5"
+source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#629464b055dc607ea3e1ba09eb6133c8dff6b998"
 dependencies = [
  "async-trait",
  "chronicle-core",
@@ -1459,7 +1460,7 @@ dependencies = [
 [[package]]
 name = "chronicle-llm-openai"
 version = "1.2.0-research"
-source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?tag=1.2.2-research#59acb6ba4e7c7f0f8ba5fe0db05efaba942e74d5"
+source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#629464b055dc607ea3e1ba09eb6133c8dff6b998"
 dependencies = [
  "async-openai",
  "async-trait",
@@ -1473,12 +1474,13 @@ dependencies = [
 [[package]]
 name = "chronicle-testkit"
 version = "1.2.0-research"
-source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?tag=1.2.2-research#59acb6ba4e7c7f0f8ba5fe0db05efaba942e74d5"
+source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#629464b055dc607ea3e1ba09eb6133c8dff6b998"
 dependencies = [
  "async-trait",
  "chronicle-core",
  "chrono",
  "serde_json",
+ "tiktoken-rs",
  "tokio",
 ]
 
@@ -2663,6 +2665,17 @@ dependencies = [
 
 [[package]]
 name = "fancy-regex"
+version = "0.17.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "72cf461f865c862bb7dc573f643dd6a2b6842f7c30b07882b56bd148cc2761b8"
+dependencies = [
+ "bit-set",
+ "regex-automata",
+ "regex-syntax",
+]
+
+[[package]]
+name = "fancy-regex"
 version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e1e1dacd0d2082dfcf1351c4bdd566bbe89a2b263235a2b50058f1e130a47277"
@@ -3396,6 +3409,41 @@ dependencies = [
  "greentic-dw-providers-common",
  "greentic-types 1.1.0-dev.25540461571",
  "serde_json",
+]
+
+[[package]]
+name = "greentic-dw-knowledge"
+version = "1.2.0-research"
+dependencies = [
+ "async-trait",
+ "greentic-dw-providers-common",
+ "greentic-types 1.1.0-dev.25540461571",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+ "tokio",
+]
+
+[[package]]
+name = "greentic-dw-knowledge-chronicle"
+version = "1.2.0-research"
+dependencies = [
+ "async-trait",
+ "chronicle-core",
+ "chronicle-driver-neo4j",
+ "chronicle-driver-surreal",
+ "chronicle-llm-openai",
+ "chronicle-testkit",
+ "chrono",
+ "greentic-dw-embedding",
+ "greentic-dw-knowledge",
+ "greentic-dw-llm",
+ "greentic-types 1.1.0-dev.25540461571",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+ "tokio",
+ "tracing",
 ]
 
 [[package]]
@@ -5144,7 +5192,7 @@ dependencies = [
  "bytecount",
  "data-encoding",
  "email_address",
- "fancy-regex",
+ "fancy-regex 0.18.0",
  "fraction",
  "getrandom 0.3.4",
  "idna",
@@ -8628,6 +8676,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f60246a4944f24f6e018aa17cdeffb7818b76356965d03b07d6a9886e8962185"
 dependencies = [
  "cfg-if",
+]
+
+[[package]]
+name = "tiktoken-rs"
+version = "0.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "027853bbf8c7763b77c5c595f1c271c7d536ced7d6f83452911b944621e57fc2"
+dependencies = [
+ "anyhow",
+ "base64 0.22.1",
+ "bstr",
+ "fancy-regex 0.17.0",
+ "lazy_static",
+ "regex",
+ "rustc-hash",
 ]
 
 [[package]]
