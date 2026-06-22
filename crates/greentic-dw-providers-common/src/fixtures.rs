@@ -111,6 +111,7 @@ pub fn sample_pack_manifest(
         signatures: PackSignatures::default(),
         bootstrap: None,
         extensions: None,
+        agents: Default::default(),
     };
 
     manifest

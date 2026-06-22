@@ -222,6 +222,7 @@ pub fn task_store_pack_manifest(
         signatures: PackSignatures::default(),
         bootstrap: None,
         extensions: None,
+        agents: Default::default(),
     };
 
     manifest
