@@ -13,6 +13,7 @@ description = "Shared support crate for Greentic DW provider scaffolding."
 # greentic-types revision that has it (e.g. the rev greentic-runner pins for the
 # long-term-memory integration). Off by default so this crate also builds
 # against the published greentic-types that lacks the field.
+default = ["pack-manifest-agents"]
 pack-manifest-agents = []
 
 [dependencies]
