@@ -12,6 +12,11 @@
       "pack_id": "greentic.dw.providers.memory.short-term.redis"
     },
     {
+      "category": "memory",
+      "name": "long-term-chronicle",
+      "pack_id": "greentic.dw.providers.memory.long-term.chronicle"
+    },
+    {
       "category": "state",
       "name": "task-store-in-memory",
       "pack_id": "greentic.dw.providers.state.task-store.in-memory"
@@ -120,6 +125,11 @@
       "category": "context",
       "name": "compressor",
       "pack_id": "greentic.dw.providers.context.compressor"
+    },
+    {
+      "category": "knowledge",
+      "name": "chronicle",
+      "pack_id": "greentic.dw.providers.knowledge.chronicle"
     }
   ]
 }

@@ -9,11 +9,14 @@
 //! during local development and integration tests.
 
 mod capability;
+mod catalog;
 mod category;
 mod control;
+pub mod embedding;
 mod engine;
 mod fixtures;
 mod integration;
+pub mod knowledge;
 mod llm;
 mod memory;
 mod observer;
@@ -27,6 +30,7 @@ pub use capability::{
     pack_capabilities_extension, pack_capability_id, sample_capability_declaration,
     sample_capability_offer_v1, validate_capability_declaration,
 };
+pub use catalog::{ProviderCatalog, ProviderCatalogEntry, unified_catalog};
 pub use category::{
     ProviderCategory, planned_categories, provider_type, workspace_banner, workspace_version,
 };
@@ -81,12 +85,17 @@ pub use llm::{
     openai_llm_provider_id, openai_llm_provider_manifest, openai_llm_wizard_qa,
 };
 pub use memory::{
-    MemoryFixtureError, ShortTermMemoryVariant, short_term_memory_capability_declaration,
-    short_term_memory_capability_id, short_term_memory_capability_uri,
-    short_term_memory_operations, short_term_memory_pack_capabilities,
-    short_term_memory_pack_capability_id, short_term_memory_pack_manifest,
-    short_term_memory_pack_manifest_cbor, short_term_memory_provider_decl,
-    short_term_memory_provider_extension_inline,
+    LongTermMemoryVariant, MemoryFixtureError, ShortTermMemoryVariant,
+    long_term_memory_capability_declaration, long_term_memory_capability_id,
+    long_term_memory_capability_uri, long_term_memory_operations,
+    long_term_memory_pack_capabilities, long_term_memory_pack_capability_id,
+    long_term_memory_pack_manifest, long_term_memory_pack_manifest_cbor,
+    long_term_memory_provider_decl, long_term_memory_provider_extension_inline,
+    short_term_memory_capability_declaration, short_term_memory_capability_id,
+    short_term_memory_capability_uri, short_term_memory_operations,
+    short_term_memory_pack_capabilities, short_term_memory_pack_capability_id,
+    short_term_memory_pack_manifest, short_term_memory_pack_manifest_cbor,
+    short_term_memory_provider_decl, short_term_memory_provider_extension_inline,
 };
 pub use observer::{
     ObserverFixtureError, ObserverVariant, observer_capability_declaration, observer_capability_id,
@@ -112,6 +121,13 @@ pub use tool::{
     tool_capability_uri, tool_operations, tool_pack_capabilities, tool_pack_capability_id,
     tool_pack_manifest, tool_pack_manifest_cbor, tool_provider_decl,
     tool_provider_extension_inline, tool_variant_from_pack_capability_id,
+};
+
+pub use knowledge::{
+    KnowledgeFixtureError, KnowledgeVariant, knowledge_capability_declaration,
+    knowledge_capability_uri, knowledge_operations, knowledge_pack_capabilities,
+    knowledge_pack_capability_id, knowledge_pack_manifest, knowledge_pack_manifest_cbor,
+    knowledge_provider_decl,
 };
 
 pub use greentic_cap_types as cap;
