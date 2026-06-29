@@ -1,0 +1,16 @@
+[package]
+name = "greentic-dw-embedding-openai-compatible"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "OpenAI-compatible embedding provider for Greentic DW (Ollama, vLLM, etc.)."
+
+[dependencies]
+greentic-dw-embedding = { workspace = true }
+greentic-types = { workspace = true }
+reqwest = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }

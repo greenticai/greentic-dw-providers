@@ -94,6 +94,12 @@ pub fn sample_pack_manifest(
     let provider_decl =
         sample_provider_decl_with_capability_name(category, provider_name, &pack_capability_name);
     let mut manifest = PackManifest {
+        // `PackManifest.agents` exists only in the greentic-types revision the
+        // long-term-memory consumer (greentic-runner) pins; gate it behind the
+        // `pack-manifest-agents` feature so this crate also builds against the
+        // published greentic-types that lacks the field. No agent blobs here.
+        #[cfg(feature = "pack-manifest-agents")]
+        agents: Default::default(),
         schema_version: "pack-v1".to_string(),
         pack_id,
         name: Some(format!("{} {} pack", category.as_str(), provider_name)),
@@ -111,7 +117,6 @@ pub fn sample_pack_manifest(
         signatures: PackSignatures::default(),
         bootstrap: None,
         extensions: None,
-        agents: Default::default(),
     };
 
     manifest

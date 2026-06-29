@@ -52,7 +52,7 @@ fn category_helpers_expose_expected_names() {
         pack_capability_id(ProviderCategory::Tool, "invoke"),
         "greentic.cap.tool.invoke"
     );
-    assert_eq!(planned_categories().len(), 7);
+    assert_eq!(planned_categories().len(), 9);
 }
 
 #[test]
@@ -166,13 +166,15 @@ fn category_and_capability_helpers_cover_remaining_variants() {
             ProviderCategory::Control,
             ProviderCategory::Observer,
             ProviderCategory::Tool,
+            ProviderCategory::Embedding,
+            ProviderCategory::Knowledge,
         ]
     );
     assert_eq!(workspace_version(), env!("CARGO_PKG_VERSION"));
     assert_eq!(
         workspace_banner(),
         format!(
-            "greentic-dw-providers {} scaffold (engine, llm, memory, state, control, observer, tool)",
+            "greentic-dw-providers {} scaffold (engine, llm, memory, state, control, observer, tool, embedding, knowledge)",
             env!("CARGO_PKG_VERSION")
         )
     );

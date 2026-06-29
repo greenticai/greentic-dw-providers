@@ -1,0 +1,23 @@
+[package]
+name = "greentic-dw-memory-long-term"
+version.workspace = true
+edition.workspace = true
+rust-version = "1.94"
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Shared long-term memory contract for Greentic DW."
+
+[dependencies]
+async-trait = { workspace = true }
+chrono = { workspace = true }
+greentic-types = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }
+# `macros` enables `#[tokio::test]`; the workspace default omits it. Previously
+# satisfied incidentally via feature unification through an (unused) dep, so it
+# must be declared explicitly now that this crate builds standalone.
+tokio = { workspace = true, features = ["macros"] }

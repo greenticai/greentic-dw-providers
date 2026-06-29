@@ -4,7 +4,7 @@
 - This repository is a Rust workspace for Greentic digital worker providers. It still contains placeholder categories for some provider families, but the control, engine, LLM, short-term memory, observer, and task-store families now include real backend crates or normalized core-contract crates alongside the shared helper crate.
 - The repo now has a functional shared helper crate that reuses Greentic core models and builds the provider/capability naming patterns used by future provider packages. The root binary remains a lightweight workspace banner rather than a runtime entrypoint.
 - The engine family, the LLM family, the control family, the observer family, the tool family, the short-term memory family, and the task-store family are the first concrete provider contracts in the tree: the repo now includes the normalized `llm/core` contract plus `anthropic`, Azure-specific `azure-openai`, `bedrock`, `gemini`, native `openai`, generic `openai-compatible`, and NVIDIA `nvidia-nim` backends, `default` and `router-lite` engine variants, `basic-policy` / `delegation-guard` control variants, `basic-audit` / `basic-metrics` observer variants, `component-adapter` / `mcp-adapter` tool variants, plus `in-memory` and `redis` variants for the memory and state families.
-- The memory family now has real backend code in this repo: `memory/short-term/core` provides the shared short-term memory contract, while `memory/short-term/in-memory` and `memory/short-term/redis` implement store-backed providers on top of `greentic-state`.
+- The memory family now has real backend code in this repo: `memory/short-term/core` provides the shared short-term memory contract, while `memory/short-term/in-memory` and `memory/short-term/redis` implement store-backed providers on top of `greentic-state`. The repo now also carries a second memory family, `memory/long-term`: `memory/long-term/core` defines the backend-agnostic long-term (episodic, bi-temporal) memory contract, and `memory/long-term/chronicle` implements it against the private `greentic-chronicle-ext` knowledge-graph crates with a `greentic-dw-llm` bridge for entity extraction.
 - The observer family now also has real backend code: `observer/core` provides the shared observer contract, while `observer/basic-audit` and `observer/basic-metrics` implement tenant-scoped audit logging and metrics aggregation.
 - The engine family now also has real backend code: `engine/core` provides the shared engine contract, while `engine/default` and `engine/router-lite` implement a direct-action engine and a lightweight heuristic router.
 - The control family now also has real backend code: `control/core` provides the shared control contract, while `control/basic-policy` and `control/delegation-guard` implement allow/deny policy checks and explicit delegation gating.
@@ -15,8 +15,8 @@
 ## 2. Main Components and Functionality
 - **Path:** `Cargo.toml`
   - **Role:** Root workspace and package manifest.
-  - **Key functionality:** Declares the authoritative workspace version, configures the root binary package, and wires in the shared support crate plus versioned Greentic workspace crates.
-  - **Key dependencies / integration points:** Uses the `0.4` Greentic crate line for shared published crates and the `0.5` `greentic-dw` / `greentic-cap` crate lines.
+  - **Key functionality:** Declares the authoritative workspace version (`1.2.0-research` on the research tier, following the three-tier scheme: research=1.2.x-research / develop=1.1.x-develop / main=1.0.x), configures the root binary package, and wires in the shared support crate plus versioned Greentic workspace crates.
+  - **Key dependencies / integration points:** Uses compatibility ranges `>=1.1.0-dev, <1.2.0-0` for shared external published crates (greentic-dw, greentic-cap, greentic-types, etc.) and path dependencies for all workspace-internal members.
 
 - **Path:** `README.md`
   - **Role:** Root workspace overview.
@@ -44,7 +44,7 @@
 
 - **Path:** `packs/gtpacks.manifest.json`
   - **Role:** Source manifest for release-time gtpack generation.
-  - **Key functionality:** Lists the current pack categories, pack names, and pack ids that the release workflow turns into `.gtpack` artifacts.
+  - **Key functionality:** Lists the current pack categories, pack names, and pack ids that the release workflow turns into `.gtpack` artifacts. Now includes the `memory.long-term.chronicle` entry (`greentic.dw.providers.memory.long-term.chronicle`) alongside the short-term memory packs.
   - **Key dependencies / integration points:** Consumed by `ci/gtpacks.sh`.
 
 - **Path:** `coverage-policy.json`
@@ -149,6 +149,16 @@
   - **Key functionality:** Wraps `greentic-state::redis_store::RedisStateStore` behind the shared short-term memory contract and exposes the canonical provider declaration and pack manifest for the Redis backend.
   - **Key dependencies / integration points:** Builds on `memory/short-term/core`, reuses the published `greentic-state` Redis support, and shares pack metadata with `crates/greentic-dw-providers-common`.
 
+- **Path:** `memory/long-term/core`
+  - **Role:** Shared long-term memory contract crate (`greentic-dw-memory-long-term`).
+  - **Key functionality:** Defines the backend-agnostic `LongTermMemory` trait (`memory.ingest` / `memory.recall`), the episode-ingest and recalled-fact DTOs with bi-temporal fields, and the error model. No concrete backend or chronicle types are present here.
+  - **Key dependencies / integration points:** Reuses `greentic-types` for tenant scoping and `crates/greentic-dw-providers-common` for capability/provider naming; carries no chronicle or storage dependencies.
+
+- **Path:** `memory/long-term/chronicle`
+  - **Role:** Chronicle-backed long-term memory backend crate (`greentic-dw-memory-chronicle`).
+  - **Key functionality:** Implements `LongTermMemory` against the private `greentic-chronicle-ext` crates (`chronicle-core`, `chronicle-driver-neo4j`, `chronicle-llm-openai`), translating ingest/recall calls into chronicle episode ingestion and graph retrieval, with a `greentic-dw-llm` bridge that adapts a configured DW LLM provider into chronicle's entity-extraction interface. Enforces tenant scoping and cross-tenant isolation.
+  - **Key dependencies / integration points:** Builds on `memory/long-term/core`, `greentic-dw-llm`, and the four `chronicle-*` git dependencies pinned in the root `Cargo.toml`; uses `crates/greentic-dw-providers-common` for the canonical provider declaration and pack manifest.
+
 - **Path:** `observer/core`
   - **Role:** Shared observer contract crate.
   - **Key functionality:** Defines the observer trait, event model, report model, and shared event-validation helpers used by concrete observer backends.
@@ -191,6 +201,10 @@
 - **Path:** `crates/greentic-dw-providers-common/tests/pr07.rs`
   - **Role:** LLM-family conformance tests.
   - **Key functionality:** Verifies that the implemented LLM backends stay aligned on helper naming, manifests, pack metadata, feature-profile behavior, wizard QA registry coverage, and exported config-schema basics.
+
+- **Path:** `crates/greentic-dw-providers-common/tests/pr08.rs`
+  - **Role:** Integration tests for the long-term memory capability helpers.
+  - **Key functionality:** Verifies the chronicle variant strings, the shared `cap://dw.memory.long-term` capability URI, the `greentic.cap.memory.long-term` pack capability id, the `dw.memory.long-term.chronicle` provider type, the `memory.ingest` / `memory.recall` operations, capability-declaration validity, and pack-manifest CBOR round-tripping.
 
 - **Path:** `engine/`, `llm/`, `memory/`, `state/`, `control/`, `observer/`, `tool/`
   - **Role:** Top-level provider category placeholders and documentation anchors.
@@ -267,6 +281,15 @@
   - **Key functionality:** Contains the shared contract crate plus the in-memory and Redis backend crates for the first real provider implementation in the repository.
   - **Key dependencies / integration points:** All three crates point at the shared `cap://dw.memory.short-term` contract and `greentic.cap.memory.short-term` pack capability id.
 
+- **Path:** `memory/long-term/`
+  - **Role:** Long-term (episodic, bi-temporal) memory provider family.
+  - **Key functionality:** Contains the shared `core` contract crate plus the `chronicle` backend crate that wraps the private `greentic-chronicle-ext` knowledge-graph primitives.
+  - **Key dependencies / integration points:** Both crates point at the shared `cap://dw.memory.long-term` contract and `greentic.cap.memory.long-term` pack capability id; the `chronicle` backend additionally pulls the `chronicle-*` git dependencies and bridges to a `greentic-dw-llm` provider.
+
+- **Path:** `docs/chronicle-dep.md`
+  - **Role:** Documentation of the private chronicle git dependency and its CI requirements.
+  - **Key functionality:** Records why the `chronicle-*` crates are pulled from `greentic-biz/greentic-chronicle-ext` (pinned to tag `1.2.0-research`, full graphiti-core parity), why no auth token is required (repo is public), and the bump procedure for future version upgrades.
+
 - **Path:** `state/task-store/in-memory/`, `state/task-store/redis/`
   - **Role:** Task-store provider documentation anchors.
   - **Key functionality:** Document the intended in-memory and Redis variants for the task-state family.
@@ -283,7 +306,7 @@
 ## 3. Work In Progress, TODOs, and Stubs
 - **Location:** `memory/`
   - **Status:** active
-  - **Short description:** The short-term memory family now has a shared contract crate plus in-memory and Redis backend crates, but pack source trees and runtime component exports are still pending.
+  - **Short description:** The short-term memory family now has a shared contract crate plus in-memory and Redis backend crates, and the long-term memory family now has a shared `core` contract plus a `chronicle` backend crate. Pack source trees, the `packs/gtpacks.manifest.json` entries for the long-term family, runtime component exports, a runtime KV adapter for chronicle, and `unified_catalog()` wiring for long-term are still pending.
 
 - **Location:** `engine/`
   - **Status:** active
@@ -396,6 +419,7 @@
 - Future `gtpack` and `gtbundle` generation should use `gtc wizard --answers` with the schema from `gtc wizard --schema`; if that flow needs `greentic-pack` or bundle support updates, the repo should be adjusted before introducing new artifact-generation scripts.
 
 ## 5. Notes for Future Work
+- For the long-term memory family: wire the `chronicle` variant into `unified_catalog()`, add its `packs/gtpacks.manifest.json` entries and pack source trees, and supply a runtime KV adapter for chronicle storage. The chronicle dependency is now at `1.2.0-research` (full graphiti-core parity: Phase-4 communities/saga/bulk; the `AddEpisodeRequest` literal in `memory/long-term/chronicle/src/lib.rs` uses `..Default::default()` for the three new additive fields). The upstream repo is public so no CI token is required (see `docs/chronicle-dep.md`).
 - Add the first real provider crates under the category directories, starting with the engine, control, observer, tool, short-term memory, and task-store families.
 - Add the remaining planned LLM provider crates after the now-landed normalized core contract, Anthropic backend, Azure OpenAI backend, Gemini backend, native OpenAI backend, generic OpenAI-compatible backend, and NVIDIA NIM backend.
 - Build additional provider-specific transports on top of the normalized `llm/core` request/response model and the shared family-level helper metadata.
