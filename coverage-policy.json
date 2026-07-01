@@ -12,6 +12,12 @@
     ]
   },
   "per_file": {
+    "embedding/openai/src/transport.rs": {
+      "line_coverage_min": 45.0
+    },
+    "embedding/openai-compatible/src/transport.rs": {
+      "line_coverage_min": 45.0
+    },
     "control/core/src/lib.rs": {
       "line_coverage_min": 60.0
     },
