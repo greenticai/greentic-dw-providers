@@ -6,8 +6,8 @@
       "kind": "research",
       "depends_on": [],
       "payload": {
-        "audience": "reviewers",
-        "topic": "golden testing"
+        "topic": "golden testing",
+        "audience": "reviewers"
       }
     },
     {
@@ -17,8 +17,8 @@
         "step-1"
       ],
       "payload": {
-        "format": "json",
-        "style": "deterministic"
+        "style": "deterministic",
+        "format": "json"
       }
     }
   ],

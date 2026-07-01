@@ -34,12 +34,12 @@
     {
       "id": "overflow-summary",
       "content": {
-        "count": 3,
         "summary_of": [
           "policy",
           "plan-step:step-1",
           "memory:constraints"
-        ]
+        ],
+        "count": 3
       },
       "provenance_ref": "compression/overflow-summary",
       "source_kind": "summary",
@@ -48,9 +48,9 @@
     }
   ],
   "metadata": {
+    "provider": "compressor",
     "kept_count": 4,
     "overflow_count": 3,
-    "provider": "compressor",
     "truncated_without_summary": false
   }
 }
