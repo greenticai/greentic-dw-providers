@@ -1,6 +1,9 @@
 [workspace]
 members = [
     "crates/greentic-dw-providers-common",
+    "embedding/core",
+    "embedding/openai",
+    "embedding/openai-compatible",
     "control/core",
     "control/basic-policy",
     "control/delegation-guard",
@@ -22,6 +25,8 @@ members = [
     "llm/openai",
     "llm/openai-compatible",
     "llm/nvidia-nim",
+    "memory/long-term/chronicle",
+    "memory/long-term/core",
     "memory/short-term/core",
     "memory/short-term/in-memory",
     "memory/short-term/redis",
@@ -44,11 +49,13 @@ members = [
     "workspace/core",
     "workspace/fs",
     "workspace/in-memory",
+    "knowledge/core",
+    "knowledge/chronicle",
 ]
 resolver = "2"
 
 [workspace.package]
-version = "0.5.8"
+version = "1.1.0"
 edition = "2024"
 rust-version = "1.94"
 license = "MIT"
@@ -57,6 +64,7 @@ readme = "README.md"
 description = "Greentic digital worker provider workspace scaffold."
 
 [workspace.dependencies]
+async-trait = "0.1"
 aws-config = "1"
 aws-credential-types = "1"
 aws-sdk-bedrockruntime = "1"
@@ -64,30 +72,40 @@ aws-smithy-runtime-api = "1"
 aws-smithy-types = "1"
 aws-types = "1"
 blake3 = "1"
+chrono = { version = "0.4", features = ["serde"] }
 criterion = "0.8"
 greentic-dw-control = { path = "control/core" }
+greentic-dw-embedding = { path = "embedding/core" }
 greentic-dw-context = { path = "context/core" }
 greentic-dw-delegation = { path = "delegation/core" }
 greentic-dw-providers-common = { path = "crates/greentic-dw-providers-common" }
 greentic-dw-engine = { path = "engine/core" }
 greentic-dw-llm = { path = "llm/core" }
 greentic-dw-memory = { path = "memory/short-term/core" }
+greentic-dw-memory-long-term = { path = "memory/long-term/core" }
+chronicle-core = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", branch = "research" }
+chronicle-driver-neo4j = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", branch = "research" }
+chronicle-driver-surreal = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", branch = "research" }
+chronicle-driver-falkor = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", branch = "research" }
+chronicle-llm-openai = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", branch = "research" }
+chronicle-testkit = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", branch = "research" }
+greentic-dw-knowledge = { path = "knowledge/core" }
 greentic-dw-planning = { path = "planning/core" }
 greentic-dw-reflection = { path = "reflection/core" }
 greentic-dw-task-store = { path = "state/task-store/core" }
 greentic-dw-observer = { path = "observer/core" }
 greentic-dw-tool = { path = "tool/core" }
 greentic-dw-workspace = { path = "workspace/core" }
-greentic-dw = { version = "0.5" }
-greentic-cap = { version = "0.5" }
-greentic-cap-types = { version = "0.5" }
-greentic-dw-manifest = { version = "0.5" }
-greentic-dw-types = { version = "0.5" }
-greentic-component = { version = "0.4", default-features = false, features = ["cli"] }
-greentic-types = { version = "0.4", default-features = false, features = ["std", "serde", "time"] }
-greentic-interfaces = { version = "0.4", default-features = false, features = ["bindings-rust", "provider-common", "state-store-v1"] }
-greentic-pack = { package = "greentic-pack-lib", version = "0.4" }
-greentic-state = { version = "0.4", default-features = false }
+greentic-dw = { version = ">=1.1.0-0, <1.2.0-0" }
+greentic-cap = { version = ">=1.1.0-0, <1.2.0-0" }
+greentic-cap-types = { version = ">=1.1.0-0, <1.2.0-0" }
+greentic-dw-manifest = { version = ">=1.1.0-0, <1.2.0-0" }
+greentic-dw-types = { version = ">=1.1.0-0, <1.2.0-0" }
+greentic-component = { version = ">=1.1.0-0, <1.2.0-0", default-features = false, features = ["cli"] }
+greentic-types = { version = ">=1.1.0-0, <1.2.0-0", default-features = false, features = ["std", "serde", "time"] }
+greentic-interfaces = { version = ">=1.1.0-0, <1.2.0-0", default-features = false, features = ["bindings-rust", "provider-common", "state-store-v1"] }
+greentic-pack = { package = "greentic-pack-lib", version = ">=1.1.0-0, <1.2.0-0" }
+greentic-state = { version = ">=1.1.0-0, <1.2.0-0", default-features = false }
 rmcp = { version = "1.3", default-features = false, features = ["client", "transport-async-rw"] }
 reqwest = { version = "0.13", default-features = false, features = ["blocking", "json", "rustls"] }
 semver = { version = "1" }
@@ -95,6 +113,7 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = { version = "1", features = ["io-util", "rt-multi-thread", "sync", "time"] }
 thiserror = { version = "2" }
+tracing = "0.1"
 
 [package]
 name = "greentic-dw-providers"

@@ -1014,6 +1014,12 @@ pub fn llm_pack_manifest(
     let provider_name = provider_name.as_ref();
     let provider_decl = llm_provider_declaration(provider_name, features);
     let mut manifest = PackManifest {
+        // `PackManifest.agents` exists only in the greentic-types revision the
+        // long-term-memory consumer (greentic-runner) pins; gate it behind the
+        // `pack-manifest-agents` feature so this crate also builds against the
+        // published greentic-types that lacks the field. No agent blobs here.
+        #[cfg(feature = "pack-manifest-agents")]
+        agents: Default::default(),
         schema_version: "pack-v1".to_string(),
         pack_id,
         name: Some(format!("llm {provider_name}")),
