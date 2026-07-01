@@ -238,4 +238,59 @@ mod tests {
         assert!(ops.contains(&"knowledge.ingest"));
         assert!(ops.contains(&"knowledge.search"));
     }
+
+    #[test]
+    fn provider_decl_uses_canonical_type() {
+        let decl = knowledge_provider_decl(KnowledgeVariant::Chronicle);
+        assert_eq!(decl.provider_type, "dw.knowledge.chronicle");
+    }
+
+    #[test]
+    fn capability_declaration_builds_and_validates() {
+        let declaration = knowledge_capability_declaration(KnowledgeVariant::Chronicle)
+            .expect("knowledge capability declaration should build");
+        assert!(crate::validate_capability_declaration(&declaration).is_ok());
+    }
+
+    #[test]
+    fn pack_capabilities_expose_canonical_offer() {
+        let ext = knowledge_pack_capabilities(KnowledgeVariant::Chronicle);
+        assert_eq!(ext.offers.len(), 1);
+        assert_eq!(ext.offers[0].cap_id, "greentic.cap.knowledge");
+        assert_eq!(ext.offers[0].offer_id, "offer.knowledge.chronicle");
+    }
+
+    #[test]
+    fn pack_manifest_declares_knowledge_capability() {
+        let manifest = knowledge_pack_manifest(
+            greentic_types::PackId::new("greentic.dw.providers.knowledge.chronicle")
+                .expect("pack id should be valid"),
+            KnowledgeVariant::Chronicle,
+        )
+        .expect("knowledge pack manifest should build");
+        assert_eq!(manifest.kind, greentic_types::PackKind::Provider);
+        assert!(
+            manifest
+                .capabilities
+                .iter()
+                .any(|cap| cap.name == "greentic.cap.knowledge")
+        );
+    }
+
+    #[test]
+    fn pack_manifest_cbor_roundtrips() {
+        let bytes = knowledge_pack_manifest_cbor(
+            greentic_types::PackId::new("greentic.dw.providers.knowledge.chronicle")
+                .expect("pack id should be valid"),
+            KnowledgeVariant::Chronicle,
+        )
+        .expect("knowledge pack manifest CBOR should build");
+        let decoded =
+            greentic_types::decode_pack_manifest(&bytes).expect("pack manifest should decode");
+        assert_eq!(
+            decoded.pack_id,
+            greentic_types::PackId::new("greentic.dw.providers.knowledge.chronicle")
+                .expect("pack id should be valid")
+        );
+    }
 }
