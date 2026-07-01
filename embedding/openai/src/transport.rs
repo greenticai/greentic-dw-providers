@@ -82,3 +82,40 @@ pub(crate) fn map_http_error(status: u16, body: &str) -> EmbeddingError {
     EmbeddingError::new(kind, format!("openai embeddings error {status}: {body}"))
         .retryable(retryable)
 }
+
+#[cfg(test)]
+#[allow(clippy::expect_used)]
+mod tests {
+    use super::{HttpOpenAiEmbeddingTransport, OpenAiEmbeddingTransport, map_http_error};
+    use crate::config::OpenAiEmbeddingConfig;
+    use greentic_dw_embedding::EmbeddingErrorKind;
+    use serde_json::json;
+
+    #[test]
+    fn map_http_error_classifies_status_codes() {
+        assert_eq!(map_http_error(401, "nope").kind, EmbeddingErrorKind::Auth);
+        assert_eq!(map_http_error(403, "nope").kind, EmbeddingErrorKind::Auth);
+
+        let rate_limited = map_http_error(429, "slow down");
+        assert_eq!(rate_limited.kind, EmbeddingErrorKind::RateLimited);
+        assert!(rate_limited.retryable);
+
+        let server = map_http_error(503, "unavailable");
+        assert_eq!(server.kind, EmbeddingErrorKind::Provider);
+        assert!(server.retryable);
+
+        let other = map_http_error(400, "bad body");
+        assert_eq!(other.kind, EmbeddingErrorKind::Provider);
+        assert!(!other.retryable);
+        assert!(other.message.contains("openai embeddings error 400"));
+    }
+
+    #[test]
+    fn create_embeddings_fails_before_network_for_invalid_api_key() {
+        let config = OpenAiEmbeddingConfig::new("bad\nkey", "text-embedding-3-small", 5_000);
+        let err = HttpOpenAiEmbeddingTransport
+            .create_embeddings(&config, &json!({ "input": "hello" }))
+            .expect_err("invalid header must fail before any network call");
+        assert_eq!(err.kind, EmbeddingErrorKind::InvalidRequest);
+    }
+}
