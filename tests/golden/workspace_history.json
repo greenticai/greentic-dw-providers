@@ -20,15 +20,15 @@
     "version_id": "v2",
     "content": {
       "plan_id": "plan-golden",
-      "reviewed": true,
-      "status": "approved"
+      "status": "approved",
+      "reviewed": true
     },
     "provenance": {
       "derived_from": "v1",
       "source": "reflection/schema-check"
     },
     "metadata": {
-      "content_checksum": "9103aa6f8b479eb3cea2cbc8d6849123e1f44fc8117b7e76aa5e36bca5dce20e",
+      "content_checksum": "b5cce3e8fc64d6e7a4c39e5ba197da33d8562695aa73e696373735baf2f2e687",
       "attributes": {
         "phase": "approved"
       }
