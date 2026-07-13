@@ -1415,7 +1415,7 @@ dependencies = [
 [[package]]
 name = "chronicle-core"
 version = "1.3.0-research.0"
-source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#9c3eb3614d49a15d7d212ba3e90a0bb9c8e2ba71"
+source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#84acbee262374a9cc24f553864723792ce7ee676"
 dependencies = [
  "async-trait",
  "blake2",
@@ -1433,7 +1433,7 @@ dependencies = [
 [[package]]
 name = "chronicle-driver-falkor"
 version = "1.3.0-research.0"
-source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#9c3eb3614d49a15d7d212ba3e90a0bb9c8e2ba71"
+source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#84acbee262374a9cc24f553864723792ce7ee676"
 dependencies = [
  "async-trait",
  "chronicle-core",
@@ -1449,7 +1449,7 @@ dependencies = [
 [[package]]
 name = "chronicle-driver-neo4j"
 version = "1.3.0-research.0"
-source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#9c3eb3614d49a15d7d212ba3e90a0bb9c8e2ba71"
+source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#84acbee262374a9cc24f553864723792ce7ee676"
 dependencies = [
  "async-trait",
  "chronicle-core",
@@ -1463,7 +1463,7 @@ dependencies = [
 [[package]]
 name = "chronicle-driver-surreal"
 version = "1.3.0-research.0"
-source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#9c3eb3614d49a15d7d212ba3e90a0bb9c8e2ba71"
+source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#84acbee262374a9cc24f553864723792ce7ee676"
 dependencies = [
  "async-trait",
  "chronicle-core",
@@ -1479,7 +1479,7 @@ dependencies = [
 [[package]]
 name = "chronicle-llm-openai"
 version = "1.3.0-research.0"
-source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#9c3eb3614d49a15d7d212ba3e90a0bb9c8e2ba71"
+source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#84acbee262374a9cc24f553864723792ce7ee676"
 dependencies = [
  "async-openai",
  "async-trait",
@@ -1493,7 +1493,7 @@ dependencies = [
 [[package]]
 name = "chronicle-testkit"
 version = "1.3.0-research.0"
-source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#9c3eb3614d49a15d7d212ba3e90a0bb9c8e2ba71"
+source = "git+https://github.com/greentic-biz/greentic-chronicle-ext.git?branch=research#84acbee262374a9cc24f553864723792ce7ee676"
 dependencies = [
  "async-trait",
  "chronicle-core",
@@ -4691,7 +4691,7 @@ dependencies = [
  "libc",
  "percent-encoding",
  "pin-project-lite",
- "socket2 0.6.4",
+ "socket2 0.5.10",
  "tokio",
  "tower-service",
  "tracing",
@@ -6575,7 +6575,7 @@ dependencies = [
  "quinn-udp",
  "rustc-hash",
  "rustls 0.23.41",
- "socket2 0.6.4",
+ "socket2 0.5.10",
  "thiserror 2.0.18",
  "tokio",
  "tracing",
@@ -6613,7 +6613,7 @@ dependencies = [
  "cfg_aliases",
  "libc",
  "once_cell",
- "socket2 0.6.4",
+ "socket2 0.5.10",
  "tracing",
  "windows-sys 0.59.0",
 ]
