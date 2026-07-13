@@ -31,6 +31,14 @@ pub struct KnowledgeChunk {
     /// Arbitrary metadata attached to the chunk.
     #[serde(default)]
     pub metadata: Map<String, Value>,
+    /// Optional pre-computed embedding vector for this chunk.
+    ///
+    /// When present, backends should use this vector directly instead of
+    /// computing one from `text`. `None` preserves the existing
+    /// backend-computed-embedding behavior. `#[serde(default)]` keeps
+    /// payloads without this field decoding to `None`.
+    #[serde(default)]
+    pub embedding: Option<Vec<f32>>,
 }
 
 /// Outcome of an ingest call.
@@ -160,6 +168,7 @@ mod tests {
             chunk_index: 2,
             text: "Rust is a systems programming language.".to_string(),
             metadata,
+            embedding: None,
         };
 
         let json = serde_json::to_string(&chunk).expect("serialize");
@@ -178,6 +187,22 @@ mod tests {
         let json = r#"{"doc_id":"d","chunk_index":0,"text":"t"}"#;
         let chunk: KnowledgeChunk = serde_json::from_str(json).expect("deserialize");
         assert!(chunk.metadata.is_empty());
+        assert_eq!(chunk.embedding, None, "embedding should default to None");
+    }
+
+    #[test]
+    fn knowledge_chunk_with_precomputed_embedding_roundtrips() {
+        let chunk = KnowledgeChunk {
+            doc_id: "doc-002".to_string(),
+            chunk_index: 0,
+            text: "Precomputed vector chunk.".to_string(),
+            metadata: Map::new(),
+            embedding: Some(vec![0.1, 0.2, 0.3]),
+        };
+
+        let json = serde_json::to_string(&chunk).expect("serialize");
+        let back: KnowledgeChunk = serde_json::from_str(&json).expect("deserialize");
+        assert_eq!(back.embedding, Some(vec![0.1, 0.2, 0.3]));
     }
 
     #[test]
@@ -305,6 +330,7 @@ mod tests {
             chunk_index: 0,
             text: "Hello world.".to_string(),
             metadata: Map::new(),
+            embedding: None,
         }];
 
         let outcome = kb.ingest(&t, chunks).await.expect("ingest succeeds");

@@ -42,6 +42,7 @@ fn chunk(doc_id: &str, index: usize, text: &str) -> KnowledgeChunk {
         chunk_index: index,
         text: text.to_string(),
         metadata: serde_json::Map::new(),
+        embedding: None,
     }
 }
 
