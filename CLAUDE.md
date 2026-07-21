@@ -4,7 +4,7 @@ Guidance for Claude Code (claude.ai/code) when working in this repository.
 
 ## What this is
 
-`greentic-dw-providers` is the Rust workspace that hosts **provider implementations** for the Greentic Digital Worker contracts defined in `greentic-dw`. Each provider family lives in its own subtree (`llm/`, `embedding/`, `memory/`, `state/`, `engine/`, `control/`, `planning/`, `workspace/`, `delegation/`, `reflection/`, `context/`, `observer/`, `tool/`) and consumes the core contracts via the `greentic-dw` and `greentic-cap` published crate lines (the `>=1.2.0-dev, <1.3.0-0` range at time of writing).
+`greentic-dw-providers` is the Rust workspace that hosts **provider implementations** for the Greentic Digital Worker contracts defined in `greentic-dw`. Each provider family lives in its own subtree (`llm/`, `embedding/`, `memory/`, `state/`, `engine/`, `control/`, `planning/`, `workspace/`, `delegation/`, `reflection/`, `context/`, `observer/`, `tool/`, `knowledge/`) and consumes the core contracts via the `greentic-dw` and `greentic-cap` published crate lines (the `>=1.2.0-dev, <1.3.0-0` range at time of writing).
 
 The shared helper crate `crates/greentic-dw-providers-common` enforces the naming conventions and provides reusable fixtures for capability declarations, manifests, runtime refs, and bundle/setup scenarios.
 
@@ -40,9 +40,9 @@ cargo test  -p greentic-dw-llm-anthropic <name> -- --nocapture
 cargo test  --workspace --all-features
 ```
 
-Toolchain pinned to **Rust 1.95.0** via canonical `rust-toolchain.toml`. Edition 2024.
+Toolchain pinned to **Rust 1.95.0** via canonical `rust-toolchain.toml`. Edition 2024. Workspace version: `1.2.0-dev.0`.
 
-CI mirrors `local_check.sh` and adds reusable coverage (`_reusable_coverage.yml`, `coverage.yml`, `nightly-coverage.yml`), `perf.yml`, and `publish.yml` (gtpack publish to GHCR under `packs/dw/<dw-type>/<dw-name>-pack`).
+CI mirrors `local_check.sh` and adds reusable coverage (`_reusable_coverage.yml`, `coverage.yml`, `nightly-coverage.yml`), `perf.yml`, `dev-publish.yml` (nightly crates.io dev-lane publish), and `publish.yml` (gtpack publish to GHCR under `packs/dw/<dw-type>/<dw-name>-pack`).
 
 ## Workspace layout — provider families
 
@@ -64,6 +64,7 @@ Each family has a `core` crate (the contract) plus zero or more backend crates (
 | **context** | `context/core` | `static`, `compressor`, `retrieval` |
 | **workspace** | `workspace/core` | `in-memory`, `fs` |
 | **delegation** | `delegation/core` | `static-router`, `capability-match` |
+| **knowledge** | `knowledge/core` | `chronicle` |
 
 Plus `crates/greentic-dw-providers-common` (shared helpers) and `packs/gtpacks.manifest.json` (release manifest for gtpack scaffolds).
 
