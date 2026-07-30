@@ -23,8 +23,14 @@ jobs:
       - name: Install cargo-binstall
         uses: cargo-bins/cargo-binstall@main
 
+      # --locked is required: when binstall cannot reach the prebuilt-binary
+      # fetchers (GitHub API timeouts / rate limits) it falls back to building
+      # from source, and cargo-nextest refuses a source install without it.
+      # GITHUB_TOKEN raises the API rate limit so the fallback is rarely needed.
       - name: Install coverage tools
-        run: cargo binstall --no-confirm --force greentic-dev cargo-nextest cargo-llvm-cov
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: cargo binstall --no-confirm --force --locked greentic-dev cargo-nextest cargo-llvm-cov
 
       - name: Run coverage policy check
         run: greentic-dev coverage
