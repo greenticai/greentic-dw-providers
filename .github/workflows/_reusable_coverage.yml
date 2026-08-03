@@ -23,14 +23,24 @@ jobs:
       - name: Install cargo-binstall
         uses: cargo-bins/cargo-binstall@main
 
-      # --locked is required: when binstall cannot reach the prebuilt-binary
-      # fetchers (GitHub API timeouts / rate limits) it falls back to building
-      # from source, and cargo-nextest refuses a source install without it.
-      # GITHUB_TOKEN raises the API rate limit so the fallback is rarely needed.
+      # --disable-strategies compile makes a failed prebuilt-binary fetch a hard
+      # error instead of a silent ~11 min source rebuild. When api.github.com
+      # answers 403 (anonymous rate limit or a transient block) binstall does not
+      # fail: it quietly degrades to compiling from source, which hides the real
+      # problem behind a slow-but-green job. All three tools publish prebuilt
+      # binaries, so there is no legitimate reason to ever compile them here.
+      # --locked is kept so a source install would still be reproducible, and
+      # GITHUB_TOKEN raises the API rate limit so the 403 is rare to begin with.
+      # The command -v checks assert the binaries actually landed on PATH.
       - name: Install coverage tools
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: cargo binstall --no-confirm --force --locked greentic-dev cargo-nextest cargo-llvm-cov
+        run: |
+          cargo binstall --no-confirm --force --locked --disable-strategies compile \
+            greentic-dev cargo-nextest cargo-llvm-cov
+          command -v greentic-dev
+          command -v cargo-nextest
+          command -v cargo-llvm-cov
 
       - name: Run coverage policy check
         run: greentic-dev coverage
