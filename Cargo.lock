@@ -955,12 +955,6 @@ checksum = "4c7f02d4ea65f2c1853089ffd8d2787bdbc63de2f0d29dedbcf8ccdfa0ccd4cf"
 
 [[package]]
 name = "base64"
-version = "0.13.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9e1b586273c5702936fe7b7d6896644d8be71e6314cfe09d3167c95f712589e8"
-
-[[package]]
-name = "base64"
 version = "0.22.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
@@ -1029,7 +1023,7 @@ dependencies = [
  "bitflags",
  "cexpr",
  "clang-sys",
- "itertools 0.11.0",
+ "itertools 0.13.0",
  "proc-macro2",
  "quote",
  "regex",
@@ -1712,6 +1706,27 @@ name = "const-oid"
 version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a6ef517f0926dd24a1582492c791b6a4818a4d94e789a334894aa15b0d12f55c"
+
+[[package]]
+name = "const_format"
+version = "0.2.36"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4481a617ad9a412be3b97c5d403fef8ed023103368908b9c50af598ff467cc1e"
+dependencies = [
+ "const_format_proc_macros",
+ "konst",
+]
+
+[[package]]
+name = "const_format_proc_macros"
+version = "0.2.34"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1d57c2eccfb16dbac1f4e61e206105db5820c9d26c3c472bc17c774259ef7744"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "unicode-xid",
+]
 
 [[package]]
 name = "constant_time_eq"
@@ -3130,6 +3145,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "getset"
+version = "0.1.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6cf442baaabe4213ce7d1239afc26c039180b6456da2cededa316ae2c8a77a77"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.118",
+]
+
+[[package]]
 name = "gimli"
 version = "0.32.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3180,9 +3206,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-component"
-version = "1.2.0-dev.32251461364"
+version = "1.2.0-dev.32337165616"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d37cff488a172a656e58f1e08962b038e4c63cf35512fadf7ddccff288b454a8"
+checksum = "0108d3592cac1fcc618c7a411a859fd4087b3ce7284f14ab2436a85eb7cee420"
 dependencies = [
  "anyhow",
  "base64 0.23.1",
@@ -3235,9 +3261,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-component-manifest"
-version = "1.2.0-dev.32251461364"
+version = "1.2.0-dev.32337165616"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7e45cc20659708e5e04e5986074ba04784e89b9e61f49c91baff7577a74f7ce8"
+checksum = "c39791de2ff15330a8359f688c12a2075ad1af555ae87e5e47e0f572b662bf49"
 dependencies = [
  "greentic-types",
  "jsonschema 0.49.4",
@@ -3266,9 +3292,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-distributor-client"
-version = "1.2.0-dev.32252092809"
+version = "1.2.0-dev.32364691332"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5398e962615c774b4992548a7b01e4f667e0625e9d1989cf7de15dab959193ef"
+checksum = "441f8ffc27c7a07180ee4616be54101d12bec8ae3c97ff4e42e45a877296c32d"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -3280,7 +3306,7 @@ dependencies = [
  "greentic-secrets-lib",
  "greentic-types",
  "hex",
- "oci-distribution",
+ "oci-client",
  "reqwest 0.13.4",
  "rpassword",
  "semver",
@@ -3902,9 +3928,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-flow"
-version = "1.2.0-dev.32253381049"
+version = "1.2.0-dev.32441808908"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c59223a9acd7aca76101243835acd8e21517513269a3effbf291e2dfc56ff511"
+checksum = "673f876b8408fd265129b85842710856a19f5b2a5107d3cccd053132d2521719"
 dependencies = [
  "anyhow",
  "blake3",
@@ -4017,9 +4043,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-pack-lib"
-version = "1.2.0-dev.32326434414"
+version = "1.2.0-dev.32442657682"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e59736b22cfcac9580e747b743ccb66d4328a2f32dd5d312f8404f2bfbefd825"
+checksum = "19625d371dced66ffddf1b0fbeb2209732a946f2e5bdf32d1f872bad8bfd1be0"
 dependencies = [
  "anyhow",
  "base64 0.22.1",
@@ -4064,9 +4090,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-secrets-api"
-version = "1.2.0-dev.32252878598"
+version = "1.2.0-dev.32335104542"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "309fb7d69b277d463a8ecda20a69a3a51527740cc08c8e272216bf06c94c0dde"
+checksum = "a10243d94b1f1158fd8abdc44026b99e654e14ad9999d87aa464ce66f8542540"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -4075,9 +4101,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-secrets-core"
-version = "1.2.0-dev.32252878598"
+version = "1.2.0-dev.32335104542"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ffa620a2b04e3843748c460919cbbce01e856debaa0777bfd01ee71f0cd2343a"
+checksum = "b5e593357dd537b835b37556478a4101def2e4ea71a38d523d913d1e694b6f05"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -4103,9 +4129,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-secrets-lib"
-version = "1.2.0-dev.32252878598"
+version = "1.2.0-dev.32335104542"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8666a7ee4f5cc44c7d84f272076de7e9e30adba00775c3807644b5df07eb588c"
+checksum = "5b263e0bd016d0bb64db6a65deed6771329d3977d851b595e4913aeaca67d0a9"
 dependencies = [
  "async-trait",
  "greentic-secrets-api",
@@ -4117,9 +4143,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-secrets-provider-dev"
-version = "1.2.0-dev.32252878598"
+version = "1.2.0-dev.32335104542"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ffb921168f351d8c8843622879a98f8f9e885f64720cabb3a50c4bfbc854a688"
+checksum = "5ca98d618a0a01ee33b3c8293290cd55a349e453b5e0d93123939e7affddc9fb"
 dependencies = [
  "async-trait",
  "base64 0.22.1",
@@ -4135,9 +4161,9 @@ dependencies = [
 
 [[package]]
 name = "greentic-secrets-spec"
-version = "1.2.0-dev.32252878598"
+version = "1.2.0-dev.32335104542"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e2e221b74a3d69531b002673d5975524d3c2c654bc6171219b60c0a9dabe92b9"
+checksum = "50a6f7df73b84f476148589339c856f98e84f3a41d0bff0c66a444618ffb3330"
 dependencies = [
  "async-trait",
  "greentic-types",
@@ -4698,7 +4724,6 @@ dependencies = [
  "tokio",
  "tokio-rustls 0.26.4",
  "tower-service",
- "webpki-roots 1.0.8",
 ]
 
 [[package]]
@@ -4731,7 +4756,7 @@ dependencies = [
  "libc",
  "percent-encoding",
  "pin-project-lite",
- "socket2 0.5.10",
+ "socket2 0.6.4",
  "tokio",
  "tower-service",
  "tracing",
@@ -5280,19 +5305,19 @@ dependencies = [
 ]
 
 [[package]]
-name = "jwt"
-version = "0.16.0"
+name = "konst"
+version = "0.2.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6204285f77fe7d9784db3fdc449ecce1a0114927a51d5a41c4c7a292011c015f"
+checksum = "128133ed7824fcd73d6e7b17957c5eb7bacb885649bd8c69708b2331a10bcefb"
 dependencies = [
- "base64 0.13.1",
- "crypto-common 0.1.7",
- "digest 0.10.7",
- "hmac 0.12.1",
- "serde",
- "serde_json",
- "sha2 0.10.9",
+ "konst_macro_rules",
 ]
+
+[[package]]
+name = "konst_macro_rules"
+version = "0.2.19"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a4933f3f57a8e9d9da04db23fb153356ecaf00cbd14aee46279c33dc80925c37"
 
 [[package]]
 name = "lazy_static"
@@ -5911,28 +5936,47 @@ dependencies = [
 ]
 
 [[package]]
-name = "oci-distribution"
-version = "0.11.0"
+name = "oci-client"
+version = "0.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b95a2c51531af0cb93761f66094044ca6ea879320bccd35ab747ff3fcab3f422"
+checksum = "5261a7fb43d9c53b8e63e6d5e86860719dad253d015d022066c72d585125aed8"
 dependencies = [
  "bytes",
  "chrono",
  "futures-util",
+ "hex",
  "http 1.4.2",
  "http-auth",
- "jwt",
+ "jsonwebtoken",
  "lazy_static",
+ "oci-spec",
  "olpc-cjson",
  "regex",
- "reqwest 0.12.28",
+ "reqwest 0.13.4",
  "serde",
  "serde_json",
- "sha2 0.10.9",
- "thiserror 1.0.69",
+ "sha2 0.11.0",
+ "thiserror 2.0.18",
  "tokio",
  "tracing",
  "unicase",
+]
+
+[[package]]
+name = "oci-spec"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e8445a2631507cec628a15fdd6154b54a3ab3f20ed4fe9d73a3b8b7a4e1ba03a"
+dependencies = [
+ "const_format",
+ "derive_builder",
+ "getset",
+ "regex",
+ "serde",
+ "serde_json",
+ "strum 0.27.2",
+ "strum_macros 0.27.2",
+ "thiserror 2.0.18",
 ]
 
 [[package]]
@@ -6589,7 +6633,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b570b25f7617e43d59005d0990ccb79e950a423952cea19671b7a876da390adf"
 dependencies = [
  "anyhow",
- "itertools 0.11.0",
+ "itertools 0.13.0",
  "proc-macro2",
  "quote",
  "syn 2.0.118",
@@ -6694,7 +6738,7 @@ dependencies = [
  "quinn-udp",
  "rustc-hash",
  "rustls 0.23.41",
- "socket2 0.5.10",
+ "socket2 0.6.4",
  "thiserror 2.0.18",
  "tokio",
  "tracing",
@@ -6732,7 +6776,7 @@ dependencies = [
  "cfg_aliases",
  "libc",
  "once_cell",
- "socket2 0.5.10",
+ "socket2 0.6.4",
  "tracing",
  "windows-sys 0.60.2",
 ]
@@ -7112,31 +7156,23 @@ dependencies = [
  "http-body 1.0.1",
  "http-body-util",
  "hyper 1.10.1",
- "hyper-rustls 0.27.9",
  "hyper-util",
  "js-sys",
  "log",
  "percent-encoding",
  "pin-project-lite",
- "quinn",
- "rustls 0.23.41",
- "rustls-pki-types",
  "serde",
  "serde_json",
  "serde_urlencoded",
  "sync_wrapper",
  "tokio",
- "tokio-rustls 0.26.4",
- "tokio-util",
  "tower",
  "tower-http",
  "tower-service",
  "url",
  "wasm-bindgen",
  "wasm-bindgen-futures",
- "wasm-streams 0.4.2",
  "web-sys",
- "webpki-roots 1.0.8",
 ]
 
 [[package]]
@@ -7179,7 +7215,7 @@ dependencies = [
  "url",
  "wasm-bindgen",
  "wasm-bindgen-futures",
- "wasm-streams 0.5.0",
+ "wasm-streams",
  "web-sys",
 ]
 
@@ -9583,19 +9619,6 @@ dependencies = [
  "url",
  "wasm-encoder 0.256.0",
  "wasmparser 0.256.0",
-]
-
-[[package]]
-name = "wasm-streams"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15053d8d85c7eccdbefef60f06769760a563c7f0a9d6902a13d35c7800b0ad65"
-dependencies = [
- "futures-util",
- "js-sys",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "web-sys",
 ]
 
 [[package]]
