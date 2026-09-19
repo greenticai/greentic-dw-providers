@@ -180,6 +180,7 @@ impl Knowledge for KnowledgeChronicle {
                 chunk_index: c.chunk_index,
                 text: c.text,
                 metadata: c.metadata,
+                embedding: c.embedding,
             })
             .collect();
 
@@ -262,6 +263,7 @@ mod tests {
             chunk_index: index,
             text: text.to_string(),
             metadata: serde_json::Map::new(),
+            embedding: None,
         }
     }
 
