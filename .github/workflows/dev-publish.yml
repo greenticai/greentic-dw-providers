@@ -28,5 +28,5 @@ jobs:
     uses: greenticai/.github/.github/workflows/dev-publish.yml@main
     with:
       version: ${{ needs.dev-prepare.outputs.version }}
-      crates: "greentic-dw-memory-long-term"
+      crates: "greentic-dw-embedding greentic-dw-llm greentic-dw-providers-common greentic-dw-llm-openai-compatible greentic-dw-embedding-openai-compatible greentic-dw-knowledge greentic-dw-memory-long-term"
     secrets: inherit

@@ -170,10 +170,10 @@ The repo is still a scaffold, but the shared helper layer is now functional:
 
 ## Build Prerequisites
 
-This workspace has a git dependency on `greentic-biz/greentic-chronicle-ext` (public
-as of 2026-06-05). No token or special credential is required — Cargo resolves the
-dependency over public HTTPS automatically. See [docs/chronicle-dep.md](docs/chronicle-dep.md)
-for the pin, rationale, and bump procedure.
+This workspace has no git dependencies: every crate resolves from crates.io on the
+`1.2.0-dev` lane, so the library crates can be published. The Chronicle-backed
+backends (`greentic-dw-memory-chronicle`, `greentic-dw-knowledge-chronicle`) live in
+`greentic-biz/greentic-chronicle-ext`; see [docs/chronicle-dep.md](docs/chronicle-dep.md).
 
 ## CI and Releases
 

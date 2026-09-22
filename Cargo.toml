@@ -25,7 +25,6 @@ members = [
     "llm/openai",
     "llm/openai-compatible",
     "llm/nvidia-nim",
-    "memory/long-term/chronicle",
     "memory/long-term/core",
     "memory/short-term/core",
     "memory/short-term/in-memory",
@@ -50,12 +49,11 @@ members = [
     "workspace/fs",
     "workspace/in-memory",
     "knowledge/core",
-    "knowledge/chronicle",
 ]
 resolver = "2"
 
 [workspace.package]
-version = "1.3.0-research.1"
+version = "1.2.0-dev.0"
 edition = "2024"
 rust-version = "1.94"
 license = "MIT"
@@ -74,38 +72,28 @@ aws-types = "1"
 blake3 = "1"
 chrono = { version = "0.4", features = ["serde"] }
 criterion = "0.8"
-greentic-dw-control = { path = "control/core" }
-greentic-dw-embedding = { path = "embedding/core" }
-greentic-dw-context = { path = "context/core" }
-greentic-dw-delegation = { path = "delegation/core" }
-greentic-dw-providers-common = { path = "crates/greentic-dw-providers-common" }
-greentic-dw-engine = { path = "engine/core" }
-greentic-dw-llm = { path = "llm/core" }
-greentic-dw-memory = { path = "memory/short-term/core" }
-greentic-dw-memory-long-term = { path = "memory/long-term/core" }
-chronicle-core = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", branch = "research" }
-chronicle-driver-neo4j = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", branch = "research" }
-chronicle-driver-surreal = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", branch = "research" }
-chronicle-driver-falkor = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", branch = "research" }
-chronicle-llm-openai = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", branch = "research" }
-chronicle-testkit = { git = "https://github.com/greentic-biz/greentic-chronicle-ext.git", branch = "research" }
-greentic-dw-knowledge = { path = "knowledge/core" }
-greentic-dw-planning = { path = "planning/core" }
-greentic-dw-reflection = { path = "reflection/core" }
-greentic-dw-task-store = { path = "state/task-store/core" }
-greentic-dw-observer = { path = "observer/core" }
-greentic-dw-tool = { path = "tool/core" }
-greentic-dw-workspace = { path = "workspace/core" }
-greentic-dw = { version = ">=1.1.0-0, <1.2.0-0" }
-greentic-cap = { version = ">=1.1.0-0, <1.2.0-0" }
-greentic-cap-types = { version = ">=1.1.0-0, <1.2.0-0" }
-greentic-dw-manifest = { version = ">=1.1.0-0, <1.2.0-0" }
-greentic-dw-types = { version = ">=1.1.0-0, <1.2.0-0" }
-greentic-component = { version = "=1.3.0-research.1", default-features = false, features = ["cli"] }
-greentic-types = { version = "=1.3.0-research.1", default-features = false, features = ["std", "serde", "time"] }
-greentic-interfaces = { version = "=1.3.0-research.1", default-features = false, features = ["bindings-rust", "provider-common", "state-store-v1"] }
-greentic-pack = { package = "greentic-pack-lib", version = "=1.3.0-research.13" }
-greentic-state = { version = "=1.3.0-research.1", default-features = false }
+greentic-dw-control = { path = "control/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-embedding = { path = "embedding/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-context = { path = "context/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-delegation = { path = "delegation/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-providers-common = { path = "crates/greentic-dw-providers-common", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-engine = { path = "engine/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-llm = { path = "llm/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-memory = { path = "memory/short-term/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-memory-long-term = { path = "memory/long-term/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-knowledge = { path = "knowledge/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-planning = { path = "planning/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-reflection = { path = "reflection/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-task-store = { path = "state/task-store/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-observer = { path = "observer/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-tool = { path = "tool/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-workspace = { path = "workspace/core", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-cap-types = { version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-component = { version = ">=1.2.0-dev, <1.3.0-0", default-features = false, features = ["cli"] }
+greentic-types = { version = ">=1.2.0-dev, <1.3.0-0", default-features = false, features = ["std", "serde", "time"] }
+greentic-interfaces = { version = ">=1.2.0-dev, <1.3.0-0", default-features = false, features = ["bindings-rust", "provider-common", "state-store-v1"] }
+greentic-pack = { package = "greentic-pack-lib", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-state = { version = ">=1.2.0-dev, <1.3.0-0", default-features = false }
 rmcp = { version = "1.3", default-features = false, features = ["client", "transport-async-rw"] }
 reqwest = { version = "0.13", default-features = false, features = ["blocking", "json", "rustls"] }
 semver = { version = "1" }
@@ -132,34 +120,24 @@ greentic-dw-providers-common = { workspace = true }
 [dev-dependencies]
 criterion = { workspace = true }
 greentic-dw-context = { workspace = true }
-greentic-dw-context-compressor = { path = "context/compressor" }
-greentic-dw-context-retrieval = { path = "context/retrieval" }
-greentic-dw-context-static = { path = "context/static" }
+greentic-dw-context-compressor = { path = "context/compressor", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-context-retrieval = { path = "context/retrieval", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-context-static = { path = "context/static", version = ">=1.2.0-dev, <1.3.0-0" }
 greentic-dw-delegation = { workspace = true }
-greentic-dw-delegation-static-router = { path = "delegation/static-router" }
+greentic-dw-delegation-static-router = { path = "delegation/static-router", version = ">=1.2.0-dev, <1.3.0-0" }
 greentic-dw-planning = { workspace = true }
-greentic-dw-planning-static = { path = "planning/static" }
+greentic-dw-planning-static = { path = "planning/static", version = ">=1.2.0-dev, <1.3.0-0" }
 greentic-dw-reflection = { workspace = true }
-greentic-dw-reflection-schema-check = { path = "reflection/schema-check" }
+greentic-dw-reflection-schema-check = { path = "reflection/schema-check", version = ">=1.2.0-dev, <1.3.0-0" }
 greentic-dw-workspace = { workspace = true }
-greentic-dw-workspace-in-memory = { path = "workspace/in-memory" }
+greentic-dw-workspace-in-memory = { path = "workspace/in-memory", version = ">=1.2.0-dev, <1.3.0-0" }
 serde = { workspace = true }
 greentic-types = { workspace = true }
-serde_json = { workspace = true }
+# The goldens in tests/provider_golden.rs are written in insertion order. That
+# used to hold only because some transitive dependency switched on
+# `preserve_order`; the 1.2.0-dev lane graph no longer does, so ask for it here.
+serde_json = { workspace = true, features = ["preserve_order"] }
 
 [[bench]]
 name = "perf"
 harness = false
-
-# Research-line chain (greentic-start#595). greentic-pack-lib 1.3.0-research.13
-# (pack's develop code on the research line) — and the greentic-flow,
-# greentic-distributor-client and greentic-secrets builds it is built against —
-# exist only in git while crates.io publishing is locked. A patch section does
-# not travel into a published crate; every consumer carries the same set at its
-# own root.
-# TO UNWIND once publishing is restored: delete this block, `cargo update`.
-[patch.crates-io]
-greentic-pack-lib = { git = "https://github.com/greenticai/greentic-pack", rev = "46851ce1477c4b440aad7f7e3032260d63f85109" }
-greentic-flow = { git = "https://github.com/greenticai/greentic-flow", rev = "348cceb857034ad6533905d747328dca13c1b610" }
-greentic-distributor-client = { git = "https://github.com/greenticai/greentic-distributor-client", rev = "d594bb896c9722f439bf3c0cb98a3b85afb9b540" }
-greentic-secrets-lib = { git = "https://github.com/greenticai/greentic-secrets", rev = "633934c31a4d0413885bbced87acbc29a03c7b28" }
