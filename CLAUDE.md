@@ -53,7 +53,7 @@ Each family has a `core` crate (the contract) plus zero or more backend crates (
 | **llm** | `llm/core` | `anthropic`, `azure-openai`, `bedrock`, `gemini`, `openai`, `openai-compatible`, `nvidia-nim` |
 | **embedding** | `embedding/core` | `openai`, `openai-compatible` |
 | **memory** (short-term) | `memory/short-term/core` | `in-memory`, `redis` |
-| **memory** (long-term) | `memory/long-term/core` | `chronicle` |
+| **memory** (long-term) | `memory/long-term/core` | `chronicle` (lives in greentic-biz/greentic-chronicle-ext) |
 | **state** (task-store) | `state/task-store/core` | `in-memory`, `redis` |
 | **engine** | `engine/core` | `default`, `router-lite` |
 | **control** | `control/core` | `basic-policy`, `delegation-guard` |
@@ -64,7 +64,7 @@ Each family has a `core` crate (the contract) plus zero or more backend crates (
 | **context** | `context/core` | `static`, `compressor`, `retrieval` |
 | **workspace** | `workspace/core` | `in-memory`, `fs` |
 | **delegation** | `delegation/core` | `static-router`, `capability-match` |
-| **knowledge** | `knowledge/core` | `chronicle` |
+| **knowledge** | `knowledge/core` | `chronicle` (lives in greentic-biz/greentic-chronicle-ext) |
 
 Plus `crates/greentic-dw-providers-common` (shared helpers) and `packs/gtpacks.manifest.json` (release manifest for gtpack scaffolds).
 

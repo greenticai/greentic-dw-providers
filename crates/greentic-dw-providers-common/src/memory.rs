@@ -167,11 +167,7 @@ pub fn short_term_memory_pack_manifest(
 ) -> Result<PackManifest, MemoryFixtureError> {
     let provider_decl = short_term_memory_provider_decl(variant);
     let mut manifest = PackManifest {
-        // `PackManifest.agents` exists only in the greentic-types revision the
-        // long-term-memory consumer (greentic-runner) pins; gate it behind the
-        // `pack-manifest-agents` feature so this crate also builds against the
-        // published greentic-types that lacks the field. No agent blobs here.
-        #[cfg(feature = "pack-manifest-agents")]
+        // No agent blobs in a provider pack.
         agents: Default::default(),
         schema_version: "pack-v1".to_string(),
         pack_id,
@@ -351,11 +347,7 @@ pub fn long_term_memory_pack_manifest(
 ) -> Result<PackManifest, MemoryFixtureError> {
     let provider_decl = long_term_memory_provider_decl(variant);
     let mut manifest = PackManifest {
-        // `PackManifest.agents` exists only in the greentic-types revision the
-        // long-term-memory consumer (greentic-runner) pins; gate it behind the
-        // `pack-manifest-agents` feature so this crate also builds against the
-        // published greentic-types that lacks the field. No agent blobs here.
-        #[cfg(feature = "pack-manifest-agents")]
+        // No agent blobs in a provider pack.
         agents: Default::default(),
         schema_version: "pack-v1".to_string(),
         pack_id,

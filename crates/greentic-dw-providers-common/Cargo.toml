@@ -9,10 +9,10 @@ readme.workspace = true
 description = "Shared support crate for Greentic DW provider scaffolding."
 
 [features]
-# Emit the `PackManifest.agents` field. Enable when building against a
-# greentic-types revision that has it (e.g. the rev greentic-runner pins for the
-# long-term-memory integration). Off by default so this crate also builds
-# against the published greentic-types that lacks the field.
+# Retained as a no-op for existing `features = ["pack-manifest-agents"]`
+# consumers (greentic-runner-host). It used to gate `PackManifest.agents`;
+# every greentic-types on the 1.2.0-dev lane has that field, so it is now
+# always emitted.
 default = ["pack-manifest-agents"]
 pack-manifest-agents = []
 
