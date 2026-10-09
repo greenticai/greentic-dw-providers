@@ -53,7 +53,7 @@ members = [
 resolver = "2"
 
 [workspace.package]
-version = "1.2.0-dev.0"
+version = "1.2.0"
 edition = "2024"
 rust-version = "1.94"
 license = "MIT"
@@ -72,28 +72,28 @@ aws-types = "1"
 blake3 = "1"
 chrono = { version = "0.4", features = ["serde"] }
 criterion = "0.8"
-greentic-dw-control = { path = "control/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-embedding = { path = "embedding/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-context = { path = "context/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-delegation = { path = "delegation/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-providers-common = { path = "crates/greentic-dw-providers-common", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-engine = { path = "engine/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-llm = { path = "llm/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-memory = { path = "memory/short-term/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-memory-long-term = { path = "memory/long-term/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-knowledge = { path = "knowledge/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-planning = { path = "planning/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-reflection = { path = "reflection/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-task-store = { path = "state/task-store/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-observer = { path = "observer/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-tool = { path = "tool/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-workspace = { path = "workspace/core", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-cap-types = { version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-component = { version = ">=1.2.0-dev, <1.3.0-0", default-features = false, features = ["cli"] }
-greentic-types = { version = ">=1.2.0-dev, <1.3.0-0", default-features = false, features = ["std", "serde", "time"] }
-greentic-interfaces = { version = ">=1.2.0-dev, <1.3.0-0", default-features = false, features = ["bindings-rust", "provider-common", "state-store-v1"] }
-greentic-pack = { package = "greentic-pack-lib", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-state = { version = ">=1.2.0-dev, <1.3.0-0", default-features = false }
+greentic-dw-control = { path = "control/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-embedding = { path = "embedding/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-context = { path = "context/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-delegation = { path = "delegation/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-providers-common = { path = "crates/greentic-dw-providers-common", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-engine = { path = "engine/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-llm = { path = "llm/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-memory = { path = "memory/short-term/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-memory-long-term = { path = "memory/long-term/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-knowledge = { path = "knowledge/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-planning = { path = "planning/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-reflection = { path = "reflection/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-task-store = { path = "state/task-store/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-observer = { path = "observer/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-tool = { path = "tool/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-workspace = { path = "workspace/core", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-cap-types = { version = ">=1.2.0-0, <1.3.0-0" }
+greentic-component = { version = ">=1.2.0-0, <1.3.0-0", default-features = false, features = ["cli"] }
+greentic-types = { version = ">=1.2.0-0, <1.3.0-0", default-features = false, features = ["std", "serde", "time"] }
+greentic-interfaces = { version = ">=1.2.0-0, <1.3.0-0", default-features = false, features = ["bindings-rust", "provider-common", "state-store-v1"] }
+greentic-pack = { package = "greentic-pack-lib", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-state = { version = ">=1.2.0-0, <1.3.0-0", default-features = false }
 rmcp = { version = "1.3", default-features = false, features = ["client", "transport-async-rw"] }
 reqwest = { version = "0.13", default-features = false, features = ["blocking", "json", "rustls"] }
 semver = { version = "1" }
@@ -120,17 +120,17 @@ greentic-dw-providers-common = { workspace = true }
 [dev-dependencies]
 criterion = { workspace = true }
 greentic-dw-context = { workspace = true }
-greentic-dw-context-compressor = { path = "context/compressor", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-context-retrieval = { path = "context/retrieval", version = ">=1.2.0-dev, <1.3.0-0" }
-greentic-dw-context-static = { path = "context/static", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-context-compressor = { path = "context/compressor", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-context-retrieval = { path = "context/retrieval", version = ">=1.2.0-0, <1.3.0-0" }
+greentic-dw-context-static = { path = "context/static", version = ">=1.2.0-0, <1.3.0-0" }
 greentic-dw-delegation = { workspace = true }
-greentic-dw-delegation-static-router = { path = "delegation/static-router", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-delegation-static-router = { path = "delegation/static-router", version = ">=1.2.0-0, <1.3.0-0" }
 greentic-dw-planning = { workspace = true }
-greentic-dw-planning-static = { path = "planning/static", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-planning-static = { path = "planning/static", version = ">=1.2.0-0, <1.3.0-0" }
 greentic-dw-reflection = { workspace = true }
-greentic-dw-reflection-schema-check = { path = "reflection/schema-check", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-reflection-schema-check = { path = "reflection/schema-check", version = ">=1.2.0-0, <1.3.0-0" }
 greentic-dw-workspace = { workspace = true }
-greentic-dw-workspace-in-memory = { path = "workspace/in-memory", version = ">=1.2.0-dev, <1.3.0-0" }
+greentic-dw-workspace-in-memory = { path = "workspace/in-memory", version = ">=1.2.0-0, <1.3.0-0" }
 serde = { workspace = true }
 greentic-types = { workspace = true }
 # The goldens in tests/provider_golden.rs are written in insertion order. That
