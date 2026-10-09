@@ -4,7 +4,7 @@ Guidance for Claude Code (claude.ai/code) when working in this repository.
 
 ## What this is
 
-`greentic-dw-providers` is the Rust workspace that hosts **provider implementations** for the Greentic Digital Worker contracts defined in `greentic-dw`. Each provider family lives in its own subtree (`llm/`, `memory/`, `state/`, `engine/`, `control/`, `planning/`, `workspace/`, `delegation/`, `reflection/`, `context/`, `observer/`, `tool/`) and consumes the core contracts via the `greentic-dw` and `greentic-cap` published crate lines (the `0.5` line at time of writing).
+`greentic-dw-providers` is the Rust workspace that hosts **provider implementations** for the Greentic Digital Worker contracts defined in `greentic-dw`. Each provider family lives in its own subtree (`llm/`, `embedding/`, `memory/`, `state/`, `engine/`, `control/`, `planning/`, `workspace/`, `delegation/`, `reflection/`, `context/`, `observer/`, `tool/`, `knowledge/`) and consumes the core contracts via the `greentic-dw` and `greentic-cap` published crate lines (the `>=1.2.0-dev, <1.3.0-0` range at time of writing).
 
 The shared helper crate `crates/greentic-dw-providers-common` enforces the naming conventions and provides reusable fixtures for capability declarations, manifests, runtime refs, and bundle/setup scenarios.
 
@@ -40,9 +40,9 @@ cargo test  -p greentic-dw-llm-anthropic <name> -- --nocapture
 cargo test  --workspace --all-features
 ```
 
-Toolchain pinned to **Rust 1.95.0** via canonical `rust-toolchain.toml`. Edition 2024.
+Toolchain pinned to **Rust 1.95.0** via canonical `rust-toolchain.toml`. Edition 2024. Workspace version: `1.2.0-dev.0`.
 
-CI mirrors `local_check.sh` and adds reusable coverage (`_reusable_coverage.yml`, `coverage.yml`, `nightly-coverage.yml`), `perf.yml`, and `publish.yml` (gtpack publish to GHCR under `packs/dw/<dw-type>/<dw-name>-pack`).
+CI mirrors `local_check.sh` and adds reusable coverage (`_reusable_coverage.yml`, `coverage.yml`, `nightly-coverage.yml`), `perf.yml`, `dev-publish.yml` (nightly crates.io dev-lane publish), and `publish.yml` (gtpack publish to GHCR under `packs/dw/<dw-type>/<dw-name>-pack`).
 
 ## Workspace layout — provider families
 
@@ -51,7 +51,9 @@ Each family has a `core` crate (the contract) plus zero or more backend crates (
 | Family | Core | Backends |
 |--------|------|----------|
 | **llm** | `llm/core` | `anthropic`, `azure-openai`, `bedrock`, `gemini`, `openai`, `openai-compatible`, `nvidia-nim` |
+| **embedding** | `embedding/core` | `openai`, `openai-compatible` |
 | **memory** (short-term) | `memory/short-term/core` | `in-memory`, `redis` |
+| **memory** (long-term) | `memory/long-term/core` | `chronicle` (lives in greentic-biz/greentic-chronicle-ext) |
 | **state** (task-store) | `state/task-store/core` | `in-memory`, `redis` |
 | **engine** | `engine/core` | `default`, `router-lite` |
 | **control** | `control/core` | `basic-policy`, `delegation-guard` |
@@ -62,6 +64,7 @@ Each family has a `core` crate (the contract) plus zero or more backend crates (
 | **context** | `context/core` | `static`, `compressor`, `retrieval` |
 | **workspace** | `workspace/core` | `in-memory`, `fs` |
 | **delegation** | `delegation/core` | `static-router`, `capability-match` |
+| **knowledge** | `knowledge/core` | `chronicle` (lives in greentic-biz/greentic-chronicle-ext) |
 
 Plus `crates/greentic-dw-providers-common` (shared helpers) and `packs/gtpacks.manifest.json` (release manifest for gtpack scaffolds).
 
@@ -102,7 +105,7 @@ This repo is the **largest reuse-first surface** in the Greentic stack — its w
 
 - `greentic-types`, `greentic-interfaces`, `greentic-pack`, `greentic-state` — shared cross-repo DTOs and pack patterns.
 - `greentic-cap-types` / `greentic-cap-*` — capability declarations and pack capability ids.
-- `greentic-dw` (`0.5` line) — the DW contracts these providers implement. **Do not redefine** DW core types here.
+- `greentic-dw` (`>=1.2.0-dev, <1.3.0-0` range) — the DW contracts these providers implement. **Do not redefine** DW core types here.
 - `greentic-dw-providers-common` — the local shared helpers.
 
 Forking or duplicating a shared model requires documented justification in the PR.
@@ -115,7 +118,7 @@ Forking or duplicating a shared model requires documented justification in the P
 - Conventional Commits.
 - **Do not** add Claude co-authorship trailers or "Generated with Claude Code" lines on commits or PR bodies.
 - `Cargo.lock` is committed; CI runs `--locked`.
-- Husky / `.githooks/` may run `local_check.sh` — never bypass with `--no-verify`.
+- No git hooks are configured (no `.husky/` or `.githooks/`) — run `bash ci/local_check.sh` manually before pushing.
 
 ## Branching and release
 

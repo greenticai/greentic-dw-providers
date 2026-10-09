@@ -12,7 +12,8 @@ Shared knowledge (document-RAG) provider contract for Greentic DW.
 
 This crate defines the `Knowledge` async trait and the normalized data-transfer
 objects shared across all knowledge backends. No concrete backend or database
-code lives here — those reside in sibling crates (`greentic-dw-knowledge-chronicle`).
+code lives here — those reside in backend crates (`greentic-dw-knowledge-chronicle`, in
+greentic-biz/greentic-chronicle-ext).
 
 ### Key types
 
