@@ -2341,7 +2341,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-context"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2350,7 +2350,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-context-compressor"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-context",
  "greentic-types",
@@ -2359,7 +2359,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-context-retrieval"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-context",
  "greentic-dw-planning",
@@ -2371,7 +2371,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-context-static"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-context",
  "greentic-types",
@@ -2380,7 +2380,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-control"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2389,7 +2389,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-control-basic-policy"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-control",
  "greentic-dw-providers-common",
@@ -2399,7 +2399,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-control-delegation-guard"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-control",
  "greentic-dw-providers-common",
@@ -2409,7 +2409,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-delegation"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2418,7 +2418,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-delegation-capability-match"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-delegation",
  "greentic-types",
@@ -2426,7 +2426,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-delegation-static-router"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-delegation",
  "greentic-types",
@@ -2436,7 +2436,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-embedding"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2446,7 +2446,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-embedding-openai"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-embedding",
  "greentic-types",
@@ -2458,7 +2458,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-embedding-openai-compatible"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-embedding",
  "greentic-types",
@@ -2470,7 +2470,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-engine"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2479,7 +2479,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-engine-default"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-engine",
  "greentic-dw-providers-common",
@@ -2489,7 +2489,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-engine-router-lite"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-engine",
  "greentic-dw-providers-common",
@@ -2499,7 +2499,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-knowledge"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "async-trait",
  "greentic-dw-providers-common",
@@ -2512,7 +2512,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-cap-types",
  "greentic-types",
@@ -2523,7 +2523,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm-anthropic"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-llm",
  "greentic-dw-providers-common",
@@ -2536,7 +2536,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm-azure-openai"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-llm",
  "greentic-dw-providers-common",
@@ -2549,7 +2549,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm-bedrock"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "aws-config",
  "aws-credential-types",
@@ -2568,7 +2568,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm-gemini"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-llm",
  "greentic-dw-providers-common",
@@ -2581,7 +2581,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm-nvidia-nim"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-llm",
  "greentic-dw-providers-common",
@@ -2594,7 +2594,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm-openai"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-llm",
  "greentic-dw-providers-common",
@@ -2607,7 +2607,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-llm-openai-compatible"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-llm",
  "greentic-dw-providers-common",
@@ -2620,7 +2620,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-memory"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-providers-common",
  "greentic-state",
@@ -2631,7 +2631,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-memory-in-memory"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-memory",
  "greentic-dw-providers-common",
@@ -2642,7 +2642,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-memory-long-term"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "async-trait",
  "chrono",
@@ -2655,7 +2655,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-memory-redis"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-memory",
  "greentic-dw-providers-common",
@@ -2666,7 +2666,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-observer"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2675,7 +2675,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-observer-basic-audit"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-observer",
  "greentic-dw-providers-common",
@@ -2685,7 +2685,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-observer-basic-metrics"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-observer",
  "greentic-dw-providers-common",
@@ -2695,7 +2695,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-planning"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2704,7 +2704,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-planning-llm-outline"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-planning",
  "greentic-types",
@@ -2714,7 +2714,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-planning-static"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-planning",
  "greentic-types",
@@ -2724,7 +2724,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-providers"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "criterion",
  "greentic-dw-context",
@@ -2747,7 +2747,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-providers-common"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-cap-types",
  "greentic-dw-embedding",
@@ -2771,7 +2771,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-reflection"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2780,7 +2780,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-reflection-llm-critic"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-reflection",
  "greentic-types",
@@ -2789,7 +2789,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-reflection-rules"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-reflection",
  "greentic-types",
@@ -2798,7 +2798,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-reflection-schema-check"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-reflection",
  "greentic-types",
@@ -2807,7 +2807,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-task-store"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-providers-common",
  "greentic-state",
@@ -2818,7 +2818,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-task-store-in-memory"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-providers-common",
  "greentic-dw-task-store",
@@ -2829,7 +2829,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-task-store-redis"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-providers-common",
  "greentic-dw-task-store",
@@ -2840,7 +2840,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-tool"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-types",
  "serde",
@@ -2849,7 +2849,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-tool-component-adapter"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-component",
  "greentic-dw-providers-common",
@@ -2861,7 +2861,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-tool-mcp-adapter"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-providers-common",
  "greentic-dw-tool",
@@ -2874,7 +2874,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-workspace"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "blake3",
  "greentic-types",
@@ -2884,7 +2884,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-workspace-fs"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-workspace",
  "greentic-types",
@@ -2894,7 +2894,7 @@ dependencies = [
 
 [[package]]
 name = "greentic-dw-workspace-in-memory"
-version = "1.2.0"
+version = "1.2.1"
 dependencies = [
  "greentic-dw-workspace",
  "greentic-types",
