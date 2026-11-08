@@ -32,12 +32,26 @@ jobs:
       # --locked is kept so a source install would still be reproducible, and
       # GITHUB_TOKEN raises the API rate limit so the 403 is rare to begin with.
       # The command -v checks assert the binaries actually landed on PATH.
+      # The download is retried (3 attempts, 20s then 40s backoff) because GitHub
+      # release downloads occasionally fail with transient network errors, and
+      # with compile disabled a single flake would fail the job before any test.
       - name: Install coverage tools
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cargo binstall --no-confirm --force --locked --disable-strategies compile \
-            greentic-dev cargo-nextest cargo-llvm-cov
+          attempt=1
+          until cargo binstall --no-confirm --force --locked --disable-strategies compile \
+            greentic-dev cargo-nextest cargo-llvm-cov; do
+            status=$?
+            if [ "$attempt" -ge 3 ]; then
+              echo "cargo binstall failed after $attempt attempts" >&2
+              exit "$status"
+            fi
+            delay=$((attempt * 20))
+            echo "cargo binstall failed (exit $status); retrying in ${delay}s" >&2
+            sleep "$delay"
+            attempt=$((attempt + 1))
+          done
           command -v greentic-dev
           command -v cargo-nextest
           command -v cargo-llvm-cov
